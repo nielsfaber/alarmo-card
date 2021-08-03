@@ -1,0 +1,10 @@
+{
+	"editor": {
+		"button_scale": "Skalierungsfaktor für Buttongröße.",
+		"keep_keypad_visible": "Zeige das Pin-Eingabefeld immer an, auch wenn kein Code erfordert ist."
+	},
+	"errors": {
+		"blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
+		"triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst"
+	}
+}
