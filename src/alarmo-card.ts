@@ -400,7 +400,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         font-weight: 500;
       }
       div.message .description span {
-        background: white;
+        background: var(--card-background-color);
         padding-right: 5px;
       }
       div.message .description ha-icon {
