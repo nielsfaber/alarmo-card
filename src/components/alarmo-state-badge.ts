@@ -1,17 +1,15 @@
+import { LitElement, html, css, PropertyValues } from 'lit';
+import { property } from 'lit/decorators.js';
 import { HomeAssistant } from "custom-card-helpers";
-import {
-  LitElement,
-  html,
-  css,
-  PropertyValues,
-  property,
-} from "lit-element";
 import { ICONS, PENDING_STATES } from "../const";
 
 class AlarmoStateBadge extends LitElement {
 
-  @property() hass!: HomeAssistant;
-  @property() entity!: string;
+  @property()
+  hass!: HomeAssistant;
+
+  @property()
+  entity!: string;
 
   duration: number = 0;
   datetime: Date | null = null;

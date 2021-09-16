@@ -7,29 +7,66 @@ export const BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "c
 
 export const FORMAT_NUMBER = "number";
 
-export const ICONS = {
-  armed_away: "hass:shield-lock",
-  armed_custom_bypass: "hass:security",
-  armed_home: "hass:shield-home",
-  armed_night: "hass:shield-home",
-  disarmed: "hass:shield-check",
-  arming: "hass:shield-outline",
-  pending: "hass:shield-outline",
-  triggered: "hass:bell-ring",
+export enum AlarmStates {
+  Disarmed = 'disarmed',
+  Arming = 'arming',
+  Pending = 'pending',
+  Triggered = 'triggered',
+  ArmedAway = 'armed_away',
+  ArmedHome = 'armed_home',
+  ArmedNight = 'armed_night',
+  ArmedCustomBypass = 'armed_custom_bypass'
+}
+
+export const ICONS: Record<AlarmStates, string> = {
+  [AlarmStates.ArmedAway]: "hass:shield-lock",
+  [AlarmStates.ArmedHome]: "hass:shield-home",
+  [AlarmStates.ArmedNight]: "hass:shield-home",
+  [AlarmStates.ArmedCustomBypass]: "hass:security",
+  [AlarmStates.Disarmed]: "hass:shield-check",
+  [AlarmStates.Arming]: "hass:shield-outline",
+  [AlarmStates.Pending]: "hass:shield-outline",
+  [AlarmStates.Triggered]: "hass:bell-ring",
 };
 
-export const EVENT = "alarmo_event";
-export const EVENT_NO_CODE = "no_code_provided";
-export const EVENT_INVALID_CODE = "invalid_code_provided";
-export const EVENT_FAILED_TO_ARM = "failed_to_arm";
+export enum ArmActions {
+  ArmAway = 'arm_away',
+  ArmHome = 'arm_home',
+  ArmNight = 'arm_night',
+  ArmCustomBypass = 'arm_custom_bypass',
+  Disarm = 'disarm'
+};
+
+export const ActionToState = {
+  [ArmActions.ArmAway]: AlarmStates.ArmedAway,
+  [ArmActions.ArmHome]: AlarmStates.ArmedHome,
+  [ArmActions.ArmNight]: AlarmStates.ArmedNight,
+  [ArmActions.ArmCustomBypass]: AlarmStates.ArmedCustomBypass,
+  [ArmActions.Disarm]: AlarmStates.Disarmed,
+}
+
+export enum AlarmoEvents {
+  Arm = 'arm',
+  Trigger = 'trigger',
+  FailedToArm = 'failed_to_arm',
+  CommandNotAllowed = 'command_not_allowed',
+  NoCodeProvided = 'no_code_provided',
+  InvalidCodeProvided = 'invalid_code_provided',
+  TriggerTimeExpired = 'trigger_time_expired'
+}
+
+export const EVENT = "alarmo_updated";
 
 export const PENDING_STATES = ["arming", "pending"];
 
 export const defaultCardConfig: CardConfig = {
   type: "",
   entity: "",
+  name: "",
   keep_keypad_visible: false,
+  use_clear_icon: false,
   button_scale: 1,
+  states: {}
 }
 
 export const minButtonScale = 1;

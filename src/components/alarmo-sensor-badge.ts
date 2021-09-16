@@ -1,20 +1,19 @@
-import {
-  css,
-  CSSResult,
-  html,
-  LitElement,
-  property,
-  TemplateResult,
-  PropertyValues,
-} from "lit-element";
-import { stateIcon, computeStateDisplay, HomeAssistant, computeEntity, fireEvent } from "custom-card-helpers";
+import { LitElement, html, css, PropertyValues, TemplateResult, CSSResult } from 'lit';
+import { property } from 'lit/decorators.js';
+
+import { stateIcon, computeStateDisplay, HomeAssistant, computeEntity, fireEvent, NumberFormat } from "custom-card-helpers";
 import { HassEntity } from "home-assistant-js-websocket";
 
 class AlarmoSensorBadge extends LitElement {
 
-  @property() public hass?: HomeAssistant;
-  @property() public entity?: string;
-  @property() public state?: string;
+  @property()
+  public hass?: HomeAssistant;
+
+  @property()
+  public entity?: string;
+
+  @property()
+  public state?: string;
 
   shouldUpdate(changedProps: PropertyValues) {
     const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
@@ -28,7 +27,7 @@ class AlarmoSensorBadge extends LitElement {
     let stateObj = { ...this.hass.states[this.entity] } as HassEntity;
     if (this.state !== undefined) stateObj = { ...stateObj, state: this.state };
     const icon = stateIcon(stateObj);
-    const value = computeStateDisplay(this.hass.localize, stateObj, this.hass.language);
+    const value = computeStateDisplay(this.hass.localize, stateObj, this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language });
     const name = stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id);
 
     let binaryState = this.state ? true : stateObj.state == "on";
@@ -52,9 +51,8 @@ class AlarmoSensorBadge extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult[] {
-    return [
-      css`
+  static get styles(): CSSResult {
+    return css`
         .badge-container {
           display: inline-block;
           text-align: center;
@@ -122,8 +120,7 @@ class AlarmoSensorBadge extends LitElement {
           text-overflow: ellipsis;
           line-height: normal;
         }
-      `,
-    ];
+      `;
   }
 }
 
