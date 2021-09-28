@@ -7,6 +7,9 @@
 - [Installation](#installation)
 - [Updating](#updating)
 - [Configuration](#configuration)
+- [Options](#options)
+  - [State configuration](#state-configuration)
+- [!example result](#)
 - [Say thank you](#say-thank-you)
 
 ## Introduction
@@ -99,6 +102,52 @@ Configuration using UI mode:
 * Click the "Add card" button on the bottom
 * Choose "Custom: Alarmo Card" and pick the correct entity.
 
+## Options
+| Name                | Type    | Requirement  | Description                                                                                                    | Default            |
+| ------------------- | ------- | ------------ | -------------------------------------------------------------------------------------------------------------- | ------------------ |
+| type                | string  | **Required** | `custom:alarmo-card`                                                                                           |                    |
+| entity              | string  | **Required** | Alarm_control_panel entity                                                                                     |                    |
+| name                | string  | Optional     | Displayed name (next to icon)                                                                                  | (Take from entity) |
+| keep_keypad_visible | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used. | `false`            |
+| button_scale        | number  | Optional     | Scaling factor to apply to the size of the buttons in the card (between 1.0 and 2.5)                           | `1.0`              |
+| use_clear_icon      | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
+
+| states              | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).            |                    |
+
+### State configuration 
+State configuration allows users to modify the displayed texts and buttons (where applicable) in the card corresponding to certain states.
+
+Note that the alarm entity may not support all `armed_xxx` states. States which are not supported will not show up in the card and cannot be configured.
+
+| Name         | Type    | Applicable states                                                                                                            | Description                                                                    | Default                   |
+| ------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------- |
+| hide         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
+| button_label | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
+| state_label  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
+
+**Example of using state configuration**
+
+The example below hides the `armed_home` button (although the alarm supports it), and renames the `armed_away` / `disarmed` options.
+
+```yaml
+type: custom:alarmo-card
+entity: alarm_control_panel.alarmo
+states:
+  armed_away:
+    hide: false
+    button_label: "Turn on"
+    state_label: "Enabled"
+  armed_home:
+    hide: true
+  disarmed:
+    hide: false
+    button_label: "Turn off"
+    state_label: "Disabled"
+# ... rest of card config
+```
+Result:
+
+![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-examplepng?raw=true "example result")
 ---
 
 ## Say thank you

@@ -1,14 +1,13 @@
-import {
-  LitElement,
-  html,
-  css,
-  property,
-} from "lit-element";
+import { LitElement, html, css } from 'lit';
+import { property } from 'lit/decorators.js';
 
 class AlarmoButton extends LitElement {
 
-  @property({ type: Boolean }) disabled: boolean = false;
-  @property({ type: Boolean }) scaled: boolean = false;
+  @property({ type: Boolean })
+  disabled: boolean = false;
+
+  @property({ type: Boolean })
+  scaled: boolean = false;
 
   render() {
     return html`
@@ -71,6 +70,9 @@ class AlarmoButton extends LitElement {
       }
       mwc-button {
         width: 100%;
+      }
+      ::slotted(ha-icon) {
+        --mdc-icon-size: calc(var(--content-scale, 1) * 1.25rem);
       }
     `;
   }
