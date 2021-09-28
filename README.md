@@ -9,7 +9,6 @@
 - [Configuration](#configuration)
 - [Options](#options)
   - [State configuration](#state-configuration)
-- [!example result](#)
 - [Say thank you](#say-thank-you)
 
 ## Introduction
@@ -147,7 +146,7 @@ states:
 ```
 Result:
 
-![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-example.png?raw=true "example result")
+[example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-example.png?raw=true "example result")
 ---
 
 ## Say thank you
