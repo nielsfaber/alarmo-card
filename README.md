@@ -147,7 +147,7 @@ states:
 ```
 Result:
 
-![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-examplepng?raw=true "example result")
+![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-example.png?raw=true "example result")
 ---
 
 ## Say thank you
