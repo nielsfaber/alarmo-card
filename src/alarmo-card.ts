@@ -33,7 +33,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   private warning: string = "";
 
   @state()
-  private area_id: string | number | null = null;
+  private area_id: string | number | null | undefined = undefined;
 
   subscribedEntities: string[] = [];
 
@@ -69,7 +69,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     fetchEntities(this.hass!)
       .then(res => {
         let match = res.find(e => e.entity_id == this._config!.entity);
-        if (match) this.area_id = match.area_id;
+        if (match) this.area_id = match.area_id ? match.area_id : null;
       })
       .catch(_e => { });
   }
@@ -148,7 +148,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         </hui-warning>
       `;
     }
-    if (this.area_id === null) {
+    if (this.area_id === undefined) {
       return html`
         <hui-warning>
          Could not establish a connection with the alarmo integration. Please check if it is installed and the correct entity is selected in the card settings.
