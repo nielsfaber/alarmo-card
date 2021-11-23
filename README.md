@@ -9,7 +9,6 @@
 - [Configuration](#configuration)
 - [Options](#options)
   - [State configuration](#state-configuration)
-- [!example result](#)
 - [Say thank you](#say-thank-you)
 
 ## Introduction
@@ -41,16 +40,8 @@ HACS installation:
 Note: Ensure you have a www folder created as in config/www or the installation will succeed but fails silently
 1. Click the Orange + button bottom right and search for Alarmo Card
 2. Click on "Install" under the new card that just popped up.
-3. Use the GUI; Configuration -> Lovelace Dashboards -> Resources Tab to add `/hacsfiles/alarmo-card/alarmo-card.js`, or add a reference to the card in the resources section of `configuration.yaml`:
-
-```yaml
-resources:
-  - url: /hacsfiles/alarmo-card/alarmo-card.js
-    type: module
-```
 
 Note: Ensure to install [`https://github.com/nielsfaber/alarmo`](https://github.com/nielsfaber/alarmo) and add the integration in order for the card to work properly. 
-
 
 Manual installation
 
@@ -111,7 +102,6 @@ Configuration using UI mode:
 | keep_keypad_visible | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used. | `false`            |
 | button_scale        | number  | Optional     | Scaling factor to apply to the size of the buttons in the card (between 1.0 and 2.5)                           | `1.0`              |
 | use_clear_icon      | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
-
 | states              | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).            |                    |
 
 ### State configuration 
