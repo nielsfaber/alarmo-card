@@ -257,8 +257,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           style="--content-scale: ${this._config!.button_scale}"
           ?scaled=${this._config!.button_scale != 1}
         >
-        ${
-        isEmpty(stateConfig.button_label)
+        ${isEmpty(stateConfig.button_label)
           ? this.hass!.localize(`ui.card.alarm_control_panel.${action}`)
           : stateConfig.button_label
         }
@@ -279,16 +278,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             <div class="description">
               <span>
               <ha-icon icon="hass:alert"></ha-icon>
-        ${
-        this.warning == "blocking_sensors"
+        ${this.warning == "blocking_sensors"
           ? localize("errors.blocking_sensors", this.hass.language)
           : localize("errors.triggered_sensors", this.hass.language)
         }
         </span>
           </div>
           <div class="content">
-            ${
-        Object.entries(stateObj.attributes.open_sensors).map(([e]) => {
+            ${Object.entries(stateObj.attributes.open_sensors).map(([e]) => {
           if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
           return html`
             <div class="badge">
@@ -314,13 +311,22 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     this._input = val === "clear" ? "" : this._input + val;
   }
 
-  private _handleActionClick(ev: Event, action: string): void {
+  private _handleActionClick(ev: Event, action: ArmActions): void {
     (ev.target as HTMLElement).blur();
     this._clearCodeError();
-    this.hass!.callService("alarm_control_panel", `alarm_${action}`, {
-      entity_id: this._config!.entity,
-      code: this._input,
-    });
+
+    if (action == ArmActions.Disarm) {
+      this.hass!.callService("alarmo", "disarm", {
+        entity_id: this._config!.entity,
+        code: this._input,
+      });
+    } else {
+      this.hass!.callService("alarmo", "arm", {
+        entity_id: this._config!.entity,
+        mode: ActionToState[action],
+        code: this._input,
+      });
+    }
     this.warning = "";
   }
 
