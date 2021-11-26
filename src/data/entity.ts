@@ -33,9 +33,5 @@ export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => 
 }
 
 export const codeRequired = (stateObj: HassEntity) => {
-  return stateObj.attributes.code_format &&
-    (
-      (stateObj.state === AlarmStates.Disarmed && stateObj.attributes.code_arm_required)
-      || (stateObj.state !== AlarmStates.Disarmed && stateObj.attributes.code_disarm_required)
-    );
+  return stateObj.attributes.code_format !== null;
 }

@@ -31,8 +31,7 @@ export type AlarmoEntity = HassEntity & {
         delay?: number,
         expiration?: string,
         code_format?: string,
-        code_arm_required?: boolean,
-        code_disarm_required?: boolean
+        code_arm_required?: boolean
     }
 }
 export interface SubElementEditorConfig {
