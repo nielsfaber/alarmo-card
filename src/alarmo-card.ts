@@ -81,7 +81,6 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   private async _fetchData(ev: AlarmoEvent): Promise<void> {
     if (ev.data.area_id !== this.area_id) return;
-    console.log(ev.data);
     switch (ev.data.event) {
       case AlarmoEvents.Arm:
         this._clearCode();

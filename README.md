@@ -9,6 +9,7 @@
 - [Configuration](#configuration)
 - [Options](#options)
   - [State configuration](#state-configuration)
+- [!example result](#)
 - [Say thank you](#say-thank-you)
 
 ## Introduction
@@ -102,6 +103,7 @@ Configuration using UI mode:
 | keep_keypad_visible | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used. | `false`            |
 | button_scale        | number  | Optional     | Scaling factor to apply to the size of the buttons in the card (between 1.0 and 2.5)                           | `1.0`              |
 | use_clear_icon      | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
+| show_messages       | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                               | `true`             |
 | states              | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).            |                    |
 
 ### State configuration 
