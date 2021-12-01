@@ -1,6 +1,7 @@
 import { css, html, LitElement, TemplateResult, CSSResult } from "lit";
 import { customElement, property, state } from "lit/decorators";
 import { HomeAssistant } from "custom-card-helpers";
+import { mdiClose } from "@mdi/js";
 import { StateConfig } from "../types";
 import { ArmActions, ActionToState } from "../const";
 import { localize } from "../localize/localize";
@@ -32,13 +33,13 @@ export class AlarmoActionConfigDialog extends LitElement {
   private _createCloseHeading() {
     return html`
   <span class="header_title">${localize("editor.action_dialog.title", this.hass.language, "{action}", this.hass!.localize(`ui.card.alarm_control_panel.${this._params!.action}`))}</span>
-  <mwc-icon-button
+  <ha-icon-button
     aria-label=${this.hass.localize("ui.dialogs.generic.close")}
     dialogAction="close"
     class="header_button"
+    .path=${mdiClose}
   >
-    <ha-icon icon="hass:close"></ha-icon>
-  </mwc-icon-button>
+  </ha-icon-button>
 `;
   }
 

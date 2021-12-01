@@ -3,6 +3,7 @@
     "keep_keypad_visible": "Keep the keypad always visible, also when no code input is required.",
     "button_scale": "Scaling factor to apply for resizing the buttons.",
     "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
+    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",
@@ -13,11 +14,5 @@
   "errors": {
     "blocking_sensors": "Could not arm due to the following sensors",
     "triggered_sensors": "Alarm was triggered by the following sensors"
-  },
-  "modes": {
-    "armed_away": "Armed Away",
-    "armed_home": "Armed Home",
-    "armed_night": "Armed Night",
-    "armed_custom_bypass": "Armed Custom Bypass"
   }
 }

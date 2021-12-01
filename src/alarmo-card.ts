@@ -81,6 +81,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   private async _fetchData(ev: AlarmoEvent): Promise<void> {
     if (ev.data.area_id !== this.area_id) return;
+    console.log(ev.data);
     switch (ev.data.event) {
       case AlarmoEvents.Arm:
         this._clearCode();
@@ -272,7 +273,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   }
 
   private _renderWarning() {
-    if (!this.hass || !this._config) return html``;
+    if (!this.hass || !this._config || !this._config.show_messages) return html``;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
     if (
       (stateObj.attributes.open_sensors && stateObj.state == AlarmStates.Triggered) ||

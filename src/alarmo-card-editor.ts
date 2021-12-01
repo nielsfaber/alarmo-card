@@ -1,12 +1,13 @@
 import { LitElement, html, TemplateResult, CSSResult, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helpers';
+import { mdiPencil } from '@mdi/js';
 import { AlarmoEntity, CardConfig, SubElementEditorConfig, StateConfig, AlarmoConfig } from './types';
 import { localize } from './localize/localize';
-import { maxButtonScale, minButtonScale, ActionToState, AlarmStates, ArmActions } from './const';
+import { maxButtonScale, minButtonScale, ActionToState, AlarmStates, ArmActions, FORMAT_NUMBER } from './const';
 import { calcSupportedActions } from './data/entity';
 import { calcStateConfig } from './data/config';
-import { pick, isEmpty } from './helpers';
+import { pick, isEmpty, isDefined } from './helpers';
 import { CustomizeActionDialogConfig } from './components/dialog-action-config';
 
 import "./components/dialog-action-config";
@@ -88,7 +89,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           </ha-checkbox>
           ${this.hass!.localize(`ui.card.alarm_control_panel.${e}`)}
           <ha-icon-button
-            icon="hass:pencil"
+            .path=${mdiPencil}
             style="color: var(--secondary-text-color); --mdc-icon-button-size: 42px"
             ?disabled=${calcStateConfig(ActionToState[e], this._config!).hide}
             @click=${(ev: Event) => this._openActionLabelDialog(ev, e)}
@@ -126,12 +127,24 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           ></ha-slider>
         </ha-formfield>
 
+        ${ stateObj && this._alarmoConfig?.code_format === FORMAT_NUMBER
+        ? html`
         <ha-formfield
           .label=${localize("editor.use_clear_icon", this.hass.language)}
         >
           <ha-switch
             .checked=${this._config!.use_clear_icon}
             @change=${(ev: Event) => this._updateConfig("use_clear_icon", (ev.target as HTMLInputElement).checked)}
+          ></ha-switch
+        ></ha-formfield>
+      ` : ''}
+
+        <ha-formfield
+          .label=${localize("editor.show_messages", this.hass.language)}
+        >
+          <ha-switch
+            .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
+            @change=${(ev: Event) => this._updateConfig("show_messages", (ev.target as HTMLInputElement).checked)}
           ></ha-switch
         ></ha-formfield>
       </div>

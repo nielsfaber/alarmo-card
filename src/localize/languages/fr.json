@@ -1,7 +1,15 @@
 {
   "editor": {
     "keep_keypad_visible": "Gardez le clavier toujours visible, même lorsqu'aucune saisie de code n'est requise.",
-    "button_scale": "Scaling factor to apply for resizing the buttons."
+    "button_scale": "Scaling factor to apply for resizing the buttons.",
+    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
+    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
+    "available_actions": "Available actions:",
+    "action_dialog": {
+      "title": "Customize display of action '{action}'",
+      "button_label": "Override button label",
+      "state_label": "Override state label"
+    }
   },
   "errors": {
     "blocking_sensors": "Impossible d'armer en raison des capteurs suivants",

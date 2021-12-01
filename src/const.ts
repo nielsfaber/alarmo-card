@@ -21,9 +21,9 @@ export enum AlarmStates {
 export const ICONS: Record<AlarmStates, string> = {
   [AlarmStates.ArmedAway]: "hass:shield-lock",
   [AlarmStates.ArmedHome]: "hass:shield-home",
-  [AlarmStates.ArmedNight]: "hass:shield-home",
+  [AlarmStates.ArmedNight]: "hass:shield-moon",
   [AlarmStates.ArmedCustomBypass]: "hass:security",
-  [AlarmStates.Disarmed]: "hass:shield-check",
+  [AlarmStates.Disarmed]: "hass:shield-off",
   [AlarmStates.Arming]: "hass:shield-outline",
   [AlarmStates.Pending]: "hass:shield-outline",
   [AlarmStates.Triggered]: "hass:bell-ring",
@@ -66,7 +66,8 @@ export const defaultCardConfig: CardConfig = {
   keep_keypad_visible: false,
   use_clear_icon: false,
   button_scale: 1,
-  states: {}
+  states: {},
+  show_messages: true
 }
 
 export const minButtonScale = 1;
