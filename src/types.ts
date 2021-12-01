@@ -44,3 +44,9 @@ export interface AlarmoEntry {
     area_id: string | number,
     entity_id: string,
 }
+
+export interface AlarmoConfig {
+    code_arm_required: boolean;
+    code_disarm_required: boolean;
+    code_format: 'number' | 'text';
+}

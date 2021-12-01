@@ -4,7 +4,7 @@ import { HomeAssistant, fireEvent } from 'custom-card-helpers';
 import { STATE_NOT_RUNNING, UnsubscribeFunc } from "home-assistant-js-websocket";
 
 import { CARD_VERSION, BUTTONS, FORMAT_NUMBER, defaultCardConfig, ActionToState, ArmActions, AlarmoEvents, AlarmStates, EVENT } from './const';
-import { CardConfig, AlarmoEvent, AlarmoEntity } from './types';
+import { CardConfig, AlarmoEvent, AlarmoEntity, AlarmoConfig } from './types';
 
 import "./alarmo-card-editor";
 import "./components/alarmo-state-badge";
@@ -16,7 +16,7 @@ import { localize } from './localize/localize';
 import { calcSupportedActions, computeStateDisplay, computeNameDisplay, codeRequired } from './data/entity';
 import { calcStateConfig, validateConfig } from './data/config';
 import { isEmpty } from './helpers';
-import { fetchEntities } from './data/websockets';
+import { fetchEntities, fetchConfig } from './data/websockets';
 
 @customElement('alarmo-card')
 export class AlarmoCard extends SubscribeMixin(LitElement) {
@@ -25,6 +25,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   @state()
   private _config?: CardConfig;
+
+  @state()
+  private _alarmoConfig?: AlarmoConfig;
 
   @state()
   private _input: string = "";
@@ -47,7 +50,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   public async getCardSize(): Promise<number> {
     if (!this._config || !this.hass) return 9;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
-    if (!stateObj || stateObj.attributes.code_format !== FORMAT_NUMBER) return 4;
+    if (!stateObj || this._alarmoConfig?.code_format !== FORMAT_NUMBER) return 4;
     return (!codeRequired(stateObj) && !this._config.keep_keypad_visible) ? 4 : 9;
   }
 
@@ -72,6 +75,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         if (match) this.area_id = match.area_id ? match.area_id : null;
       })
       .catch(_e => { });
+    
+    this._alarmoConfig = await fetchConfig(this.hass!);
   }
 
   private async _fetchData(ev: AlarmoEvent): Promise<void> {
@@ -198,11 +203,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 @focus=${this._clearCodeError}
                 type="password"
                 id="code_input"
-                .inputmode=${stateObj.attributes.code_format === FORMAT_NUMBER ? "numeric" : "text"}
+                .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? "numeric" : "text"}
               ></paper-input>
             `}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible)
-        || stateObj.attributes.code_format !== FORMAT_NUMBER
+        || this._alarmoConfig?.code_format !== FORMAT_NUMBER
         ? html``
         : html`
           <div

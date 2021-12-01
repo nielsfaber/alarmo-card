@@ -1,7 +1,7 @@
 import { LitElement, html, TemplateResult, CSSResult, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helpers';
-import { AlarmoEntity, CardConfig, SubElementEditorConfig, StateConfig } from './types';
+import { AlarmoEntity, CardConfig, SubElementEditorConfig, StateConfig, AlarmoConfig } from './types';
 import { localize } from './localize/localize';
 import { maxButtonScale, minButtonScale, ActionToState, AlarmStates, ArmActions } from './const';
 import { calcSupportedActions } from './data/entity';
@@ -11,7 +11,7 @@ import { CustomizeActionDialogConfig } from './components/dialog-action-config';
 
 import "./components/dialog-action-config";
 import { HassEntity } from 'home-assistant-js-websocket';
-import { fetchEntities } from './data/websockets';
+import { fetchEntities, fetchConfig } from './data/websockets';
 
 @customElement('alarmo-card-editor')
 export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
@@ -23,6 +23,9 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
   private _config?: Partial<CardConfig>;
 
   @state()
+  private _alarmoConfig?: AlarmoConfig;
+
+  @state()
   private _entities: string[] = [];
 
   async firstUpdated() {
@@ -31,6 +34,8 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         this._entities = res.map(e => e.entity_id);
       })
       .catch(_e => { });
+    
+    this._alarmoConfig = await fetchConfig(this.hass!);
   }
 
   public setConfig(config?: Partial<CardConfig>): void {
@@ -96,7 +101,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         : ''}
         ${
       stateObj
-        && (stateObj.attributes.code_arm_required !== stateObj.attributes.code_disarm_required)
+        && (this._alarmoConfig?.code_arm_required !== this._alarmoConfig?.code_disarm_required)
         ? html`
         <ha-formfield
           .label=${localize("editor.keep_keypad_visible", this.hass.language)}
