@@ -13,7 +13,6 @@ class AlarmoStateBadge extends LitElement {
   duration: number = 0;
   datetime: Date | null = null;
   timer = 0;
-  offset = 0;
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!changedProps.size) return true;
@@ -41,9 +40,6 @@ class AlarmoStateBadge extends LitElement {
     if (!stateObj.attributes.expiration || !stateObj.attributes.delay) return;
     this.duration = stateObj.attributes.delay;
     this.datetime = new Date(stateObj.attributes.expiration);
-    this.offset = 0;
-    const remaining = this.getRemaining();
-    this.offset = remaining - this.duration;
 
     this.timer = window.setInterval(() => {
       this.requestUpdate();
@@ -58,17 +54,11 @@ class AlarmoStateBadge extends LitElement {
 
   getRemaining(): number {
     if (!this.datetime) return 0;
-    const seconds = (this.datetime.getTime() - new Date().getTime()) / 1000 - this.offset;
+    const seconds = (this.datetime.getTime() - new Date().getTime()) / 1000;
     if (seconds < 0) {
       clearInterval(this.timer);
       return 0;
     }
-    return seconds;
-  }
-
-  getTime() {
-    const seconds = Math.round(this.getRemaining());
-    if (seconds <= 0) return '';
     return seconds;
   }
 
@@ -80,7 +70,7 @@ class AlarmoStateBadge extends LitElement {
   private _stateValue(state: string) {
     if (this.datetime && this.duration) {
       return html`
-        ${this.getTime()}
+        ${Math.max(Math.round(this.getRemaining()), 0)}
       `;
     } else {
       return html`
@@ -135,17 +125,15 @@ class AlarmoStateBadge extends LitElement {
       svg {
         overflow: visible;
         display: block;
-        transform: scaleX(-1);
+        transform: rotateY(-180deg) rotateZ(90deg);
       }
       .track {
         stroke-width: 3;
         stroke-linecap: round;
-        stroke: lightgray;
+        stroke: var(--disabled-text-color);
         fill: none;
       }
       .track .remaining {
-        transform: rotate(90deg);
-        transform-origin: center;
         transition: 0.3s linear stroke;
         stroke: var(--alarm-state-color);
       }
