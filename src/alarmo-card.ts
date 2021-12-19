@@ -284,25 +284,31 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       (this.warning == 'blocking_sensors' && stateObj.attributes.open_sensors)
     ) {
       return html`
-        <div class="message">
-          <div class="description">
-            <span>
-              <ha-icon icon="hass:alert"></ha-icon>
-              ${this.warning == 'blocking_sensors'
-                ? localize('errors.blocking_sensors', this.hass.language)
-                : localize('errors.triggered_sensors', this.hass.language)}
-            </span>
+        <div class="messagebox">
+          <div class="messagebox-left"></div>
+          <div class="messagebox-inner">
+            <div class="description">
+              <div class="description-filler"></div>
+              <span>
+                <ha-icon icon="hass:alert"></ha-icon>
+                ${this.warning == 'blocking_sensors'
+                  ? localize('errors.blocking_sensors', this.hass.language)
+                  : localize('errors.triggered_sensors', this.hass.language)}
+              </span>
+              <div class="description-filler"></div>
+            </div>
+            <div class="content">
+              ${Object.entries(stateObj.attributes.open_sensors).map(([e]) => {
+                if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
+                return html`
+                  <div class="badge">
+                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e}> </alarmo-sensor-badge>
+                  </div>
+                `;
+              })}
+            </div>
           </div>
-          <div class="content">
-            ${Object.entries(stateObj.attributes.open_sensors).map(([e]) => {
-              if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
-              return html`
-                <div class="badge">
-                  <alarmo-sensor-badge .hass=${this.hass} .entity=${e}> </alarmo-sensor-badge>
-                </div>
-              `;
-            })}
-          </div>
+          <div class="messagebox-right"></div>
         </div>
       `;
     } else {
@@ -452,32 +458,59 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           margin-left: calc(50% - 150px / 2);
         }
       }
-      div.message {
-        border-radius: 4px;
+      div.messagebox {
         width: 90%;
         margin: 0px auto 20px;
-        box-sizing: border-box;
-        border: 1px solid var(--label-badge-red);
         display: flex;
-        flex-direction: column;
-        position: relative;
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
       }
-      div.message .description {
-        padding: 5px 5px 0px 5px;
-        margin: -15px auto 0px;
+      div.messagebox-left {
+        display: flex;
+        width: 10px;
+        border: 1px solid var(--label-badge-red);
+        border-width: 1px 0px 1px 1px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+      div.messagebox-right {
+        display: flex;
+        width: 10px;
+        border: 1px solid var(--label-badge-red);
+        border-width: 1px 1px 1px 0px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+      div.messagebox-inner {
+        flex-direction: column;
+        border-bottom: 1px solid var(--label-badge-red);
+        flex: 1 1;
+      }
+      div.messagebox .description {
+        display: flex;
+        flex-direction: row;
+      }
+      div.messagebox .description span {
         color: var(--label-badge-red);
         font-weight: 500;
-      }
-      div.message .description span {
-        background: var(--ha-card-background, var(--card-background-color, white));
-        padding-right: 5px;
-      }
-      div.message .description ha-icon {
-        --mdc-icon-size: 24px;
-        margin: 0px 0px 0px 0px;
-      }
-      div.message .content {
         display: flex;
+        margin-top: -10px;
+        padding: 0px 5px;
+        flex-shrink: 2;
+      }
+      div.messagebox .description-filler {
+        flex: 1;
+        border-top: 1px solid var(--label-badge-red);
+        min-width: 5px;
+      }
+      div.messagebox .description ha-icon {
+        --mdc-icon-size: 24px;
+        margin: 0px 4px 0px 0px;
+      }
+      div.messagebox .content {
+        display: flex;
+        flex-basis: 100%;
         padding: 5px;
         justify-content: space-around;
         align-items: center;
@@ -486,7 +519,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         flex-wrap: wrap;
         color: var(--primary-text-color);
       }
-      div.message .content .badge {
+      div.messagebox .content .badge {
         width: 64px;
         margin: 5px 0px;
         justify-content: center;
