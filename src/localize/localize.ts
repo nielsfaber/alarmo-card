@@ -3,11 +3,15 @@ import * as fr from './languages/fr.json';
 
 var languages: any = {
   en: en,
-  fr: fr
+  fr: fr,
 };
 
-export function localize(string: string, language: string, search: string | string[] = '', replace: string | string[] = '') {
-
+export function localize(
+  string: string,
+  language: string,
+  search: string | string[] = '',
+  replace: string | string[] = ''
+) {
   const lang = language.replace(/['"]+/g, '').replace('-', '_');
 
   var translated: string;
@@ -19,7 +23,6 @@ export function localize(string: string, language: string, search: string | stri
   }
 
   if (translated === undefined) translated = string.split('.').reduce((o, i) => o[i], languages['en']);
-
 
   if (search !== '' && replace !== '') {
     if (!Array.isArray(search)) search = [search];

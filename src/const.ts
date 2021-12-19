@@ -1,11 +1,10 @@
-import { CardConfig } from "./types";
+import { CardConfig } from './types';
 
+export const CARD_VERSION = 'v1.2.1';
 
-export const CARD_VERSION = "v1.2.1"
+export const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
 
-export const BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "clear"];
-
-export const FORMAT_NUMBER = "number";
+export const FORMAT_NUMBER = 'number';
 
 export enum AlarmStates {
   Disarmed = 'disarmed',
@@ -15,18 +14,18 @@ export enum AlarmStates {
   ArmedAway = 'armed_away',
   ArmedHome = 'armed_home',
   ArmedNight = 'armed_night',
-  ArmedCustomBypass = 'armed_custom_bypass'
+  ArmedCustomBypass = 'armed_custom_bypass',
 }
 
 export const ICONS: Record<AlarmStates, string> = {
-  [AlarmStates.ArmedAway]: "hass:shield-lock",
-  [AlarmStates.ArmedHome]: "hass:shield-home",
-  [AlarmStates.ArmedNight]: "hass:shield-moon",
-  [AlarmStates.ArmedCustomBypass]: "hass:security",
-  [AlarmStates.Disarmed]: "hass:shield-off",
-  [AlarmStates.Arming]: "hass:shield-outline",
-  [AlarmStates.Pending]: "hass:shield-outline",
-  [AlarmStates.Triggered]: "hass:bell-ring",
+  [AlarmStates.ArmedAway]: 'hass:shield-lock',
+  [AlarmStates.ArmedHome]: 'hass:shield-home',
+  [AlarmStates.ArmedNight]: 'hass:shield-moon',
+  [AlarmStates.ArmedCustomBypass]: 'hass:security',
+  [AlarmStates.Disarmed]: 'hass:shield-off',
+  [AlarmStates.Arming]: 'hass:shield-outline',
+  [AlarmStates.Pending]: 'hass:shield-outline',
+  [AlarmStates.Triggered]: 'hass:bell-ring',
 };
 
 export enum ArmActions {
@@ -34,8 +33,8 @@ export enum ArmActions {
   ArmHome = 'arm_home',
   ArmNight = 'arm_night',
   ArmCustomBypass = 'arm_custom_bypass',
-  Disarm = 'disarm'
-};
+  Disarm = 'disarm',
+}
 
 export const ActionToState = {
   [ArmActions.ArmAway]: AlarmStates.ArmedAway,
@@ -43,7 +42,7 @@ export const ActionToState = {
   [ArmActions.ArmNight]: AlarmStates.ArmedNight,
   [ArmActions.ArmCustomBypass]: AlarmStates.ArmedCustomBypass,
   [ArmActions.Disarm]: AlarmStates.Disarmed,
-}
+};
 
 export enum AlarmoEvents {
   Arm = 'arm',
@@ -52,23 +51,23 @@ export enum AlarmoEvents {
   CommandNotAllowed = 'command_not_allowed',
   NoCodeProvided = 'no_code_provided',
   InvalidCodeProvided = 'invalid_code_provided',
-  TriggerTimeExpired = 'trigger_time_expired'
+  TriggerTimeExpired = 'trigger_time_expired',
 }
 
-export const EVENT = "alarmo_updated";
+export const EVENT = 'alarmo_updated';
 
-export const PENDING_STATES = ["arming", "pending"];
+export const PENDING_STATES = ['arming', 'pending'];
 
 export const defaultCardConfig: CardConfig = {
-  type: "",
-  entity: "",
-  name: "",
+  type: '',
+  entity: '',
+  name: '',
   keep_keypad_visible: false,
   use_clear_icon: false,
   button_scale: 1,
   states: {},
-  show_messages: true
-}
+  show_messages: true,
+};
 
 export const minButtonScale = 1;
 export const maxButtonScale = 2.5;

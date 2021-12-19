@@ -1,18 +1,18 @@
 {
-	"editor": {
-		"button_scale": "Skalierungsfaktor für Buttongröße.",
-		"keep_keypad_visible": "Zeige das Pin-Eingabefeld immer an, auch wenn kein Code erfordert ist.",
-		"use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
-		"show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
-		"available_actions": "Available actions:",
-		"action_dialog": {
-		  "title": "Customize display of action '{action}'",
-		  "button_label": "Override button label",
-		  "state_label": "Override state label"
-		}
-	},
-	"errors": {
-		"blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
-		"triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst"
-	}
+  "editor": {
+    "button_scale": "Skalierungsfaktor für Buttongröße.",
+    "keep_keypad_visible": "Zeige das Pin-Eingabefeld immer an, auch wenn kein Code erfordert ist.",
+    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
+    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
+    "available_actions": "Available actions:",
+    "action_dialog": {
+      "title": "Customize display of action '{action}'",
+      "button_label": "Override button label",
+      "state_label": "Override state label"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
+    "triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst"
+  }
 }

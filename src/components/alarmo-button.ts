@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
 class AlarmoButton extends LitElement {
-
   @property({ type: Boolean })
   disabled: boolean = false;
 
@@ -13,19 +12,15 @@ class AlarmoButton extends LitElement {
     return html`
       ${this.scaled
         ? html`
-      <button
-        ?disabled=${this.disabled}
-      >
-        <slot></slot>
-      </button>`
+            <button ?disabled=${this.disabled}>
+              <slot></slot>
+            </button>
+          `
         : html`
-      <mwc-button
-        ?disabled=${this.disabled}
-        ?outlined=${!this.disabled}
-      >
-        <slot></slot>
-      </mwc-button>
-    `}
+            <mwc-button ?disabled=${this.disabled} ?outlined=${!this.disabled}>
+              <slot></slot>
+            </mwc-button>
+          `}
     `;
   }
 
@@ -60,10 +55,10 @@ class AlarmoButton extends LitElement {
         border: none;
       }
       button:not(:disabled):hover {
-        background-color: rgba(var(--rgb-primary-color),0.06);
+        background-color: rgba(var(--rgb-primary-color), 0.06);
       }
       button:not(:disabled):active {
-        background-color: rgba(var(--rgb-primary-color),0.12);
+        background-color: rgba(var(--rgb-primary-color), 0.12);
       }
       button:focus {
         outline: none;

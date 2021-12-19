@@ -1,10 +1,9 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
-import { HomeAssistant } from "custom-card-helpers";
-import { ICONS, PENDING_STATES } from "../const";
+import { HomeAssistant } from 'custom-card-helpers';
+import { ICONS, PENDING_STATES } from '../const';
 
 class AlarmoStateBadge extends LitElement {
-
   @property()
   hass!: HomeAssistant;
 
@@ -18,12 +17,8 @@ class AlarmoStateBadge extends LitElement {
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!changedProps.size) return true;
-    const oldHass = changedProps.get("hass") as HomeAssistant | undefined;
-    if (
-      !oldHass ||
-      oldHass.themes !== this.hass!.themes ||
-      oldHass.language !== this.hass!.language
-    ) return true;
+    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
+    if (!oldHass || oldHass.themes !== this.hass!.themes || oldHass.language !== this.hass!.language) return true;
     if (oldHass.states[this.entity].state !== this.hass.states[this.entity].state) {
       const oldState = oldHass.states[this.entity].state;
       const newState = this.hass.states[this.entity].state;
@@ -73,7 +68,7 @@ class AlarmoStateBadge extends LitElement {
 
   getTime() {
     const seconds = Math.round(this.getRemaining());
-    if (seconds <= 0) return "";
+    if (seconds <= 0) return '';
     return seconds;
   }
 
@@ -87,14 +82,12 @@ class AlarmoStateBadge extends LitElement {
       return html`
         ${this.getTime()}
       `;
-    }
-    else {
+    } else {
       return html`
         <ha-icon .icon=${ICONS[state]}></ha-icon>
       `;
     }
   }
-
 
   render() {
     let c = 50;
@@ -105,11 +98,8 @@ class AlarmoStateBadge extends LitElement {
     const timerRunning = this.datetime && this.duration;
 
     return html`
-      <svg
-        viewBox="0 0 100 100"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g class="track ${stateObj.state.split("_").shift()} ${timerRunning ? "timer" : ""}">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g class="track ${stateObj.state.split('_').shift()} ${timerRunning ? 'timer' : ''}">
           <circle cx="${c}" cy="${c}" r="${r}"></circle>
           <path
             stroke-dasharray="${(this.getFraction() * arcLength).toFixed(2)} ${arcLength.toFixed(2)}"
@@ -123,12 +113,12 @@ class AlarmoStateBadge extends LitElement {
           ></path>
         </g>
       </svg>
-      <div class="overlay ${stateObj.state.split("_").shift()} ${timerRunning ? "timer" : ""}">
+      <div class="overlay ${stateObj.state.split('_').shift()} ${timerRunning ? 'timer' : ''}">
         <div class="value">
           ${this._stateValue(stateObj.state)}
         </div>
       </div>
-      `;
+    `;
   }
 
   static get styles() {
@@ -159,7 +149,8 @@ class AlarmoStateBadge extends LitElement {
         transition: 0.3s linear stroke;
         stroke: var(--alarm-state-color);
       }
-      .track.arming .remaining, .track.pending .remaining {
+      .track.arming .remaining,
+      .track.pending .remaining {
         transition: 1s linear stroke-dasharray;
       }
       .overlay {
@@ -194,11 +185,13 @@ class AlarmoStateBadge extends LitElement {
         --alarm-state-color: var(--alarm-color-triggered);
         animation: pulse 1s infinite;
       }
-      .arming, .pending {
+      .arming,
+      .pending {
         --alarm-state-color: var(--alarm-color-pending);
         animation: pulse 1s infinite;
       }
-      .arming.timer, .pending.timer {
+      .arming.timer,
+      .pending.timer {
         --alarm-state-color: var(--primary-color);
         animation: none;
       }
