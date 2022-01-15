@@ -9,7 +9,6 @@
 - [Configuration](#configuration)
 - [Options](#options)
   - [State configuration](#state-configuration)
-- [!example result](#)
 - [Say thank you](#say-thank-you)
 
 ## Introduction
@@ -113,9 +112,9 @@ Note that the alarm entity may not support all `armed_xxx` states. States which 
 
 | Name         | Type    | Applicable states                                                                                                            | Description                                                                    | Default                   |
 | ------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------- |
-| hide         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
-| button_label | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
-| state_label  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
+| hide         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
+| button_label | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
+| state_label  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
 
 **Example of using state configuration**
 
@@ -140,10 +139,11 @@ states:
 Result:
 
 ![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-example.png?raw=true "example result")
+
 ---
 
 ## Say thank you
-If you want to make donation as appreciation of my work, you can buy me a coffee. Thank you!
+If you want to make donation as appreciation of my work, you can do so via PayPal or buy me a coffee. Thank you!
 
+<a href="https://www.paypal.com/donate/?business=CLL4T6Y8ACXNN&no_recurring=0&item_name=Thank+you+for+supporting+my+work+on+the+Alarmo+project%2E+Your+donation+is+much+appreciated%21&currency_code=EUR" target="_blank"><img src="https://pics.paypal.com/00/s/YzlhMzI2ZjYtZDQxMi00NzNiLThmZTktOTk3MmEyYTA2Zjc0/file.PNG" width="150" /></a>
 <a href="https://www.buymeacoffee.com/vrdx7mi" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png"></a>
-

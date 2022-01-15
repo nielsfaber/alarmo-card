@@ -12,6 +12,7 @@ export const calcSupportedActions = (stateObj: HassEntity) => {
   if (supportedFeatures & 2) actions.push(ArmActions.ArmAway);
   if (supportedFeatures & 1) actions.push(ArmActions.ArmHome);
   if (supportedFeatures & 4) actions.push(ArmActions.ArmNight);
+  if (supportedFeatures & 32) actions.push(ArmActions.ArmVacation);
   if (supportedFeatures & 16) actions.push(ArmActions.ArmCustomBypass);
   return actions;
 };
