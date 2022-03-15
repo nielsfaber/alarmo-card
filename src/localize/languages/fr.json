@@ -1,18 +1,18 @@
 {
   "editor": {
     "keep_keypad_visible": "Gardez le clavier toujours visible, même lorsqu'aucune saisie de code n'est requise.",
-    "button_scale": "Scaling factor to apply for resizing the buttons.",
-    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
-    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
-    "available_actions": "Available actions:",
+    "button_scale": "Facteur d'échelle à appliquer pour le redimensionnement des boutons.",
+    "use_clear_icon": "Afficher l'icône (au lieu du texte) sur le clavier pour effacer la saisie du code.",
+    "show_messages": "Afficher les messages de diagnostic lorsque l'alarme est déclenchée ou ne peut pas être armée.",
+    "available_actions": "Actions disponibles:",
     "action_dialog": {
-      "title": "Customize display of action '{action}'",
-      "button_label": "Override button label",
-      "state_label": "Override state label"
+      "title": "Personnaliser l'affichage de l'action '{action}'",
+      "button_label": "Remplacer le libellé du bouton",
+      "state_label": "Remplacer l'étiquette d'état"
     }
   },
   "errors": {
-    "blocking_sensors": "Impossible d'armer en raison des capteurs suivants",
-    "triggered_sensors": "L'alarme a été déclenchée par les capteurs suivants"
+    "blocking_sensors": "Impossible d'armer en raison du(es) capteur(s) suivant(s)",
+    "triggered_sensors": "L'alarme a été déclenchée par le(s) capteur(s) suivant(s)"
   }
 }
