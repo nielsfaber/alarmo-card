@@ -1,7 +1,13 @@
 {
+  "arm_options": {
+    "heading": "Options for arming",
+    "skip_delay": "Skip exit delay",
+    "force": "Bypass open sensors"
+  },
   "editor": {
     "keep_keypad_visible": "Keep the keypad always visible, also when no code input is required.",
-    "button_scale": "Scaling factor to apply for resizing the buttons.",
+    "button_scale_actions": "Scaling factor to apply for resizing the action buttons.",
+    "button_scale_keypad": "Scaling factor to apply for resizing the keypad buttons.",
     "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
     "available_actions": "Available actions:",

@@ -1,7 +1,13 @@
 {
+  "arm_options": {
+    "heading": "Options for arming",
+    "skip_delay": "Skip exit delay",
+    "force": "Bypass open sensors"
+  },
   "editor": {
     "keep_keypad_visible": "Gardez le clavier toujours visible, même lorsqu'aucune saisie de code n'est requise.",
-    "button_scale": "Facteur d'échelle à appliquer pour le redimensionnement des boutons.",
+    "button_scale_actions": "Facteur d'échelle à appliquer pour le redimensionnement des boutons des actions.",
+    "button_scale_keypad": "Facteur d'échelle à appliquer pour le redimensionnement des boutons du clavier.",
     "use_clear_icon": "Afficher l'icône (au lieu du texte) sur le clavier pour effacer la saisie du code.",
     "show_messages": "Afficher les messages de diagnostic lorsque l'alarme est déclenchée ou ne peut pas être armée.",
     "available_actions": "Actions disponibles:",

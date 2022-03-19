@@ -68,6 +68,8 @@ class AlarmoButton extends LitElement {
       }
       ::slotted(ha-icon) {
         --mdc-icon-size: calc(var(--content-scale, 1) * 1.25rem);
+        margin: -0.1875rem 0px;
+        display: block;
       }
     `;
   }

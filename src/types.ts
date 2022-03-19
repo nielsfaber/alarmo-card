@@ -7,7 +7,8 @@ export type CardConfig = {
   name: string;
   keep_keypad_visible: boolean;
   use_clear_icon: boolean;
-  button_scale: number;
+  button_scale_keypad: number;
+  button_scale_actions: number;
   states: Partial<Record<AlarmStates, StateConfig>>;
   show_messages: boolean;
 };

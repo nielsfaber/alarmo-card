@@ -1,5 +1,5 @@
 import { LitElement, html, TemplateResult, PropertyValues, CSSResult, css } from 'lit';
-import { property, customElement, state } from 'lit/decorators.js';
+import { property, customElement, state, query } from 'lit/decorators.js';
 import { HomeAssistant, fireEvent } from 'custom-card-helpers';
 import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
 
@@ -13,6 +13,7 @@ import {
   AlarmoEvents,
   AlarmStates,
   EVENT,
+  defaultArmOptions,
 } from './const';
 import { CardConfig, AlarmoEvent, AlarmoEntity, AlarmoConfig } from './types';
 
@@ -27,6 +28,7 @@ import { calcSupportedActions, computeStateDisplay, computeNameDisplay, codeRequ
 import { calcStateConfig, validateConfig } from './data/config';
 import { isEmpty } from './helpers';
 import { fetchEntities, fetchConfig } from './data/websockets';
+import { mdiDotsVertical } from '@mdi/js';
 
 @customElement('alarmo-card')
 export class AlarmoCard extends SubscribeMixin(LitElement) {
@@ -48,6 +50,12 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   @state()
   private area_id: string | number | null | undefined = undefined;
 
+  @state()
+  armOptions = { ...defaultArmOptions };
+
+  @state()
+  backendConnection: boolean | null = null;
+
   subscribedEntities: string[] = [];
 
   _codeClearTimer: number = 0;
@@ -64,7 +72,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     return !codeRequired(stateObj) && !this._config.keep_keypad_visible ? 4 : 9;
   }
 
-  public setConfig(config?: CardConfig): void {
+  public setConfig(config?: CardConfig & { button_scale?: any }): void {
+    if (!config?.button_scale_actions && config?.button_scale)
+      //legacy: button_scale was replaced by button_scale_actions
+      config = { ...config, button_scale_actions: config?.button_scale };
+    if (!config?.button_scale_keypad && config?.button_scale)
+      //legacy: button_scale was replaced by button_scale_keypad
+      config = { ...config, button_scale_keypad: config?.button_scale };
+
     validateConfig(config);
     this._config = { ...defaultCardConfig, ...config };
   }
@@ -76,14 +91,24 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   }
 
   async firstUpdated() {
+    //load the checkbox element
+    const ch = await (window as any).loadCardHelpers();
+    const c = await ch.createCardElement({ type: 'entities', entities: [] });
+    await c.constructor.getConfigElement();
+
     fetchEntities(this.hass!)
       .then(res => {
         let match = res.find(e => e.entity_id == this._config!.entity);
         if (match) this.area_id = match.area_id ? match.area_id : null;
       })
-      .catch(_e => {});
-
-    this._alarmoConfig = await fetchConfig(this.hass!);
+      .then(() => fetchConfig(this.hass!))
+      .then(res => {
+        this._alarmoConfig = res;
+        this.backendConnection = true;
+      })
+      .catch(_e => {
+        this.backendConnection = false;
+      });
   }
 
   private async _fetchData(ev: AlarmoEvent): Promise<void> {
@@ -141,7 +166,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   }
 
   protected render(): TemplateResult {
-    if (!this._config || !this.hass) {
+    if (!this._config || !this.hass || this.backendConnection === null) {
       return html``;
     }
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
@@ -159,7 +184,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         </hui-warning>
       `;
     }
-    if (this.area_id === undefined) {
+    if (this.backendConnection === false) {
       return html`
         <hui-warning>
           Could not establish a connection with the alarmo integration. Please check if it is installed and the correct
@@ -169,6 +194,47 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
     return html`
       <ha-card>
+        ${stateObj.state === AlarmStates.Disarmed
+          ? html`
+              <ha-button-menu
+                corner="BOTTOM_START"
+                multi
+                @action=${this._toggleArmOptions}
+                @click=${(ev: Event) => ev.preventDefault()}
+              >
+                <ha-icon-button slot="trigger" .label=${this.hass.localize('ui.common.menu')} .path=${mdiDotsVertical}>
+                </ha-icon-button>
+                <mwc-list-item noninteractive>
+                  <span class="title">
+                    ${localize('arm_options.heading', this.hass.language)}
+                  </span>
+                </mwc-list-item>
+                <mwc-list-item graphic="icon">
+                  <mwc-checkbox
+                    slot="graphic"
+                    ?checked=${this.armOptions.skip_delay}
+                    @click=${(ev: Event) => {
+                      (ev.target as HTMLInputElement).parentElement?.click();
+                      ev.stopPropagation();
+                    }}
+                  ></mwc-checkbox>
+                  ${localize('arm_options.skip_delay', this.hass.language)}
+                </mwc-list-item>
+                <mwc-list-item graphic="icon">
+                  <mwc-checkbox
+                    slot="graphic"
+                    ?checked=${this.armOptions.force}
+                    @click=${(ev: Event) => {
+                      (ev.target as HTMLInputElement).parentElement?.click();
+                      ev.stopPropagation();
+                    }}
+                  ></mwc-checkbox>
+                  ${localize('arm_options.force', this.hass.language)}
+                </mwc-list-item>
+              </ha-button-menu>
+            `
+          : ''}
+
         <div class="header">
           <div class="icon">
             <alarmo-state-badge
@@ -197,11 +263,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         ${!codeRequired(stateObj) && !this._config.keep_keypad_visible
           ? html``
           : html`
-              <paper-input
+              <ha-textfield
                 .value=${this._input}
                 .label=${this.hass.localize('ui.card.alarm_control_panel.code')}
                 ?disabled=${!codeRequired(stateObj)}
-                @value-changed=${(ev: Event) => {
+                @input=${(ev: Event) => {
                   this._clearCodeError();
                   this._input = (ev.target as HTMLInputElement).value;
                   this._setCodeClearTimer();
@@ -210,20 +276,20 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 type="password"
                 id="code_input"
                 .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
-              ></paper-input>
+              ></ha-textfield>
             `}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
         this._alarmoConfig?.code_format !== FORMAT_NUMBER
           ? html``
           : html`
-              <div id="keypad" style="max-width: ${this._config.button_scale * 300}px">
+              <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
                 ${BUTTONS.map(value => {
                   return value === ''
                     ? html`
                         <alarmo-button
                           disabled
-                          style="--content-scale: ${this._config!.button_scale}"
-                          ?scaled=${this._config!.button_scale != 1}
+                          style="--content-scale: ${this._config!.button_scale_keypad}"
+                          ?scaled=${this._config!.button_scale_keypad != 1}
                         ></alarmo-button>
                       `
                     : html`
@@ -232,8 +298,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                           @click=${this._handlePadClick}
                           ?disabled=${!codeRequired(stateObj)}
                           class="${value !== 'clear' ? 'numberKey' : ''}"
-                          style="--content-scale: ${this._config!.button_scale}"
-                          ?scaled=${this._config!.button_scale != 1}
+                          style="--content-scale: ${this._config!.button_scale_keypad}"
+                          ?scaled=${this._config!.button_scale_keypad != 1}
                         >
                           ${value === 'clear'
                             ? this._config!.use_clear_icon
@@ -265,8 +331,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       return html`
         <alarmo-button
           @click=${(ev: Event) => this._handleActionClick(ev, action)}
-          style="--content-scale: ${this._config!.button_scale}"
-          ?scaled=${this._config!.button_scale != 1}
+          style="--content-scale: ${this._config!.button_scale_actions}"
+          ?scaled=${this._config!.button_scale_actions != 1}
         >
           ${isEmpty(stateConfig.button_label)
             ? this.hass!.localize(`ui.card.alarm_control_panel.${action}`)
@@ -333,12 +399,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       });
     } else {
       this.hass!.callService('alarmo', 'arm', {
+        ...this.armOptions,
         entity_id: this._config!.entity,
         mode: ActionToState[action],
         code: this._input,
       });
     }
     this.warning = '';
+    this.armOptions = { ...defaultArmOptions };
   }
 
   private _showCodeError() {
@@ -381,6 +449,22 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
   }
 
+  private _toggleArmOptions(ev: CustomEvent) {
+    switch (ev.detail.index) {
+      case 0:
+        this.armOptions = { ...this.armOptions, skip_delay: !this.armOptions.skip_delay };
+        break;
+      case 1:
+        this.armOptions = { ...this.armOptions, force: !this.armOptions.force };
+        break;
+    }
+    ev.preventDefault();
+    const el = ev.target as HTMLElement;
+    setTimeout(() => {
+      (el.firstElementChild as HTMLElement).blur();
+    }, 50);
+  }
+
   static get styles(): CSSResult {
     return css`
       ha-card {
@@ -421,15 +505,15 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         justify-content: center;
       }
       .actions alarmo-button {
-        margin: 0 4px 4px;
+        margin: 0 8px 8px;
       }
-      paper-input {
-        margin: 0 auto 8px;
-        max-width: 150px;
+      ha-textfield {
+        margin: 8px auto;
+        max-width: 200px;
         text-align: center;
-        margin-left: calc(50% - 150px / 2);
+        margin-left: calc(50% - 200px / 2);
       }
-      paper-input.error {
+      ha-textfield.error {
         animation: shake 0.2s ease-in-out 0s 2;
       }
       #keypad {
@@ -440,22 +524,22 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         width: 100%;
       }
       #keypad alarmo-button {
-        padding: 4px;
+        padding: 8px;
         width: 30%;
         box-sizing: border-box;
       }
       @keyframes shake {
         0% {
-          margin-left: calc(50% - 150px / 2);
+          margin-left: calc(50% - 200px / 2);
         }
         25% {
-          margin-left: calc(50% - 150px / 2 + 10px);
+          margin-left: calc(50% - 200px / 2 + 10px);
         }
         75% {
-          margin-left: calc(50% - 150px / 2 - 10px);
+          margin-left: calc(50% - 200px / 2 - 10px);
         }
         100% {
-          margin-left: calc(50% - 150px / 2);
+          margin-left: calc(50% - 200px / 2);
         }
       }
       div.messagebox {
@@ -524,6 +608,19 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         margin: 5px 0px;
         justify-content: center;
         align-items: center;
+      }
+      ha-button-menu {
+        position: absolute;
+        right: 4px;
+        top: 4px;
+      }
+      mwc-list-item {
+        --mdc-theme-secondary: var(--primary-color);
+        --mdc-list-item-graphic-margin: 16px;
+      }
+      mwc-list-item .title {
+        font-weight: 500;
+        font-size: 1.1em;
       }
     `;
   }

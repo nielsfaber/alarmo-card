@@ -4,6 +4,10 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
+  - [Countdown timer](#countdown-timer)
+  - [Diagnostics messages](#diagnostics-messages)
+  - [Arming options](#arming-options)
+  - [Card customization](#card-customization)
 - [Installation](#installation)
 - [Updating](#updating)
 - [Configuration](#configuration)
@@ -24,12 +28,37 @@ Preview:
 
 ## Features
 
-The alarmo-card is similar to the [Lovelace alarm panel card](https://www.home-assistant.io/lovelace/alarm-panel/), but brings some extra functions:
+The alarmo-card is similar to the [Lovelace alarm panel card](https://www.home-assistant.io/lovelace/alarm-panel/), but brings some extra functions.
 
-* A countdown timer is displayed when the alarm is in arming or pending state. It shows you how much time you have left for leaving the house / disarming the alarm.
-* A message is displayed when the arming of the alarm failed or the alarm has triggered, with an overview of the sensor(s) involved.
-* The card gives you feedback when a wrong code was entered.
-* You can resize the buttons
+### Countdown timer
+
+A countdown timer is displayed when the alarm is in arming or pending state. 
+The countdown timer will show the remaining time of the configured exit / entry delay.
+This gives you an indication of how much time you have left for leaving the house / disarming the alarm.
+
+### Diagnostics messages
+The card will give you an indication in the following conditions:
+* A wrong code (or no code) was entered.
+* The alarm could not be armed (due to one or more sensors).
+* The alarm was triggered (due to one or more sensors).
+
+In the second and third case you will see a message in the card with the sensors that caused the issue.
+The state of these sensors is visible in the message, such that you have feedback in case the issue is resolved.
+
+### Arming options
+When the alarm is disabled, an icon is shown in the top-right corner of the card. By clicking it a menu is revealed with the advanced arming options:
+* *Skip delay*: setting this option will cause the exit delay to be skipped, so arming the alarm will be effective immediately. This is practical in case you want to arm the alarm after you already left the house.
+* *Bypass open sensors*: this option forces the alarm to be armed. In case sensors are blocking the arming, they will be automatically bypassed (temporarily eliminated from the alarm). 
+
+The arming options are only applied on the next time you arm the alarm.
+
+### Card customization
+The card allows the following customization options:
+* Increasing the size of the buttons in the card.
+* Choose which buttons for arming modes are visible.
+* Change the texts visible on the arming mode buttons and the text visible when the alarm is in this state.
+* Change the title of the alarm.
+
 
 ## Installation
 <details>
@@ -94,27 +123,28 @@ Configuration using UI mode:
 * Choose "Custom: Alarmo Card" and pick the correct entity.
 
 ## Options
-| Name                | Type    | Requirement  | Description                                                                                                    | Default            |
-| ------------------- | ------- | ------------ | -------------------------------------------------------------------------------------------------------------- | ------------------ |
-| type                | string  | **Required** | `custom:alarmo-card`                                                                                           |                    |
-| entity              | string  | **Required** | Alarm_control_panel entity                                                                                     |                    |
-| name                | string  | Optional     | Displayed name (next to icon)                                                                                  | (Take from entity) |
-| keep_keypad_visible | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used. | `false`            |
-| button_scale        | number  | Optional     | Scaling factor to apply to the size of the buttons in the card (between 1.0 and 2.5)                           | `1.0`              |
-| use_clear_icon      | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
-| show_messages       | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                               | `true`             |
-| states              | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).            |                    |
+| Name                   | Type    | Requirement  | Description                                                                                                    | Default            |
+| ---------------------- | ------- | ------------ | -------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `type`                 | string  | **Required** | `custom:alarmo-card`                                                                                           |                    |
+| `entity`               | string  | **Required** | Alarm_control_panel entity                                                                                     |                    |
+| `name`                 | string  | Optional     | Displayed name (next to icon)                                                                                  | (Take from entity) |
+| `keep_keypad_visible`  | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used. | `false`            |
+| `button_scale_actions` | number  | Optional     | Scaling factor to apply to the size of the action buttons (between 1.0 and 2.5)                                | `1.0`              |
+| `button_scale_keypad`  | number  | Optional     | Scaling factor to apply to the size of the keypad buttons (between 1.0 and 2.5)                                | `1.0`              |
+| `use_clear_icon`       | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
+| `show_messages`        | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                               | `true`             |
+| `states`               | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).               |                    |
 
 ### State configuration 
 State configuration allows users to modify the displayed texts and buttons (where applicable) in the card corresponding to certain states.
 
 Note that the alarm entity may not support all `armed_xxx` states. States which are not supported will not show up in the card and cannot be configured.
 
-| Name         | Type    | Applicable states                                                                                                            | Description                                                                    | Default                   |
-| ------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------- |
-| hide         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
-| button_label | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
-| state_label  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
+| Name           | Type    | Applicable states                                                                                                                                | Description                                                                    | Default                   |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------- |
+| `hide`         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
+| `button_label` | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
+| `state_label`  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
 
 **Example of using state configuration**
 

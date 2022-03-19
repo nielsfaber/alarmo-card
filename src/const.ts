@@ -1,6 +1,6 @@
 import { CardConfig } from './types';
 
-export const CARD_VERSION = 'v1.2.3';
+export const CARD_VERSION = 'v1.3.0';
 
 export const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
 
@@ -68,10 +68,16 @@ export const defaultCardConfig: CardConfig = {
   name: '',
   keep_keypad_visible: false,
   use_clear_icon: false,
-  button_scale: 1,
+  button_scale_actions: 1,
+  button_scale_keypad: 1,
   states: {},
   show_messages: true,
 };
 
 export const minButtonScale = 1;
 export const maxButtonScale = 2.5;
+
+export const defaultArmOptions = {
+  skip_delay: false,
+  force: false,
+};
