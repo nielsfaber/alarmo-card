@@ -2,6 +2,7 @@ import { LitElement, html, css, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { HomeAssistant } from 'custom-card-helpers';
 import { ICONS, PENDING_STATES } from '../const';
+import { fetchCountdown } from '../data/websockets';
 
 class AlarmoStateBadge extends LitElement {
   @property()
@@ -34,12 +35,14 @@ class AlarmoStateBadge extends LitElement {
     if (PENDING_STATES.includes(state)) this.startTimer();
   }
 
-  startTimer() {
+  async startTimer() {
     clearInterval(this.timer);
-    const stateObj = this.hass.states[this.entity];
-    if (!stateObj.attributes.expiration || !stateObj.attributes.delay) return;
-    this.duration = stateObj.attributes.delay;
-    this.datetime = new Date(stateObj.attributes.expiration);
+    fetchCountdown(this.hass, this.entity)
+      .then(countdownConfig => {
+        this.duration = countdownConfig.delay;
+        this.datetime = new Date(new Date().getTime() + countdownConfig.remaining * 1000);
+      })
+      .catch(_e => {});
 
     this.timer = window.setInterval(() => {
       this.requestUpdate();

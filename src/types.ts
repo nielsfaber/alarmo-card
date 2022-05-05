@@ -52,3 +52,8 @@ export interface AlarmoConfig {
   code_disarm_required: boolean;
   code_format: 'number' | 'text';
 }
+
+export interface CountdownConfig {
+  delay: number;
+  remaining: number;
+}
