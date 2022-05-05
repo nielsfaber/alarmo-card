@@ -169,6 +169,7 @@ class AlarmoStateBadge extends LitElement {
       }
       .disarmed {
         --alarm-state-color: var(--alarm-color-disarmed);
+        animation: none;
       }
       .triggered {
         --alarm-state-color: var(--alarm-color-triggered);
@@ -186,6 +187,7 @@ class AlarmoStateBadge extends LitElement {
       }
       .armed {
         --alarm-state-color: var(--alarm-color-armed);
+        animation: none;
       }
       @keyframes pulse {
         0% {
