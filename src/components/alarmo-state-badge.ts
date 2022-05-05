@@ -123,9 +123,10 @@ class AlarmoStateBadge extends LitElement {
         cursor: pointer;
       }
       svg {
-        overflow: visible;
+        width: 100%;
+        height: 100%;
         display: block;
-        transform: rotateY(-180deg) rotateZ(90deg);
+        transform: rotateZ(90deg) scale(1, -1);
       }
       .track {
         stroke-width: 3;
