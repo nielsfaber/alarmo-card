@@ -19,7 +19,10 @@ class AlarmoStateBadge extends LitElement {
     if (!changedProps.size) return true;
     const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
     if (!oldHass || oldHass.themes !== this.hass!.themes || oldHass.language !== this.hass!.language) return true;
-    if (oldHass.states[this.entity].state !== this.hass.states[this.entity].state) {
+    if (
+      oldHass.states[this.entity].state !== this.hass.states[this.entity].state ||
+      oldHass.states[this.entity].attributes.delay !== this.hass.states[this.entity].attributes.delay
+    ) {
       const oldState = oldHass.states[this.entity].state;
       const newState = this.hass.states[this.entity].state;
       if (PENDING_STATES.includes(newState)) this.startTimer();
