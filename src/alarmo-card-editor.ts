@@ -68,8 +68,8 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         <div class="grid">
           <ha-entity-picker
             .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.entity')} (${this.hass.localize(
-      'ui.panel.lovelace.editor.card.config.required'
-    )})"
+              'ui.panel.lovelace.editor.card.config.required'
+            )})"
             .hass=${this.hass}
             .value="${this._config!.entity || ''}"
             .includeDomains=${['alarm_control_panel']}
@@ -80,116 +80,110 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
 
           <ha-textfield
             .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize(
-      'ui.panel.lovelace.editor.card.config.optional'
-    )})"
+              'ui.panel.lovelace.editor.card.config.optional'
+            )})"
             .value="${this._config!.name || ''}"
             @input=${(ev: Event) => this._updateConfig('name', String((ev.target as HTMLInputElement).value).trim())}
           ></ha-textfield>
-          </div>
-            ${
-              stateObj
-                ? html`
-                    <div class="config-item">
-                      <span>${localize('editor.available_actions', this.hass.language)}</span>
+        </div>
+
+        ${stateObj
+          ? html`
+              <div class="config-item">
+                <span>${localize('editor.available_actions', this.hass.language)}</span>
+              </div>
+              <div class="config-row">
+                ${[...calcSupportedActions(stateObj), ArmActions.Disarm].map(e => {
+                  const supportedStates = calcSupportedActions(stateObj).map(e => ActionToState[e]);
+                  const isHidden = calcStateConfig(ActionToState[e], this._config!).hide;
+                  return html`
+                    <div class="checkbox-item ${isHidden ? 'disabled' : ''}">
+                      <ha-checkbox
+                        ?checked=${!isHidden}
+                        ?disabled=${(!isHidden &&
+                          supportedStates.filter(e => !calcStateConfig(e, this._config!).hide).length == 1) ||
+                          e == ArmActions.Disarm}
+                        @change=${(ev: Event) =>
+                          this._updateStateConfig(
+                            ActionToState[e],
+                            (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
+                          )}
+                      >
+                      </ha-checkbox>
+                      <span
+                        @click=${(ev: Event) => {
+                          const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
+                          checkbox.click();
+                          checkbox.blur();
+                        }}
+                      >
+                        ${this.hass!.localize(`ui.card.alarm_control_panel.${e}`)}
+                      </span>
+                      <ha-icon-button
+                        .path=${mdiPencil}
+                        style="color: var(--secondary-text-color); --mdc-icon-button-size: 42px"
+                        ?disabled=${calcStateConfig(ActionToState[e], this._config!).hide}
+                        @click=${(ev: Event) => this._openActionLabelDialog(ev, e)}
+                      >
+                      </ha-icon-button>
                     </div>
-                    <div class="config-row">
-                      ${[...calcSupportedActions(stateObj), ArmActions.Disarm].map(e => {
-                        const supportedStates = calcSupportedActions(stateObj).map(e => ActionToState[e]);
-                        const isHidden = calcStateConfig(ActionToState[e], this._config!).hide;
-                        return html`
-        <div class="checkbox-item ${isHidden ? 'disabled' : ''}">
-          <ha-checkbox
-            ?checked=${!isHidden}
-            ?disabled=${(!isHidden &&
-              supportedStates.filter(e => !calcStateConfig(e, this._config!).hide).length == 1) ||
-              e == ArmActions.Disarm}
-            @change=${(ev: Event) =>
-              this._updateStateConfig(
-                ActionToState[e],
-                (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
-              )}
-          >
-          </ha-checkbox>
-          <span
-            @click=${(ev: Event) => {
-              const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
-              checkbox.click();
-              checkbox.blur();
-            }}
-          >
-            ${this.hass!.localize(`ui.card.alarm_control_panel.${e}`)}
-          </span>
-          <ha-icon-button
-            .path=${mdiPencil}
-            style="color: var(--secondary-text-color); --mdc-icon-button-size: 42px"
-            ?disabled=${calcStateConfig(ActionToState[e], this._config!).hide}
-            @click=${(ev: Event) => this._openActionLabelDialog(ev, e)}
-          >
-          </ha-icon-button>
-        </span>
-      `;
-                      })}
-                    </div>
-                  `
-                : ''
-            }
+                  `;
+                })}
+              </div>
+            `
+          : ''}
 
-            <div class="grid">
-              <ha-formfield .label=${localize('editor.button_scale_actions', this.hass.language)}>
-                <ha-slider
-                  value=${this._config!.button_scale_actions || 1}
-                  @change=${(ev: Event) =>
-                    this._updateConfig('button_scale_actions', Number((ev.target as HTMLInputElement).value))}
-                  min="${minButtonScale}"
-                  max="${maxButtonScale}"
-                  step="0.1"
-                  pin
-                ></ha-slider>
-              </ha-formfield>
+        <div class="grid">
+          <ha-formfield .label=${localize('editor.button_scale_actions', this.hass.language)}>
+            <ha-slider
+              value=${this._config!.button_scale_actions || 1}
+              @change=${(ev: Event) =>
+                this._updateConfig('button_scale_actions', Number((ev.target as HTMLInputElement).value))}
+              min="${minButtonScale}"
+              max="${maxButtonScale}"
+              step="0.1"
+              pin
+            ></ha-slider>
+          </ha-formfield>
 
-              <ha-formfield .label=${localize('editor.button_scale_keypad', this.hass.language)}>
-                <ha-slider
-                  value=${this._config!.button_scale_keypad || 1}
-                  @change=${(ev: Event) =>
-                    this._updateConfig('button_scale_keypad', Number((ev.target as HTMLInputElement).value))}
-                  min="${minButtonScale}"
-                  max="${maxButtonScale}"
-                  step="0.1"
-                  pin
-                  ?disabled=${!stateObj || !hasKeypad}
-                ></ha-slider>
-              </ha-formfield>
-            </div>
+          <ha-formfield .label=${localize('editor.button_scale_keypad', this.hass.language)}>
+            <ha-slider
+              value=${this._config!.button_scale_keypad || 1}
+              @change=${(ev: Event) =>
+                this._updateConfig('button_scale_keypad', Number((ev.target as HTMLInputElement).value))}
+              min="${minButtonScale}"
+              max="${maxButtonScale}"
+              step="0.1"
+              pin
+              ?disabled=${!stateObj || !hasKeypad}
+            ></ha-slider>
+          </ha-formfield>
 
-            <div class="grid">
-              <ha-formfield .label=${localize('editor.use_clear_icon', this.hass.language)}>
-                <ha-switch
-                  .checked=${this._config!.use_clear_icon}
-                  @change=${(ev: Event) =>
-                    this._updateConfig('use_clear_icon', (ev.target as HTMLInputElement).checked)}
-                  ?disabled=${!stateObj || !hasKeypad}
-                ></ha-switch
-              ></ha-formfield>
+          <ha-formfield .label=${localize('editor.use_clear_icon', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.use_clear_icon}
+              @change=${(ev: Event) => this._updateConfig('use_clear_icon', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj || !hasKeypad}
+            ></ha-switch
+          ></ha-formfield>
 
-              <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
-                <ha-switch
-                  .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
-                  @change=${(ev: Event) => this._updateConfig('show_messages', (ev.target as HTMLInputElement).checked)}
-                ></ha-switch
-              ></ha-formfield>
-            </div>
+          <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
+              @change=${(ev: Event) => this._updateConfig('show_messages', (ev.target as HTMLInputElement).checked)}
+            ></ha-switch
+          ></ha-formfield>
 
-            <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
-              <ha-switch
-                .checked=${this._config!.keep_keypad_visible}
-                @change=${(ev: Event) =>
-                  this._updateConfig('keep_keypad_visible', (ev.target as HTMLInputElement).checked)}
-                ?disabled=${!stateObj ||
-                  !hasKeypad ||
-                  this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required}
-              ></ha-switch
-            ></ha-formfield>
-          </div>
+          <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.keep_keypad_visible}
+              @change=${(ev: Event) =>
+                this._updateConfig('keep_keypad_visible', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj ||
+                !hasKeypad ||
+                this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required}
+            ></ha-switch
+          ></ha-formfield>
         </div>
       </div>
     `;
@@ -241,9 +235,6 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
 
   static get styles(): CSSResult {
     return css`
-      ha-formfield {
-        padding: 20px 0px;
-      }
       div.config-row {
         font-size: 16px;
         display: flex;
@@ -263,9 +254,15 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         width: 100%;
       }
       div.grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 8px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px 8px;
+      }
+      div.grid > * {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 300px;
       }
       div.checkbox-item {
         font-size: 0.875rem;
