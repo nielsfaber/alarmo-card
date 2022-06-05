@@ -95,7 +95,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     const ch = await (window as any).loadCardHelpers();
     const c = await ch.createCardElement({ type: 'entities', entities: [] });
     await c.constructor.getConfigElement();
+    await this.loadBackendConfig();
+  }
 
+  async loadBackendConfig() {
+    if (this.backendConnection) return;
     fetchEntities(this.hass!)
       .then(res => {
         let match = res.find(e => e.entity_id == this._config!.entity);
@@ -140,10 +144,17 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     if (changedProps.has('_config')) return true;
 
     const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
-    if (!oldHass || oldHass.themes !== this.hass!.themes || oldHass.language !== this.hass!.language) return true;
+    if (
+      !oldHass ||
+      oldHass.themes !== this.hass!.themes ||
+      oldHass.language !== this.hass!.language ||
+      oldHass.config.state !== this.hass!.config.state
+    )
+      return true;
     if (oldHass.states[this._config!.entity] !== this.hass!.states[this._config!.entity]) {
       const oldState = oldHass.states[this._config!.entity] as AlarmoEntity;
       const newState = this.hass!.states[this._config!.entity] as AlarmoEntity;
+      if (this.backendConnection === false) (async () => await this.loadBackendConfig())();
       this.processStateUpdate(oldState, newState);
       return true;
     }
