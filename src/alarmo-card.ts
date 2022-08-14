@@ -1,6 +1,6 @@
 import { LitElement, html, TemplateResult, PropertyValues, CSSResult, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
-import { HomeAssistant, fireEvent } from 'custom-card-helpers';
+import { HomeAssistant, fireEvent, computeDomain } from 'custom-card-helpers';
 import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
 
 import {
@@ -65,6 +65,22 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     return document.createElement('alarmo-card-editor');
   }
 
+  public static async getStubConfig(hass: HomeAssistant): Promise<Partial<CardConfig>> {
+
+    let defaultEntity = Object.keys(hass.states).find((e) => computeDomain(e) == "alarm_control_panel");
+
+    await fetchEntities(hass)
+      .then(res => {
+        const sorted = res.sort((a,b) => Number(a.area_id) - Number(b.area_id));
+        if(sorted.length) defaultEntity = sorted[0].entity_id;
+      });
+
+      return {
+          type: `custom:alarmo-card`,
+          entity: defaultEntity
+      };
+  }
+  
   public async getCardSize(): Promise<number> {
     if (!this._config || !this.hass) return 9;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
@@ -642,6 +658,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   type: 'alarmo-card',
   name: 'Alarmo Card',
   description: 'Card for operating Alarmo through Lovelace.',
+  preview: true
 });
 
 console.info(
