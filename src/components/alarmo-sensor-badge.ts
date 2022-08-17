@@ -63,9 +63,9 @@ class AlarmoSensorBadge extends LitElement {
         <div class="title">${name}-</div>
       </div>
     `
-    }
+  }
 
-    static get styles(): CSSResult {
+  static get styles(): CSSResult {
     return css`
       .badge-container {
         display: inline-block;
