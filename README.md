@@ -134,7 +134,7 @@ Configuration using UI mode:
 | `use_clear_icon`       | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
 | `show_messages`        | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                               | `true`             |
 | `states`               | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).               |                    |
-
+| `kiosk_mode    `       | boolean | Optional     | Disable more-info tapping.                                                                                     | `false`            |
 ### State configuration 
 State configuration allows users to modify the displayed texts and buttons (where applicable) in the card corresponding to certain states.
 

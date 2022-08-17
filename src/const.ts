@@ -72,6 +72,7 @@ export const defaultCardConfig: CardConfig = {
   button_scale_keypad: 1,
   states: {},
   show_messages: true,
+  kiosk_mode: false,
 };
 
 export const minButtonScale = 1;

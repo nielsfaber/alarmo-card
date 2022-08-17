@@ -11,6 +11,7 @@
     "button_scale_keypad": "Factor de escalado para cambiar el tamaño de los botones del teclado.",
     "use_clear_icon": "Mostrar icono (en lugar de texto) en el teclado para borrar la entrada de código.",
     "show_messages": "Mostrar mensajes de diagnóstico cuando se activa la alarma o no se puede activar.",
+    "kiosk_mode": "Disable more-info tapping.",
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",

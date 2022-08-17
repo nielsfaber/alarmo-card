@@ -10,6 +10,7 @@
     "button_scale_keypad": "Skalierungsfaktor für Buttongröße der Pin-Eingabefeld.",
     "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
+    "kiosk_mode": "Disable more-info tapping.",
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",

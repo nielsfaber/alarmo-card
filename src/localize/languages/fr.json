@@ -10,6 +10,7 @@
     "button_scale_keypad": "Facteur d'échelle à appliquer pour le redimensionnement des boutons du clavier.",
     "use_clear_icon": "Afficher l'icône (au lieu du texte) sur le clavier pour effacer la saisie du code.",
     "show_messages": "Afficher les messages de diagnostic lorsque l'alarme est déclenchée ou ne peut pas être armée.",
+    "kiosk_mode": "Disable more-info tapping.",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",

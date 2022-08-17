@@ -267,7 +267,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             <alarmo-state-badge
               .hass=${this.hass}
               .entity=${this._config.entity}
-              @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
+              @click=${this._config.kiosk_mode
+              ? void(0)
+              : () => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
             >
             </alarmo-state-badge>
           </div>
@@ -395,7 +397,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
                 return html`
                   <div class="badge">
-                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e}> </alarmo-sensor-badge>
+                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e} .config=${this._config}> </alarmo-sensor-badge>
                   </div>
                 `;
               })}
