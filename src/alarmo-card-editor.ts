@@ -167,6 +167,14 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             ></ha-switch
           ></ha-formfield>
 
+          <ha-formfield .label=${localize('editor.kiosk_mode', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.kiosk_mode}
+              @change=${(ev: Event) => this._updateConfig('kiosk_mode', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj || !hasKeypad}
+            ></ha-switch
+          ></ha-formfield>
+
           <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
             <ha-switch
               .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
