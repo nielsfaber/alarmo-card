@@ -11,6 +11,7 @@ export type CardConfig = {
   button_scale_actions: number;
   states: Partial<Record<AlarmStates, StateConfig>>;
   show_messages: boolean;
+  kiosk_mode: boolean;
 };
 
 export type StateConfig = {

@@ -10,6 +10,7 @@ import {
   NumberFormat,
 } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
+import { CardConfig } from '../types';
 
 class AlarmoSensorBadge extends LitElement {
   @property()
@@ -20,6 +21,9 @@ class AlarmoSensorBadge extends LitElement {
 
   @property()
   public state?: string;
+
+  @property()
+  public config?: CardConfig;
 
   shouldUpdate(changedProps: PropertyValues) {
     const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
@@ -43,7 +47,11 @@ class AlarmoSensorBadge extends LitElement {
     let binaryState = this.state ? true : stateObj.state == 'on';
 
     return html`
-      <div class="badge-container" @click=${() => fireEvent(this, 'hass-more-info', { entityId: this.entity! })}>
+      <div class="badge-container"
+        ${ !this.config?.kiosk_mode
+          ? html`@click=${() => fireEvent(this, 'hass-more-info', { entityId: this.entity! })}>`
+         : '' }
+      >
         <div class="label-badge ${binaryState ? 'active' : ''}" id="badge">
           <div class="value">
             <ha-icon .icon=${icon}></ha-icon>
@@ -52,12 +60,12 @@ class AlarmoSensorBadge extends LitElement {
             </div>
           </div>
         </div>
-        <div class="title">${name}</div>
+        <div class="title">${name}-</div>
       </div>
-    `;
-  }
+    `
+    }
 
-  static get styles(): CSSResult {
+    static get styles(): CSSResult {
     return css`
       .badge-container {
         display: inline-block;
