@@ -1,11 +1,13 @@
 import * as en from './languages/en.json';
 import * as fr from './languages/fr.json';
 import * as es from './languages/es.json';
+import * as zh_Hans from './languages/zh-Hans.json';
 
 var languages: any = {
   fr: fr,
   en: en,
-  es: es
+  es: es,
+  'zh-Hans': zh_Hans,
 };
 
 export function localize(
