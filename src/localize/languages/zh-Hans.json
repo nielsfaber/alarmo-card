@@ -1,0 +1,24 @@
+{
+    "arm_options": {
+        "heading": "警戒选项",
+        "skip_delay": "跳过离开延迟",
+        "force": "绕过开放的传感器"
+    },
+    "editor": {
+        "keep_keypad_visible": "保持小键盘总是可见，即使不需要输入密码",
+        "button_scale_actions": "调整动作按键大小的缩放系数",
+        "button_scale_keypad": "调整小键盘按键大小的缩放系数",
+        "use_clear_icon": "在小键盘上显示图标（而不是文字），用于清除密码输入。",
+        "show_messages": "当警报被触发或无法警戒时，显示诊断信息。",
+        "available_actions": "可用动作：",
+        "action_dialog": {
+            "title": "自定义动作'{action}'的显示",
+            "button_label": "覆盖按钮标签",
+            "state_label": "覆盖状态标签"
+        }
+    },
+    "errors": {
+        "blocking_sensors": "由于以下传感器而无法警戒",
+        "triggered_sensors": "警报是由以下传感器触发的"
+    }
+}
