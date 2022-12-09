@@ -1,0 +1,24 @@
+{
+  "arm_options": {
+    "heading": "Opzioni per l'attivazione",
+    "skip_delay": "Ignorare il ritardo di uscita",
+    "force": "Bypassare i sensori aperti"
+  },
+  "editor": {
+    "keep_keypad_visible": "Mantenere la tastiera sempre visibile, anche quando nessun codice è richiesto.",
+    "button_scale_actions": "Fattore di scala da applicare per ridimensionare i pulsanti di azione.",
+    "button_scale_keypad": "Fattore di scala da applicare per ridimensionare i pulsanti della tastiera.",
+    "use_clear_icon": "Mostrare l'icona (invece del testo) sulla tastiera per cancellare il codice digitato.",
+    "show_messages": "Mostrare messaggi diagnostici quando l'allarme viene attivato o non può essere inserito.",
+    "available_actions": "Azioni disponibili:",
+    "action_dialog": {
+      "title": "Personalizzare la visualizzazione dell'azione '{action}'",
+      "button_label": "Sovrascrivere l'etichetta del pulsante",
+      "state_label": "Sovrascrivere l'etichetta di stato"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "Impossibile inserire l'allarme a causa dei seguenti sensori",
+    "triggered_sensors": "L'allarme è stato attivato dai seguenti sensori"
+  }
+}
