@@ -24,7 +24,7 @@ import './components/alarmo-button';
 
 import { SubscribeMixin } from './subscribe-mixin';
 import { localize } from './localize/localize';
-import { calcSupportedActions, computeStateDisplay, computeNameDisplay, codeRequired } from './data/entity';
+import { calcSupportedActions, computeStateDisplay, computeNameDisplay, codeRequired, computeStateColor } from './data/entity';
 import { calcStateConfig, validateConfig } from './data/config';
 import { isEmpty } from './helpers';
 import { fetchEntities, fetchConfig } from './data/websockets';
@@ -268,6 +268,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               .hass=${this.hass}
               .entity=${this._config.entity}
               @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
+              style="--alarm-state-color: ${computeStateColor(stateObj)}"
             >
             </alarmo-state-badge>
           </div>

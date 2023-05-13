@@ -34,3 +34,13 @@ export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => 
 export const codeRequired = (stateObj: HassEntity) => {
   return stateObj.attributes.code_format !== null;
 };
+
+export const computeStateColor = (stateObj: HassEntity) => {
+  if(!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
+
+  const state = stateObj.state;
+  if(state == AlarmStates.Disarmed) return 'var(--state-inactive-color)';
+  if(Object.values(AlarmStates).includes(state as any)) return `var(--state-alarm_control_panel-${state}-color)`;
+
+  return 'var(--disabled-color)';
+}

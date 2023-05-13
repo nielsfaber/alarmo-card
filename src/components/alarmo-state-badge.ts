@@ -120,10 +120,6 @@ class AlarmoStateBadge extends LitElement {
   static get styles() {
     return css`
       :host {
-        --alarm-color-disarmed: var(--label-badge-green);
-        --alarm-color-pending: var(--label-badge-yellow);
-        --alarm-color-triggered: var(--label-badge-red);
-        --alarm-color-armed: var(--label-badge-red);
         width: 60px;
         height: 60px;
         cursor: pointer;
@@ -135,7 +131,7 @@ class AlarmoStateBadge extends LitElement {
         transform: rotateZ(90deg) scale(1, -1);
       }
       .track {
-        stroke-width: 3;
+        stroke-width: 4px;
         stroke-linecap: round;
         stroke: var(--disabled-text-color);
         fill: none;
@@ -173,26 +169,13 @@ class AlarmoStateBadge extends LitElement {
       .value ha-icon {
         --mdc-icon-size: 1.2em;
       }
-      .disarmed {
-        --alarm-state-color: var(--alarm-color-disarmed);
+      .disarmed, .armed {
         animation: none;
       }
-      .triggered {
-        --alarm-state-color: var(--alarm-color-triggered);
+      .triggered, .arming, .pending {
         animation: pulse 1s infinite;
       }
-      .arming,
-      .pending {
-        --alarm-state-color: var(--alarm-color-pending);
-        animation: pulse 1s infinite;
-      }
-      .arming.timer,
-      .pending.timer {
-        --alarm-state-color: var(--primary-color);
-        animation: none;
-      }
-      .armed {
-        --alarm-state-color: var(--alarm-color-armed);
+      .arming.timer, .pending.timer {
         animation: none;
       }
       @keyframes pulse {
