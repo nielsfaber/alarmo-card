@@ -36,11 +36,6 @@ export type AlarmoEntity = HassEntity & {
     code_arm_required?: boolean;
   };
 };
-export interface SubElementEditorConfig {
-  index?: number;
-  elementConfig?: {};
-  type: string;
-}
 
 export interface AlarmoEntry {
   area_id: string | number;

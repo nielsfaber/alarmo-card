@@ -13,6 +13,7 @@
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",
+      "show_button": "Mostra il pulsante per questa azione",
       "button_label": "Sovrascrivere l'etichetta del pulsante",
       "state_label": "Sovrascrivere l'etichetta di stato"
     }

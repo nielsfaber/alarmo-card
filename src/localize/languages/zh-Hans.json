@@ -13,6 +13,7 @@
         "available_actions": "可用动作：",
         "action_dialog": {
             "title": "自定义动作'{action}'的显示",
+            "show_button": "显示此操作的按钮",
             "button_label": "覆盖按钮标签",
             "state_label": "覆盖状态标签"
         }

@@ -14,6 +14,7 @@
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",
+      "show_button": "mostrar botón para esta acción",
       "button_label": "Sobrescribir el texto del botón",
       "state_label": "Sobrescribir el texto de estado"
     }

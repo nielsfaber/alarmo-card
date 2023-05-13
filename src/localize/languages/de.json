@@ -13,6 +13,7 @@
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",
+      "show_button": "Show button for this action",
       "button_label": "Override button label",
       "state_label": "Override state label"
     }

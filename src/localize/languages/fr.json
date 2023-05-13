@@ -13,6 +13,7 @@
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",
+      "show_button": "Afficher le bouton pour cette action",
       "button_label": "Remplacer le libellé du bouton",
       "state_label": "Remplacer l'étiquette d'état"
     }
