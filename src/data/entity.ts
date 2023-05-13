@@ -24,7 +24,7 @@ export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc
     const stateConfig = calcStateConfig(state as AlarmStates, config);
     if (!isEmpty(stateConfig.state_label)) return stateConfig.state_label;
   }
-  return localize(`component.alarm_control_panel.state._.${stateObj.state}`);
+  return localize(`component.alarm_control_panel.entity_component._.state.${stateObj.state}`);
 };
 
 export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => {

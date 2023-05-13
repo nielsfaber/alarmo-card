@@ -516,6 +516,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       .header .summary {
         display: flex;
         flex-direction: column;
+        gap: 3px;
       }
       .header .name {
         font-size: 24px;
