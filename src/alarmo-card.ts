@@ -193,6 +193,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     if (newState.state == AlarmStates.Disarmed) {
       //wipe code in every card update (except InvalidCodeProvided/NoCodeProvided)
       this._clearCode();
+    } else if (newState.last_changed !== oldState.last_changed) {
+      //assume the state was changed although not detected
+      this._clearCode();
     }
   }
 
