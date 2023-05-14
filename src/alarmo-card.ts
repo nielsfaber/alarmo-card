@@ -24,7 +24,13 @@ import './components/alarmo-button';
 
 import { SubscribeMixin } from './subscribe-mixin';
 import { localize } from './localize/localize';
-import { calcSupportedActions, computeStateDisplay, computeNameDisplay, codeRequired, computeStateColor } from './data/entity';
+import {
+  calcSupportedActions,
+  computeStateDisplay,
+  computeNameDisplay,
+  codeRequired,
+  computeStateColor,
+} from './data/entity';
 import { calcStateConfig, validateConfig } from './data/config';
 import { isEmpty } from './helpers';
 import { fetchEntities, fetchConfig } from './data/websockets';
@@ -66,21 +72,19 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   }
 
   public static async getStubConfig(hass: HomeAssistant): Promise<Partial<CardConfig>> {
+    let defaultEntity = Object.keys(hass.states).find(e => computeDomain(e) == 'alarm_control_panel');
 
-    let defaultEntity = Object.keys(hass.states).find((e) => computeDomain(e) == "alarm_control_panel");
+    await fetchEntities(hass).then(res => {
+      const sorted = res.sort((a, b) => Number(a.area_id) - Number(b.area_id));
+      if (sorted.length) defaultEntity = sorted[0].entity_id;
+    });
 
-    await fetchEntities(hass)
-      .then(res => {
-        const sorted = res.sort((a,b) => Number(a.area_id) - Number(b.area_id));
-        if(sorted.length) defaultEntity = sorted[0].entity_id;
-      });
-
-      return {
-          type: `custom:alarmo-card`,
-          entity: defaultEntity
-      };
+    return {
+      type: `custom:alarmo-card`,
+      entity: defaultEntity,
+    };
   }
-  
+
   public async getCardSize(): Promise<number> {
     if (!this._config || !this.hass) return 9;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
@@ -219,6 +223,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         </hui-warning>
       `;
     }
+
     return html`
       <ha-card>
         ${stateObj.state === AlarmStates.Disarmed
@@ -237,25 +242,25 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                   </span>
                 </mwc-list-item>
                 <mwc-list-item graphic="icon">
-                  <mwc-checkbox
+                  <ha-icon
                     slot="graphic"
-                    ?checked=${this.armOptions.skip_delay}
+                    icon="${this.armOptions.skip_delay ? 'mdi:check' : ''}"
                     @click=${(ev: Event) => {
                       (ev.target as HTMLInputElement).parentElement?.click();
                       ev.stopPropagation();
                     }}
-                  ></mwc-checkbox>
+                  ></ha-icon>
                   ${localize('arm_options.skip_delay', this.hass.language)}
                 </mwc-list-item>
                 <mwc-list-item graphic="icon">
-                  <mwc-checkbox
+                  <ha-icon
                     slot="graphic"
-                    ?checked=${this.armOptions.force}
+                    icon="${this.armOptions.force ? 'mdi:check' : ''}"
                     @click=${(ev: Event) => {
                       (ev.target as HTMLInputElement).parentElement?.click();
                       ev.stopPropagation();
                     }}
-                  ></mwc-checkbox>
+                  ></ha-icon>
                   ${localize('arm_options.force', this.hass.language)}
                 </mwc-list-item>
               </ha-button-menu>
@@ -660,7 +665,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   type: 'alarmo-card',
   name: 'Alarmo Card',
   description: 'Card for operating Alarmo through Lovelace.',
-  preview: true
+  preview: true,
 });
 
 console.info(
