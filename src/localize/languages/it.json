@@ -2,7 +2,7 @@
   "arm_options": {
     "heading": "Opzioni di inserimento",
     "skip_delay": "Ignorare il ritardo di uscita",
-    "force": "Bypassare i sensori aperti"
+    "force": "Ignorare i sensori aperti"
   },
   "editor": {
     "keep_keypad_visible": "Mantenere la tastiera sempre visibile, anche quando nessun codice è richiesto.",
