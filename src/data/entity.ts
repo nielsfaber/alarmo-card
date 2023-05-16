@@ -36,11 +36,13 @@ export const codeRequired = (stateObj: HassEntity) => {
 };
 
 export const computeStateColor = (stateObj: HassEntity) => {
-  if(!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
+  if (!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
 
   const state = stateObj.state;
-  if(state == AlarmStates.Disarmed) return 'var(--state-inactive-color)';
-  if(Object.values(AlarmStates).includes(state as any)) return `var(--state-alarm_control_panel-${state}-color)`;
+  if (state == AlarmStates.Disarmed)
+    return 'var(--state-alarm_control_panel-disarmed-color, var(--state-alarm_control_panel-inactive-color, var(--state-inactive-color)))';
+  if (Object.values(AlarmStates).includes(state as any))
+    return `var(--state-alarm_control_panel-${state}-color, var(--state-alarm_control_panel-active-color, var(--state-active-color)))`;
 
-  return 'var(--disabled-color)';
-}
+  return 'var(--disabled-color, var(--state-inactive-color))';
+};
