@@ -1,21 +1,21 @@
 {
   "arm_options": {
-    "heading": "Options for arming",
-    "skip_delay": "Skip exit delay",
-    "force": "Bypass open sensors"
+    "heading": "Scharfschaltungsoptionen",
+    "skip_delay": "Ausgangsverzögerung überspringen",
+    "force": "Offene Sensoren ignorieren"
   },
   "editor": {
     "keep_keypad_visible": "Zeige das Pin-Eingabefeld immer an, auch wenn kein Code erfordert ist.",
     "button_scale_actions": "Skalierungsfaktor für Buttongröße der Aktionen.",
     "button_scale_keypad": "Skalierungsfaktor für Buttongröße der Pin-Eingabefeld.",
-    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
-    "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
-    "available_actions": "Available actions:",
+    "use_clear_icon": "Anzeige eines Symbols (anstelle von Text) im Tastenfeld für die Eingabe des Codes.",
+    "show_messages": "Anzeige von Diagnosemeldungen, wenn der Alarm ausgelöst wird oder nicht scharf geschaltet werden kann.",
+    "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
-      "title": "Customize display of action '{action}'",
-      "show_button": "Show button for this action",
-      "button_label": "Override button label",
-      "state_label": "Override state label"
+      "title": "Anzeige der Aktion '{action}' anpassen",
+      "show_button": "Taste für diese Aktion anzeigen",
+      "button_label": "Überschreibung der Tastenbeschriftung",
+      "state_label": "Überschreibung der Statusbezeichnung"
     }
   },
   "errors": {
