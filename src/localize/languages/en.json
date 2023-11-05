@@ -10,6 +10,7 @@
     "button_scale_keypad": "Scaling factor to apply for resizing the keypad buttons.",
     "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
+    "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",

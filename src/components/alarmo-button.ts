@@ -45,6 +45,10 @@ class AlarmoButton extends LitElement {
         text-transform: var(--mdc-typography-button-text-transform, uppercase);
         -webkit-font-smoothing: antialiased;
         font-family: var(--mdc-typography-button-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
       }
       button:not(:disabled) {
         cursor: pointer;
@@ -67,9 +71,16 @@ class AlarmoButton extends LitElement {
         width: 100%;
       }
       ::slotted(ha-icon) {
-        --mdc-icon-size: calc(var(--content-scale, 1) * 1.25rem);
-        margin: -0.1875rem 0px;
-        display: block;
+        --mdc-icon-size: calc(var(--content-scale, 1) * 1.5rem);
+        margin: calc(var(--content-scale, 1) * -0.25rem) 0px;
+        display: flex;
+      }
+      ::slotted(ha-icon.leading) {
+        margin-left: calc(var(--content-scale, 1) * -0.3rem);
+        margin-right: calc(var(--content-scale, 1) * 0.3rem);
+      }
+      ::slotted span {
+        display: flex;
       }
     `;
   }

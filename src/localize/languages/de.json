@@ -10,6 +10,7 @@
     "button_scale_keypad": "Skalierungsfaktor für Buttongröße der Pin-Eingabefeld.",
     "use_clear_icon": "Anzeige eines Symbols (anstelle von Text) im Tastenfeld für die Eingabe des Codes.",
     "show_messages": "Anzeige von Diagnosemeldungen, wenn der Alarm ausgelöst wird oder nicht scharf geschaltet werden kann.",
+    "show_ready_indicator": "Zeigt die Bereitschafts-/Nicht-Bereitschaftsanzeige auf den Scharfschaltmodus-Tasten an.",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",

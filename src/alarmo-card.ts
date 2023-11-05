@@ -339,11 +339,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                         >
                           ${value === 'clear'
                             ? this._config!.use_clear_icon
-                              ? html`
-                                  <ha-icon icon="hass:backspace-outline"></ha-icon>
-                                `
-                              : this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)
-                            : value}
+                              ? html`<ha-icon icon="hass:backspace-outline"></ha-icon>`
+                              : html`<span>${this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)}</span>`
+                            : html`<span>${value}</span>`}
                         </alarmo-button>
                       `;
                 })}
@@ -362,17 +360,31 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         ? calcSupportedActions(stateObj).filter(e => !calcStateConfig(ActionToState[e], this._config!).hide)
         : [ArmActions.Disarm];
 
+    const showReadyStatus = stateObj.attributes.ready_to_arm_modes !== undefined && this._config.show_ready_indicator;
+
     return actions.map(action => {
       const stateConfig = calcStateConfig(ActionToState[action], this._config!);
+      const readyStatus = stateObj.attributes.ready_to_arm_modes?.some(e => action.includes(e));
+
       return html`
         <alarmo-button
           @click=${(ev: Event) => this._handleActionClick(ev, action)}
           style="--content-scale: ${this._config!.button_scale_actions}"
           ?scaled=${this._config!.button_scale_actions != 1}
         >
+          ${showReadyStatus && action != ArmActions.Disarm
+            ? html`
+              <ha-icon
+                icon="mdi:circle-medium"
+                style="${readyStatus ? `color: var(--success-color)` : `color: var(--error-color)`}"
+                class="leading"
+              ></ha-icon>`
+            : ''
+          }
           ${isEmpty(stateConfig.button_label)
-            ? this.hass!.localize(`ui.card.alarm_control_panel.${action}`)
-            : stateConfig.button_label}
+            ? html`<span>${this.hass!.localize(`ui.card.alarm_control_panel.${action}`)}</span>`
+            : html`<span>${stateConfig.button_label}</span>`
+          }
         </alarmo-button>
       `;
     });

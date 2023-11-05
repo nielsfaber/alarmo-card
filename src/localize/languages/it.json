@@ -10,6 +10,7 @@
     "button_scale_keypad": "Fattore di scala da applicare per ridimensionare i pulsanti della tastiera.",
     "use_clear_icon": "Mostrare l'icona (invece del testo) sulla tastiera per cancellare il codice digitato.",
     "show_messages": "Mostrare messaggi diagnostici quando l'allarme viene attivato o non può essere inserito.",
+    "show_ready_indicator": "Mostra l'indicatore pronto/non pronto sui pulsanti della modalità di inserimento.",
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",

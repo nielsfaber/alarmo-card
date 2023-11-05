@@ -10,6 +10,7 @@
         "button_scale_keypad": "调整小键盘按键大小的缩放系数",
         "use_clear_icon": "在小键盘上显示图标（而不是文字），用于清除密码输入。",
         "show_messages": "当警报被触发或无法警戒时，显示诊断信息。",
+        "show_ready_indicator": "在手臂模式按钮上显示就绪/未就绪指示器。",
         "available_actions": "可用动作：",
         "action_dialog": {
             "title": "自定义动作'{action}'的显示",
