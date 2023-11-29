@@ -1,13 +1,15 @@
+import * as cs from './languages/cs.json';
 import * as en from './languages/en.json';
-import * as fr from './languages/fr.json';
 import * as es from './languages/es.json';
+import * as fr from './languages/fr.json';
 import * as it from './languages/it.json';
 import * as zh_Hans from './languages/zh-Hans.json';
 
 var languages: any = {
-  fr: fr,
+  cs: cs,
   en: en,
   es: es,
+  fr: fr,
   it: it,
   'zh-Hans': zh_Hans,
 };
