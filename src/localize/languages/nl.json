@@ -1,0 +1,26 @@
+{
+  "arm_options": {
+    "heading": "Opties voor inschakelen",
+    "skip_delay": "Sla vertraging over",
+    "force": "Negeer open sensoren"
+  },
+  "editor": {
+    "keep_keypad_visible": "Houd het keypad altijd zichtbaar, ook wanneer er geen code vereist is.",
+    "button_scale_actions": "Schaalfactor actieknoppen",
+    "button_scale_keypad": "Schaalfactor keypadknoppen",
+    "use_clear_icon": "Toon pictogram (in plaats van tekst) in keypad om code-invoer te wissen.",
+    "show_messages": "Toon diagnostische berichten wanneer het alarm wordt geactiveerd of niet kan worden ingeschakeld.",
+    "show_ready_indicator": "Toon gereed/niet gereed-indicator op inschakelmodusknoppen.",
+    "available_actions": "Beschikbare acties:",
+    "action_dialog": {
+      "title": "Weergave van actie '{action}' aanpassen",
+      "show_button": "Toon knop voor deze actie",
+      "button_label": "Knoplabel overschrijven",
+      "state_label": "Statuslabel overschrijven"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "Kon niet inschakelen vanwege de volgende sensoren",
+    "triggered_sensors": "Alarm werd geactiveerd door de volgende sensoren"
+  }
+}
