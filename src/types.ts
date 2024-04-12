@@ -54,3 +54,7 @@ export interface CountdownConfig {
   delay: number;
   remaining: number;
 }
+
+export interface ReadyToArmModesConfig {
+  modes: AlarmStates[] | null
+}

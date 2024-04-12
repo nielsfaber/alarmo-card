@@ -2,18 +2,19 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)  
 
 
-- [Introduction](#introduction)
-- [Features](#features)
-  - [Countdown timer](#countdown-timer)
-  - [Diagnostics messages](#diagnostics-messages)
-  - [Arming options](#arming-options)
-  - [Card customization](#card-customization)
-- [Installation](#installation)
-- [Updating](#updating)
-- [Configuration](#configuration)
-- [Options](#options)
-  - [State configuration](#state-configuration)
-- [Say thank you](#say-thank-you)
+- [alarmo-card ](#alarmo-card-)
+  - [Introduction](#introduction)
+  - [Features](#features)
+    - [Countdown timer](#countdown-timer)
+    - [Diagnostics messages](#diagnostics-messages)
+    - [Arming options](#arming-options)
+    - [Card customization](#card-customization)
+  - [Installation](#installation)
+  - [Updating](#updating)
+  - [Configuration](#configuration)
+  - [Options](#options)
+    - [State configuration](#state-configuration)
+  - [Say thank you](#say-thank-you)
 
 ## Introduction
 This is a Lovelace card for Home Assistant that can be used to control your Alarmo security system.
@@ -133,6 +134,7 @@ Configuration using UI mode:
 | `button_scale_keypad`  | number  | Optional     | Scaling factor to apply to the size of the keypad buttons (between 1.0 and 2.5)                                | `1.0`              |
 | `use_clear_icon`       | boolean | Optional     | Show icon (instead of text) in keypad for clearing code input.<br>Only useful if numerical code is used.       | `false`            |
 | `show_messages`        | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                               | `true`             |
+| `show_ready_indicator`        | boolean | Optional     | Adds ready/not ready indicators to the arm mode buttons.                               | `true`             |
 | `states`               | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).               |                    |
 
 ### State configuration 
