@@ -1,6 +1,6 @@
 import { LitElement, html, TemplateResult, PropertyValues, CSSResult, css } from 'lit';
 import { property, customElement, state, query } from 'lit/decorators.js';
-import { HomeAssistant, fireEvent, computeDomain } from 'custom-card-helpers';
+import { HomeAssistant, fireEvent, computeDomain, computeEntity } from 'custom-card-helpers';
 import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
 
 import {
@@ -64,6 +64,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   @state()
   backendConnection: boolean | null = null;
+
+  @state()
+  showBypassedSensors: boolean = false;
 
   subscribedEntities: string[] = [];
 
@@ -443,9 +446,38 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           <div class="messagebox-right"></div>
         </div>
       `;
-    } else {
-      return html``;
     }
+    if (stateObj.state.startsWith('armed_') && stateObj.attributes.bypassed_sensors?.length && this._config.show_bypassed_sensors) {
+      return html`
+        <div class="messagebox warning">
+          <div class="messagebox-left"></div>
+          <div class="messagebox-inner">
+            <div class="description">
+              <div class="description-filler"></div>
+              <span>
+                <ha-icon icon="hass:alert"></ha-icon>
+                ${localize('errors.bypassed_sensors', this.hass.language)}
+              </span>
+              <div class="description-filler"></div>
+            </div>
+            <div class="content">
+              ${stateObj.attributes.bypassed_sensors.map(e => {
+        if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
+        return html`
+                  <div class="badge">
+                    <alarmo-sensor-badge
+                      .hass=${this.hass}
+                      .entity=${e}
+                    > </alarmo-sensor-badge>
+                  </div>
+                `;
+      })}
+            </div>
+          </div>
+          <div class="messagebox-right"></div>
+        </div>`;
+    }
+    return html``;
   }
 
   private _handlePadClick(e: MouseEvent): void {
@@ -616,11 +648,18 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         flex-direction: row;
         justify-content: center;
         align-items: stretch;
+        --border-color: var(--label-badge-red);
+      }
+      div.messagebox.warning {
+        --border-color: var(--label-badge-yellow);
+      }
+      div.messagebox.warning alarmo-sensor-badge {
+        --label-badge-red: var(--label-badge-yellow);
       }
       div.messagebox-left {
         display: flex;
         width: 10px;
-        border: 1px solid var(--label-badge-red);
+        border: 1px solid var(--border-color);
         border-width: 1px 0px 1px 1px;
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
@@ -628,14 +667,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       div.messagebox-right {
         display: flex;
         width: 10px;
-        border: 1px solid var(--label-badge-red);
+        border: 1px solid var(--border-color);
         border-width: 1px 1px 1px 0px;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
       }
       div.messagebox-inner {
         flex-direction: column;
-        border-bottom: 1px solid var(--label-badge-red);
+        border-bottom: 1px solid var(--border-color);
         flex: 1 1;
       }
       div.messagebox .description {
@@ -650,9 +689,12 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         padding: 0px 5px;
         flex-shrink: 2;
       }
+      div.messagebox.warning .description span {
+        color: #d0863d;
+      }
       div.messagebox .description-filler {
         flex: 1;
-        border-top: 1px solid var(--label-badge-red);
+        border-top: 1px solid var(--border-color);
         min-width: 5px;
       }
       div.messagebox .description ha-icon {

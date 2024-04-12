@@ -10,7 +10,6 @@ import {
 } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 import { computeStateDisplay } from '../data/entity';
-import { CardConfig } from '../types';
 
 class AlarmoSensorBadge extends LitElement {
   @property()

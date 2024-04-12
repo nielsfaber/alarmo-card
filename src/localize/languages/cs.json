@@ -1,26 +1,28 @@
 {
-    "arm_options": {
-      "heading": "Možnosti aktivace",
-      "skip_delay": "Přeskočit čas pro vystup",
-      "force": "Bypass otevřených senzorů"
-    },
-    "editor": {
-      "keep_keypad_visible": "Zachovat klávesnici vždy viditelnou, i když není vyžadován žádný kód.",
-      "button_scale_actions": "Měřítko použité pro změnu velikosti tlačítek akcí.",
-      "button_scale_keypad": "Měřítko použité pro změnu velikosti tlačítek klávesnice.",
-      "use_clear_icon": "Zobrazit ikonu (namísto textu) na klávesnici pro vymazání zadávaného kódu.",
-      "show_messages": "Zobrazit diagnostické zprávy při spuštění alarmu nebo nemožnosti aktivace.",
-      "show_ready_indicator": "Zobrazit indikátor připraveno/nepřipraveno na tlačítkách režimu aktivace.",
-      "available_actions": "Dostupné akce:",
-      "action_dialog": {
-        "title": "Upravit zobrazení akce '{action}'",
-        "show_button": "Zobrazit tlačítko pro tuto akci",
-        "button_label": "Přepsat popisek tlačítka",
-        "state_label": "Přepsat popisek stavu"
-      }
-    },
-    "errors": {
-      "blocking_sensors": "Nelze aktivovat kvůli následujícím senzorům",
-      "triggered_sensors": "Alarm byl spuštěn následujícími senzory"
+  "arm_options": {
+    "heading": "Možnosti aktivace",
+    "skip_delay": "Přeskočit čas pro vystup",
+    "force": "Bypass otevřených senzorů"
+  },
+  "editor": {
+    "keep_keypad_visible": "Zachovat klávesnici vždy viditelnou, i když není vyžadován žádný kód.",
+    "button_scale_actions": "Měřítko použité pro změnu velikosti tlačítek akcí.",
+    "button_scale_keypad": "Měřítko použité pro změnu velikosti tlačítek klávesnice.",
+    "use_clear_icon": "Zobrazit ikonu (namísto textu) na klávesnici pro vymazání zadávaného kódu.",
+    "show_messages": "Zobrazit diagnostické zprávy při spuštění alarmu nebo nemožnosti aktivace.",
+    "show_ready_indicator": "Zobrazit indikátor připraveno/nepřipraveno na tlačítkách režimu aktivace.",
+    "show_bypassed_sensors": "Zobrazit varování při aktivaci alarmu s přemostěnými senzory.",
+    "available_actions": "Dostupné akce:",
+    "action_dialog": {
+      "title": "Upravit zobrazení akce '{action}'",
+      "show_button": "Zobrazit tlačítko pro tuto akci",
+      "button_label": "Přepsat popisek tlačítka",
+      "state_label": "Přepsat popisek stavu"
     }
+  },
+  "errors": {
+    "blocking_sensors": "Nelze aktivovat kvůli následujícím senzorům",
+    "triggered_sensors": "Alarm byl spuštěn následujícími senzory",
+    "bypassed_sensors": "Jsou tam přemostěné senzory"
   }
+}

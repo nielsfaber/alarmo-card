@@ -1,4 +1,3 @@
-
 {
   "arm_options": {
     "heading": "Opciones de armado",
@@ -12,6 +11,7 @@
     "use_clear_icon": "Mostrar icono (en lugar de texto) en el teclado para borrar la entrada de código.",
     "show_messages": "Mostrar mensajes de diagnóstico cuando se activa la alarma o no se puede activar.",
     "show_ready_indicator": "Mostrar indicador listo/no listo en los botones de modo armado.",
+    "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",
@@ -22,6 +22,7 @@
   },
   "errors": {
     "blocking_sensors": "No se pudo armar debido a los siguientes sensores",
-    "triggered_sensors": "La alarma fue disparada por los siguientes sensores"
+    "triggered_sensors": "La alarma fue disparada por los siguientes sensores",
+    "bypassed_sensors": "Hay sensores omitidos"
   }
 }

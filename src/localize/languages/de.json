@@ -11,6 +11,7 @@
     "use_clear_icon": "Anzeige eines Symbols (anstelle von Text) im Tastenfeld für die Eingabe des Codes.",
     "show_messages": "Anzeige von Diagnosemeldungen, wenn der Alarm ausgelöst wird oder nicht scharf geschaltet werden kann.",
     "show_ready_indicator": "Zeigt die Bereitschafts-/Nicht-Bereitschaftsanzeige auf den Scharfschaltmodus-Tasten an.",
+    "show_bypassed_sensors": "Warnung anzeigen, wenn der Alarm mit umgangenen Sensoren aktiviert wird.",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",
@@ -21,6 +22,7 @@
   },
   "errors": {
     "blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
-    "triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst"
+    "triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst",
+    "bypassed_sensors": "Es gibt umgangene Sensoren"
   }
 }

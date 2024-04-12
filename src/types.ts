@@ -12,6 +12,7 @@ export type CardConfig = {
   states: Partial<Record<AlarmStates, StateConfig>>;
   show_messages: boolean;
   show_ready_indicator: boolean;
+  show_bypassed_sensors: boolean;
 };
 
 export type StateConfig = {
@@ -35,7 +36,7 @@ export type AlarmoEntity = HassEntity & {
     expiration?: string;
     code_format?: string;
     code_arm_required?: boolean;
-    ready_to_arm_modes?: string[]
+    bypassed_sensors?: string[];
   };
 };
 

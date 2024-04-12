@@ -11,6 +11,7 @@
         "use_clear_icon": "在小键盘上显示图标（而不是文字），用于清除密码输入。",
         "show_messages": "当警报被触发或无法警戒时，显示诊断信息。",
         "show_ready_indicator": "在手臂模式按钮上显示就绪/未就绪指示器。",
+        "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
         "available_actions": "可用动作：",
         "action_dialog": {
             "title": "自定义动作'{action}'的显示",
@@ -21,6 +22,7 @@
     },
     "errors": {
         "blocking_sensors": "由于以下传感器而无法警戒",
-        "triggered_sensors": "警报是由以下传感器触发的"
+        "triggered_sensors": "警报是由以下传感器触发的",
+        "bypassed_sensors": "有绕过的传感器"
     }
 }

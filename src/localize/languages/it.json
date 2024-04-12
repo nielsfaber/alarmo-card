@@ -11,6 +11,7 @@
     "use_clear_icon": "Mostrare l'icona (invece del testo) sulla tastiera per cancellare il codice digitato.",
     "show_messages": "Mostrare messaggi diagnostici quando l'allarme viene attivato o non può essere inserito.",
     "show_ready_indicator": "Mostra l'indicatore pronto/non pronto sui pulsanti della modalità di inserimento.",
+    "show_bypassed_sensors": "Mostra avviso quando l'allarme è armato con sensori esclusi.",
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",
@@ -21,6 +22,7 @@
   },
   "errors": {
     "blocking_sensors": "Impossibile inserire l'allarme a causa dei seguenti sensori",
-    "triggered_sensors": "L'allarme è stato attivato dai seguenti sensori"
+    "triggered_sensors": "L'allarme è stato attivato dai seguenti sensori",
+    "bypassed_sensors": "Sono presenti sensori esclusi"
   }
 }

@@ -11,6 +11,7 @@
     "use_clear_icon": "Afficher l'icône (au lieu du texte) sur le clavier pour effacer la saisie du code.",
     "show_messages": "Afficher les messages de diagnostic lorsque l'alarme est déclenchée ou ne peut pas être armée.",
     "show_ready_indicator": "Afficher l'indicateur prêt/pas prêt sur les boutons de mode d'armement.",
+    "show_bypassed_sensors": "Afficher un avertissement lorsque l'alarme est armée avec des capteurs ignorés.",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",
@@ -21,6 +22,7 @@
   },
   "errors": {
     "blocking_sensors": "Impossible d'armer en raison du(es) capteur(s) suivant(s)",
-    "triggered_sensors": "L'alarme a été déclenchée par le(s) capteur(s) suivant(s)"
+    "triggered_sensors": "L'alarme a été déclenchée par le(s) capteur(s) suivant(s)",
+    "bypassed_sensors": "Il y a des capteurs ignorés"
   }
 }

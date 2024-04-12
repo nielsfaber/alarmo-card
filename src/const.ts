@@ -75,6 +75,7 @@ export const defaultCardConfig: CardConfig = {
   states: {},
   show_messages: true,
   show_ready_indicator: true,
+  show_bypassed_sensors: true
 };
 
 export const minButtonScale = 1;
