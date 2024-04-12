@@ -431,7 +431,10 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
             return html`
                   <div class="badge">
-                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e}> </alarmo-sensor-badge>
+                    <alarmo-sensor-badge
+                      .hass=${this.hass}
+                      .entity=${e}
+                    > </alarmo-sensor-badge>
                   </div>
                 `;
           })}

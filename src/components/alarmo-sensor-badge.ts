@@ -1,15 +1,16 @@
 import { LitElement, html, css, PropertyValues, TemplateResult, CSSResult } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 
 import {
   stateIcon,
-  computeStateDisplay,
   HomeAssistant,
   computeEntity,
   fireEvent,
   NumberFormat,
 } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
+import { computeStateDisplay } from '../data/entity';
+import { CardConfig } from '../types';
 
 class AlarmoSensorBadge extends LitElement {
   @property()
@@ -35,9 +36,8 @@ class AlarmoSensorBadge extends LitElement {
     if (this.state !== undefined) stateObj = { ...stateObj, state: this.state };
     const icon = validEntity ? stateIcon(stateObj) : 'mdi:help-circle-outline';
     const value = validEntity ? computeStateDisplay(
-      this.hass.localize,
       stateObj,
-      this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
+      this.hass.localize
     ) : this.hass.localize('state.default.unavailable', this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language });
     const name = validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : this.entity;
     let binaryState = this.state ? true : stateObj.state == 'on';

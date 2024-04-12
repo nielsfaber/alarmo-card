@@ -3,7 +3,7 @@ import { ArmActions, AlarmStates } from '../const';
 import { CardConfig } from '../types';
 import { calcStateConfig } from './config';
 import { isEmpty } from '../helpers';
-import { LocalizeFunc } from 'custom-card-helpers';
+import { LocalizeFunc, computeDomain } from 'custom-card-helpers';
 
 export const calcSupportedActions = (stateObj: HassEntity) => {
   if (!stateObj) return [];
@@ -17,14 +17,19 @@ export const calcSupportedActions = (stateObj: HassEntity) => {
   return actions;
 };
 
-export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc, config: CardConfig) => {
+export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc, config?: CardConfig) => {
+  const domain = computeDomain(stateObj.entity_id);
+  const deviceClass = stateObj.attributes.device_class;
   const state = stateObj.state;
 
-  if ((Object.values(AlarmStates) as string[]).includes(state)) {
+  if ((Object.values(AlarmStates) as string[]).includes(state) && config) {
     const stateConfig = calcStateConfig(state as AlarmStates, config);
     if (!isEmpty(stateConfig.state_label)) return stateConfig.state_label;
   }
-  return localize(`component.alarm_control_panel.entity_component._.state.${stateObj.state}`);
+  let translation = '';
+  if (deviceClass) translation = localize(`component.${domain}.entity_component.${deviceClass}.state.${stateObj.state}`);
+  if (!translation) translation = localize(`component.${domain}.entity_component._.state.${stateObj.state}`);
+  return translation;
 };
 
 export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => {
