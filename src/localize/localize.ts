@@ -14,8 +14,8 @@ var languages: any = {
   fr: fr,
   it: it,
   nl: nl,
-  'zh-Hans': zh_Hans,
   'pt-BR': pt_Br,
+  'zh-Hans': zh_Hans,
 };
 
 export function localize(
