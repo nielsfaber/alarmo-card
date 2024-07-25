@@ -1,0 +1,28 @@
+{
+  "arm_options": {
+    "heading": "Opções para armar",
+    "skip_delay": "Omitir tempo para sair",
+    "force": "Ignorar os sensores abertos"
+  },
+  "editor": {
+    "keep_keypad_visible": "Mantenha o teclado sempre visível, mesmo quando não for necessária nenhuma entrada de código.",
+    "button_scale_actions": "Fator de escala para redimensionar botões de ação.",
+    "button_scale_keypad": "Fator de escala para redimensionar os botões do teclado.",
+    "use_clear_icon": "Mostre o ícone (em vez de texto) no teclado para limpar a entrada do código.",
+    "show_messages": "Mostrar mensagens de diagnóstico quando o alarme estiver disparado ou não puder ser armado.",
+    "show_ready_indicator": "Mostrar indicador de disponível/não disponível nos botões do modo de armar.",
+    "show_bypassed_sensors": "Mostrar aviso quando o alarme for ativado com sensores ignorados.",
+    "available_actions": "Ações disponíveis:",
+    "action_dialog": {
+      "title": "Personalize a exibição da ação '{action}'",
+      "show_button": "Mostrar botão para esta ação",
+      "button_label": "Substituir texto do botão",
+      "state_label": "Substituir texto de status"
+    }
+  },
+  "errors": {
+    "blocking_sensors": "Não foi possível armar devido aos seguintes sensores",
+    "triggered_sensors": "O alarme foi disparado pelos seguintes sensores",
+    "bypassed_sensors": "Existem sensores ignorados"
+  }
+}
