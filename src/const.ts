@@ -37,7 +37,7 @@ export enum ArmActions {
   ArmVacation = 'arm_vacation',
   ArmCustomBypass = 'arm_custom_bypass',
   Disarm = 'disarm',
-  SwitchMode = 'switch_mode'
+  SwitchMode = 'switch_mode',
 }
 
 export const ActionToState = {
@@ -57,7 +57,7 @@ export enum AlarmoEvents {
   NoCodeProvided = 'no_code_provided',
   InvalidCodeProvided = 'invalid_code_provided',
   TriggerTimeExpired = 'trigger_time_expired',
-  ReadyToArmModesChanged = 'ready_to_arm_modes_changed'
+  ReadyToArmModesChanged = 'ready_to_arm_modes_changed',
 }
 
 export const EVENT = 'alarmo_updated';
@@ -75,7 +75,7 @@ export const defaultCardConfig: CardConfig = {
   states: {},
   show_messages: true,
   show_ready_indicator: true,
-  show_bypassed_sensors: true
+  show_bypassed_sensors: true,
 };
 
 export const minButtonScale = 1;

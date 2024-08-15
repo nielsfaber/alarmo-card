@@ -6,7 +6,7 @@ export function isEmpty<TValue>(value: TValue | null | undefined): value is TVal
   const type = typeof value;
   switch (type) {
     case 'object':
-      return Object.keys(value as Object).length == 0;
+      return Object.keys(value as Record<string, any>).length == 0;
     case 'string':
       return String(value).length == 0;
     default:
