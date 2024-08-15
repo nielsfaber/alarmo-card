@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "Alarmo card",
   "main": "dist/alarmo-card.js",
+  "type": "module",
   "scripts": {
-    "build": "npm run lint && npm run rollup && npm run babel",
-    "rollup": "rollup -c",
-    "babel": "babel dist/alarmo-card.js --out-file dist/alarmo-card.js",
-    "lint": "eslint --fix src/*.ts",
-    "start": "rollup -c --watch"
+    "build": "npm run lint && npm run rollup",
+    "rollup": "rollup -c rollup.config.mjs",
+    "lint": "eslint --fix src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -21,34 +20,28 @@
   },
   "homepage": "https://github.com/nielsfaber/alarmo#readme",
   "dependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-decorators": "^7.4.0",
-    "@material/mwc-ripple": "^0.27.0",
-    "@mdi/js": "^6.5.95",
-    "@rollup/plugin-json": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.6.0",
-    "@typescript-eslint/parser": "^2.6.0",
-    "ajv": "^6.12.6",
-    "custom-card-helpers": "^1.8.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "home-assistant-js-websocket": "^5.7.0",
-    "lit": "^2.7.1",
-    "prettier": "^1.18.2",
-    "rollup": "^1.32.1",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-serve": "^1.0.1",
-    "rollup-plugin-terser": "^5.3.1",
-    "rollup-plugin-typescript2": "^0.24.3",
-    "rollup-plugin-uglify": "^6.0.3",
-    "typescript": "^3.6.4"
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-proposal-decorators": "^7.24.7",
+    "@material/web": "^2.0.0",
+    "@mdi/js": "^7.4.47",
+    "@rollup/plugin-json": "^6.1.0",
+    "home-assistant-js-websocket": "^9.4.0",
+    "custom-card-helpers": "^1.9.0",
+    "@jridgewell/sourcemap-codec": "^1.5.0"
   },
   "devDependencies": {
-    "rollup-plugin-commonjs": "^10.1.0"
+    "rollup": "^4.20.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@babel/preset-env": "^7.25.3",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "eslint": "^9.9.0",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-define-config": "^2.1.0",
+    "rimraf": "^6.0.1"
   }
 }

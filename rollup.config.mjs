@@ -1,14 +1,17 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
 const plugins = [
   nodeResolve(),
   typescript(),
   json(),
-  babel(),
+  babel({
+    babelHelpers: 'bundled',
+    presets: ['@babel/preset-env'],
+  }),
   terser()
 ];
 
@@ -18,7 +21,8 @@ export default [
     output: {
       dir: 'dist',
       format: 'iife',
-      sourcemap: false
+      sourcemap: false,
+      name: 'AlarmoCard'
     },
     plugins: [...plugins],
     context: 'window'
