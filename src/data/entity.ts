@@ -27,7 +27,8 @@ export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc
     if (!isEmpty(stateConfig.state_label)) return stateConfig.state_label;
   }
   let translation = '';
-  if (deviceClass) translation = localize(`component.${domain}.entity_component.${deviceClass}.state.${stateObj.state}`);
+  if (deviceClass)
+    translation = localize(`component.${domain}.entity_component.${deviceClass}.state.${stateObj.state}`);
   if (!translation) translation = localize(`component.${domain}.entity_component._.state.${stateObj.state}`);
   return translation;
 };

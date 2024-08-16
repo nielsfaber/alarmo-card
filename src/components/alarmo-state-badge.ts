@@ -41,11 +41,11 @@ class AlarmoStateBadge extends LitElement {
   async startTimer() {
     clearInterval(this.timer);
     fetchCountdown(this.hass, this.entity)
-      .then(countdownConfig => {
+      .then((countdownConfig) => {
         this.duration = countdownConfig.delay;
         this.datetime = new Date(new Date().getTime() + countdownConfig.remaining * 1000);
       })
-      .catch(_e => {});
+      .catch((_e) => {});
 
     this.timer = window.setInterval(() => {
       this.requestUpdate();
@@ -75,13 +75,9 @@ class AlarmoStateBadge extends LitElement {
 
   private _stateValue(state: string) {
     if (this.datetime && this.duration) {
-      return html`
-        ${Math.max(Math.round(this.getRemaining()), 0)}
-      `;
+      return html` ${Math.max(Math.round(this.getRemaining()), 0)} `;
     } else {
-      return html`
-        <ha-icon .icon=${ICONS[state]}></ha-icon>
-      `;
+      return html` <ha-icon .icon=${ICONS[state]}></ha-icon> `;
     }
   }
 
@@ -110,9 +106,7 @@ class AlarmoStateBadge extends LitElement {
         </g>
       </svg>
       <div class="overlay ${stateObj.state.split('_').shift()} ${timerRunning ? 'timer' : ''}">
-        <div class="value">
-          ${this._stateValue(stateObj.state)}
-        </div>
+        <div class="value">${this._stateValue(stateObj.state)}</div>
       </div>
     `;
   }
@@ -169,13 +163,17 @@ class AlarmoStateBadge extends LitElement {
       .value ha-icon {
         --mdc-icon-size: 1.2em;
       }
-      .disarmed, .armed {
+      .disarmed,
+      .armed {
         animation: none;
       }
-      .triggered, .arming, .pending {
+      .triggered,
+      .arming,
+      .pending {
         animation: pulse 1s infinite;
       }
-      .arming.timer, .pending.timer {
+      .arming.timer,
+      .pending.timer {
         animation: none;
       }
       @keyframes pulse {

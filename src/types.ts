@@ -57,5 +57,5 @@ export interface CountdownConfig {
 }
 
 export interface ReadyToArmModesConfig {
-  modes: AlarmStates[] | null
+  modes: AlarmStates[] | null;
 }
