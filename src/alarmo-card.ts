@@ -311,6 +311,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
         ${!codeRequired(stateObj) && !this._config.keep_keypad_visible
           ? html``
+          : !this._config.show_code_inputfield
+          ? html``
           : html`
               <ha-textfield
                 .value=${this._input}
@@ -510,6 +512,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         code: this._input,
       });
     }
+    this._clearCode();
     this.warning = '';
     this.armOptions = { ...defaultArmOptions };
   }

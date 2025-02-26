@@ -12,6 +12,7 @@
     "show_messages": "Toon diagnostische berichten wanneer het alarm wordt geactiveerd of niet kan worden ingeschakeld.",
     "show_ready_indicator": "Toon gereed/niet gereed-indicator op inschakelmodusknoppen.",
     "show_bypassed_sensors": "Toon melding wanneer het alarm is ingeschakeld met omzeilde sensoren.",
+    "show_code_inputfield": "Toon code invoerveld",
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",

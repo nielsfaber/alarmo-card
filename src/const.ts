@@ -76,6 +76,7 @@ export const defaultCardConfig: CardConfig = {
   show_messages: true,
   show_ready_indicator: true,
   show_bypassed_sensors: true,
+  show_code_inputfield: true,
 };
 
 export const minButtonScale = 1;

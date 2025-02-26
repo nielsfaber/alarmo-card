@@ -12,6 +12,7 @@
     "show_messages": "Mostrar mensajes de diagnóstico cuando se activa la alarma o no se puede activar.",
     "show_ready_indicator": "Mostrar indicador listo/no listo en los botones de modo armado.",
     "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
+    "show_code_inputfield": "Mostrar campo de entrada de código",
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",

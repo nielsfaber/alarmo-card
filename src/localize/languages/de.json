@@ -12,6 +12,7 @@
     "show_messages": "Anzeige von Diagnosemeldungen, wenn der Alarm ausgelöst wird oder nicht scharf geschaltet werden kann.",
     "show_ready_indicator": "Zeigt die Bereitschafts-/Nicht-Bereitschaftsanzeige auf den Scharfschaltmodus-Tasten an.",
     "show_bypassed_sensors": "Warnung anzeigen, wenn der Alarm mit umgangenen Sensoren aktiviert wird.",
+    "show_code_inputfield": "Pin-Eingabefeld anzeigen",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",

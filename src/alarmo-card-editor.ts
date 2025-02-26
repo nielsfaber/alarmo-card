@@ -288,6 +288,14 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
                 this._updateConfig('show_bypassed_sensors', (ev.target as HTMLInputElement).checked)}
             ></ha-switch
           ></ha-formfield>
+          
+          <ha-formfield .label=${localize('editor.show_code_inputfield', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.show_code_inputfield}
+              @change=${(ev: Event) => 
+                this._updateConfig('show_code_inputfield', (ev.target as HTMLInputElement).checked)}
+            ></ha-switch>
+          </ha-formfield>
 
           <ha-formfield></ha-formfield>
         </div>
