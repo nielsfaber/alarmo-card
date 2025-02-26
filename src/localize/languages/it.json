@@ -13,6 +13,7 @@
     "show_ready_indicator": "Mostra l'indicatore pronto/non pronto sui pulsanti della modalità di inserimento.",
     "show_bypassed_sensors": "Mostra avviso quando l'allarme è armato con sensori esclusi.",
     "show_code_inputfield": "Mostra il campo di inserimento del codice.",
+    "show_header": "Mostra header.",
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",

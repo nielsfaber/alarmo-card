@@ -12,8 +12,9 @@
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
     "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
     "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
-    "available_actions": "Available actions:",
     "show_code_inputfield": "Show code input field", 
+    "show_header": "Show header",
+    "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",
       "show_button": "Show button for this action",

@@ -14,6 +14,7 @@ export type CardConfig = {
   show_ready_indicator: boolean;
   show_bypassed_sensors: boolean;
   show_code_inputfield: boolean;
+  show_header: boolean;
 };
 
 export type StateConfig = {

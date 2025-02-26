@@ -283,26 +283,31 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             `
           : ''}
 
-        <div class="header">
-          <div class="icon">
-            <alarmo-state-badge
-              .hass=${this.hass}
-              .entity=${this._config.entity}
-              @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
-              style="--alarm-state-color: ${computeStateColor(stateObj)}"
-            >
-            </alarmo-state-badge>
-          </div>
-          <div class="summary">
-            <div class="name">
-              ${computeNameDisplay(stateObj, this._config)}
-            </div>
-            <div class="state">
-              ${computeStateDisplay(stateObj, this.hass.localize, this._config)}
-            </div>
-          </div>
-        </div>
-
+        ${!this._config.show_header
+          ? html`
+              <div class="spacer"></div>`
+          : html`
+              <div class="header">
+                <div class="icon">
+                  <alarmo-state-badge
+                    .hass=${this.hass}
+                    .entity=${this._config.entity}
+                    @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
+                    style="--alarm-state-color: ${computeStateColor(stateObj)}"
+                  >
+                  </alarmo-state-badge>
+                </div>
+                <div class="summary">
+                  <div class="name">
+                    ${computeNameDisplay(stateObj, this._config)}
+                  </div>
+                  <div class="state">
+                    ${computeStateDisplay(stateObj, this.hass.localize, this._config)}
+                  </div>
+                </div>
+              </div>
+        `}
+        
         ${this._renderWarning()}
 
         <div id="armActions" class="actions">
@@ -606,6 +611,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       .header .state {
         font-size: 14px;
         display: flex;
+      }
+      .spacer {
+        height: 8px;
+        margin: 0px auto;
+        box-sizing: border-box;
       }
       .actions {
         margin: 0;
