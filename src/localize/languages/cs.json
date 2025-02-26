@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Zobrazit varování při aktivaci alarmu s přemostěnými senzory.",
     "show_code_inputfield": "Zobrazit vstupní pole kódu",
     "show_header": "Zobrazit záhlaví",
+    "use_arm_button_icons": "Používejte ikony na tlačítkách akcí (místo štítků)",
     "available_actions": "Dostupné akce:",
     "action_dialog": {
       "title": "Upravit zobrazení akce '{action}'",

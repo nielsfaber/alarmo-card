@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
     "show_code_inputfield": "Mostrar campo de entrada de código",
     "show_header": "Mostrar encabezado",
+    "use_arm_button_icons": "Utilice iconos en los botones de acción (en lugar de etiquetas)",
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",

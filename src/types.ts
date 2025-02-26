@@ -15,11 +15,13 @@ export type CardConfig = {
   show_bypassed_sensors: boolean;
   show_code_inputfield: boolean;
   show_header: boolean;
+  use_arm_button_icons: boolean;
 };
 
 export type StateConfig = {
   hide: boolean;
   button_label: string;
+  button_icon: string;
   state_label: string;
 };
 

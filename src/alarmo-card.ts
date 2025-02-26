@@ -412,7 +412,12 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               `
             : ''}
           ${isEmpty(stateConfig.button_label)
-            ? html`
+            ?  (this._config?.use_arm_button_icons && stateConfig.button_icon) 
+            ?  html`
+                <ha-icon .icon=${stateConfig.button_icon}>
+                </ha-icon>
+                `
+            :  html`
                 <span>${this.hass!.localize(`ui.card.alarm_control_panel.${action}`)}</span>
               `
             : html`

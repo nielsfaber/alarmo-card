@@ -27,6 +27,7 @@ export const calcStateConfig = (state: AlarmStates, config: Partial<CardConfig>)
   let result: StateConfig = {
     hide: false,
     button_label: '',
+    button_icon: '',
     state_label: '',
   };
 

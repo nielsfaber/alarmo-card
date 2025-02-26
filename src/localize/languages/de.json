@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Warnung anzeigen, wenn der Alarm mit umgangenen Sensoren aktiviert wird.",
     "show_code_inputfield": "Pin-Eingabefeld anzeigen",
     "show_header": "Kopfzeile anzeigen",
+    "use_arm_button_icons": "Verwenden Sie Symbole auf Aktionsschaltflächen (anstelle von Beschriftungen).",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",

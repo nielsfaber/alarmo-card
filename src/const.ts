@@ -78,6 +78,7 @@ export const defaultCardConfig: CardConfig = {
   show_bypassed_sensors: true,
   show_code_inputfield: true,
   show_header: true,
+  use_arm_button_icons: false,
 };
 
 export const minButtonScale = 1;

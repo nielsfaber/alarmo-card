@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Mostra avviso quando l'allarme è armato con sensori esclusi.",
     "show_code_inputfield": "Mostra il campo di inserimento del codice.",
     "show_header": "Mostra header.",
+    "use_arm_button_icons": "Usa le icone sui pulsanti di azione (invece che l'etichetta).",
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",

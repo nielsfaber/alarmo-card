@@ -14,6 +14,7 @@
         "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
         "show_code_inputfield": "显示代码输入文本框",
         "show_header": "显示页眉",
+        "use_arm_button_icons": "在操作按钮上使用图标（而不是标签）",
         "available_actions": "可用动作：",
         "action_dialog": {
             "title": "自定义动作'{action}'的显示",

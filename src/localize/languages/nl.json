@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Toon melding wanneer het alarm is ingeschakeld met omzeilde sensoren.",
     "show_code_inputfield": "Toon code invoerveld",
     "show_header": "Koptekst weergeven",
+    "use_arm_button_icons": "Gebruik pictogrammen op actieknoppen (in plaats van labels)",
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",

@@ -14,6 +14,7 @@
     "show_bypassed_sensors": "Afficher un avertissement lorsque l'alarme est armée avec des capteurs ignorés.",
     "show_code_inputfield": "Afficher le champ de saisie du code",
     "show_header": "Afficher l'en-tête",
+    "use_arm_button_icons": "Utiliser des icônes sur les boutons d'action (au lieu d'étiquettes)",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",

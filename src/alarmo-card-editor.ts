@@ -135,6 +135,17 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
                 button_label: String((ev.target as HTMLInputElement).value).trim(),
               })}
           ></ha-textfield>
+          
+          <ha-textfield
+            label="${localize('editor.action_dialog.button_icon', this.hass.language)}"
+            .value="${stateConfig.button_icon || ''}"
+            placeholder="mdi:shield-home"
+            ?disabled=${stateConfig.hide}
+            @input=${(ev: Event) =>
+              this._updateStateConfig(ActionToState[this._editAction!], {
+                button_icon: String((ev.target as HTMLInputElement).value).trim(),
+              })}
+          ></ha-textfield>
 
           <ha-textfield
             label="${localize('editor.action_dialog.state_label', this.hass.language)}"
@@ -302,6 +313,14 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
               .checked=${this._config!.show_header}
               @change=${(ev: Event) => 
                 this._updateConfig('show_header', (ev.target as HTMLInputElement).checked)}
+            ></ha-switch>
+          </ha-formfield>
+          
+          <ha-formfield .label=${localize('editor.use_arm_button_icons', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.use_arm_button_icons}
+              @change=${(ev: Event) => 
+                this._updateConfig('use_arm_button_icons', (ev.target as HTMLInputElement).checked)}
             ></ha-switch>
           </ha-formfield>
 
