@@ -58,7 +58,10 @@ The card allows the following customization options:
 * Increasing the size of the buttons in the card.
 * Choose which buttons for arming modes are visible.
 * Change the texts visible on the arming mode buttons and the text visible when the alarm is in this state.
+* Choose whether to display labels or icons over arming buttons.
 * Change the title of the alarm.
+* Choose whether to show the header or not.
+* Choose whether to show the code input box or not.
 
 
 ## Installation
@@ -137,6 +140,9 @@ Configuration using UI mode:
 | `show_ready_indicator`  | boolean | Optional     | Adds ready/not ready indicators to the arm mode buttons.                                                       | `true`             |
 | `show_bypassed_sensors` | boolean | Optional     | Show a warning message when the alarm is armed with bypassed sensors.                                          | `true`             |
 | `states`                | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).               |                    |
+| `show_code_inputfield`  | boolean | Optional     | Customize the display of code input box in the card.                                                           | `true`             |
+| `show_header`           | boolean | Optional     | Customize the display of the header in the card.                                                               | `true`             |
+| `use_arm_button_icons`  | boolean | Optional     | Customize the display of labels or icons over action arm buttons in the card.<br>See [state configuration](#state-configuration).| `false`            |
 
 ### State configuration 
 State configuration allows users to modify the displayed texts and buttons (where applicable) in the card corresponding to certain states.
@@ -148,6 +154,7 @@ Note that the alarm entity may not support all `armed_xxx` states. States which 
 | `hide`         | boolean | `armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                                       | Hides the button corresponding to the state.                                   | `false`                   |
 | `button_label` | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
 | `state_label`  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
+| `button_icon`  | string  | `mdi:choose-icon`                                                                                                                                | Overwrites the text on the button with the icon provided.                      | ` `                       |
 
 **Example of using state configuration**
 
