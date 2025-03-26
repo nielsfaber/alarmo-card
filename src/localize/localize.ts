@@ -1,4 +1,5 @@
 import * as cs from './languages/cs.json';
+import * as de from './languages/de.json';
 import * as en from './languages/en.json';
 import * as es from './languages/es.json';
 import * as fr from './languages/fr.json';
@@ -9,6 +10,7 @@ import * as zh_Hans from './languages/zh-Hans.json';
 
 var languages: any = {
   cs: cs,
+  de: de,
   en: en,
   es: es,
   fr: fr,
