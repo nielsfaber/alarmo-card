@@ -1,8 +1,8 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
-import { HomeAssistant } from 'custom-card-helpers';
 import { ICONS, PENDING_STATES } from '../const';
 import { fetchCountdown } from '../data/websockets';
+import { HomeAssistant } from '../lib/types';
 
 class AlarmoStateBadge extends LitElement {
   @property()
@@ -45,7 +45,7 @@ class AlarmoStateBadge extends LitElement {
         this.duration = countdownConfig.delay;
         this.datetime = new Date(new Date().getTime() + countdownConfig.remaining * 1000);
       })
-      .catch((_e) => {});
+      .catch((_e) => { });
 
     this.timer = window.setInterval(() => {
       this.requestUpdate();

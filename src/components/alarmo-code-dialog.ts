@@ -1,11 +1,11 @@
 import { mdiCheck, mdiClose } from "@mdi/js";
 import { css, html, LitElement, nothing, PropertyValues, TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
-import { HomeAssistant } from "custom-card-helpers";
 import { UnsubscribeFunc } from "home-assistant-js-websocket";
 import { AlarmoEntity, AlarmoEvent } from "../types";
 import { ActionToState, AlarmoEvents, AlarmStates, ArmActions, EVENT, FORMAT_NUMBER } from "../const";
 import { SubscribeMixin } from "../subscribe-mixin";
+import { HomeAssistant } from "../lib/types";
 
 type ValidHassDomEvent = keyof HASSDomEvents;
 

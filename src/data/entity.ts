@@ -3,7 +3,8 @@ import { ArmActions, AlarmStates } from '../const';
 import { CardConfig } from '../types';
 import { calcStateConfig } from './config';
 import { isEmpty } from '../helpers';
-import { LocalizeFunc, computeDomain } from 'custom-card-helpers';
+import { LocalizeFunc } from '../lib/types';
+import { computeDomain } from '../lib/compute-domain';
 
 export const calcSupportedActions = (stateObj: HassEntity) => {
   if (!stateObj) return [];

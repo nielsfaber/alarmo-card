@@ -1,9 +1,10 @@
 import { LitElement, html, css, PropertyValues, TemplateResult, CSSResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
-
-import { stateIcon, HomeAssistant, computeEntity, fireEvent, NumberFormat } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 import { computeStateDisplay } from '../data/entity';
+import { HomeAssistant, NumberFormat } from '../lib/types';
+import { computeEntity } from '../lib/compute-entity';
+import { fireEvent } from '../lib/fire-event';
 
 class AlarmoSensorBadge extends LitElement {
   @property()
@@ -27,13 +28,12 @@ class AlarmoSensorBadge extends LitElement {
     const validEntity = this.entity in this.hass.states;
     let stateObj = { ...this.hass.states[this.entity] } as HassEntity;
     if (this.state !== undefined) stateObj = { ...stateObj, state: this.state };
-    const icon = validEntity ? stateIcon(stateObj) : 'mdi:help-circle-outline';
     const value = validEntity
       ? computeStateDisplay(stateObj, this.hass.localize)
       : this.hass.localize(
-          'state.default.unavailable',
-          this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
-        );
+        'state.default.unavailable',
+        this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
+      );
     const name = validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : this.entity;
     let binaryState = this.state ? true : stateObj.state == 'on';
 
@@ -41,7 +41,10 @@ class AlarmoSensorBadge extends LitElement {
       <div class="badge-container" @click=${() => fireEvent(this, 'hass-more-info', { entityId: this.entity! })}>
         <div class="label-badge ${binaryState ? 'active' : ''}" id="badge">
           <div class="value">
-            <ha-icon .icon=${icon}></ha-icon>
+            <ha-state-icon
+              .hass=${this.hass}
+              .stateObj=${stateObj}
+            ></ha-state-icon>
             <div class="label">
               <span>${value}</span>
             </div>

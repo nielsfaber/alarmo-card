@@ -1,4 +1,4 @@
-import { HomeAssistant } from 'custom-card-helpers';
+import { HomeAssistant } from '../lib/types';
 import { AlarmoEntry, AlarmoConfig, CountdownConfig, ReadyToArmModesConfig } from '../types';
 
 export const fetchEntities = (hass: HomeAssistant): Promise<AlarmoEntry[]> =>

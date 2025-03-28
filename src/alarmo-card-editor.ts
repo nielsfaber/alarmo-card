@@ -1,6 +1,5 @@
 import { LitElement, html, TemplateResult, CSSResult, css } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { HomeAssistant, LovelaceCardEditor, fireEvent } from 'custom-card-helpers';
 import { mdiArrowLeft, mdiPencil } from '@mdi/js';
 import { AlarmoEntity, CardConfig, StateConfig, AlarmoConfig } from './types';
 import { localize } from './localize/localize';
@@ -18,6 +17,8 @@ import { calcStateConfig } from './data/config';
 import { pick, isEmpty, isDefined } from './helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 import { fetchEntities, fetchConfig } from './data/websockets';
+import { HomeAssistant, LovelaceCardEditor } from './lib/types';
+import { fireEvent } from './lib/fire-event';
 
 @customElement('alarmo-card-editor')
 export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
