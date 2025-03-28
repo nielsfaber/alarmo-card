@@ -342,14 +342,10 @@ export class AlarmoCodeDialog
     }
     ha-textfield {
       width: 100%;
-      max-width: 300px;
-      margin: auto;
-    }
-    ha-textfield {
+      max-width: 240px;
       margin: 0px auto;
-      max-width: 200px;
       text-align: center;
-      margin-left: calc(50% - 200px / 2);
+      margin-left: calc(50% - 240px / 2);
       margin-bottom: 18.5px;
     }
     ha-textfield.error {
@@ -358,16 +354,16 @@ export class AlarmoCodeDialog
     }
     @keyframes shake {
       0% {
-        margin-left: calc(50% - 200px / 2);
+        margin-left: calc(50% - 240px / 2);
       }
       25% {
-        margin-left: calc(50% - 200px / 2 + 10px);
+        margin-left: calc(50% - 240px / 2 + 10px);
       }
       75% {
-        margin-left: calc(50% - 200px / 2 - 10px);
+        margin-left: calc(50% - 240px / 2 - 10px);
       }
       100% {
-        margin-left: calc(50% - 200px / 2);
+        margin-left: calc(50% - 240px / 2);
       }
     }
     .container {
