@@ -2,8 +2,6 @@ import { CardConfig } from './types';
 
 export const CARD_VERSION = 'v1.5.2';
 
-export const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
-
 export const FORMAT_NUMBER = 'number';
 
 export enum AlarmStates {
@@ -50,6 +48,7 @@ export const ActionToState = {
 };
 
 export enum AlarmoEvents {
+  Disarm = 'disarm',
   Arm = 'arm',
   Trigger = 'trigger',
   FailedToArm = 'failed_to_arm',

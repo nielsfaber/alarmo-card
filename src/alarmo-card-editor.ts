@@ -89,11 +89,11 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             ></ha-icon-button>
             <span slot="title"
               >${localize(
-                'editor.action_dialog.title',
-                this.hass.language,
-                '{action}',
-                this.hass!.localize(`ui.card.alarm_control_panel.${this._editAction}`)
-              )}</span
+        'editor.action_dialog.title',
+        this.hass.language,
+        '{action}',
+        this.hass!.localize(`ui.card.alarm_control_panel.${this._editAction}`)
+      )}</span
             >
           </div>
         </div>
@@ -102,23 +102,23 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           <ha-checkbox
             ?checked=${!stateConfig.hide}
             ?disabled=${(!stateConfig.hide &&
-              calcSupportedActions(stateObj!)
-                .map(e => ActionToState[e])
-                .filter(e => !calcStateConfig(e, this._config!).hide).length == 1) ||
-              this._editAction == ArmActions.Disarm}
+          calcSupportedActions(stateObj!)
+            .map(e => ActionToState[e])
+            .filter(e => !calcStateConfig(e, this._config!).hide).length == 1) ||
+        this._editAction == ArmActions.Disarm}
             @change=${(ev: Event) =>
-              this._updateStateConfig(
-                ActionToState[this._editAction!],
-                (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
-              )}
+          this._updateStateConfig(
+            ActionToState[this._editAction!],
+            (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
+          )}
           >
           </ha-checkbox>
           <span
             @click=${(ev: Event) => {
-              const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
-              checkbox.click();
-              checkbox.blur();
-            }}
+          const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
+          checkbox.click();
+          checkbox.blur();
+        }}
           >
             ${localize('editor.action_dialog.show_button', this.hass.language)}
           </span>
@@ -131,21 +131,21 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             placeholder="${this.hass!.localize(`ui.card.alarm_control_panel.${this._editAction}`)}"
             ?disabled=${stateConfig.hide}
             @input=${(ev: Event) =>
-              this._updateStateConfig(ActionToState[this._editAction!], {
-                button_label: String((ev.target as HTMLInputElement).value).trim(),
-              })}
+          this._updateStateConfig(ActionToState[this._editAction!], {
+            button_label: String((ev.target as HTMLInputElement).value).trim(),
+          })}
           ></ha-textfield>
 
           <ha-textfield
             label="${localize('editor.action_dialog.state_label', this.hass.language)}"
             .value="${stateConfig.state_label || ''}"
             placeholder="${this.hass.localize(
-              `component.alarm_control_panel.entity_component._.state.${ActionToState[this._editAction]}`
-            )}"
+            `component.alarm_control_panel.entity_component._.state.${ActionToState[this._editAction]}`
+          )}"
             @input=${(ev: Event) =>
-              this._updateStateConfig(ActionToState[this._editAction!], {
-                state_label: String((ev.target as HTMLInputElement).value).trim(),
-              })}
+          this._updateStateConfig(ActionToState[this._editAction!], {
+            state_label: String((ev.target as HTMLInputElement).value).trim(),
+          })}
           ></ha-textfield>
         </div>
       `;
@@ -156,8 +156,8 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         <div class="grid">
           <ha-entity-picker
             .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.entity')} (${this.hass.localize(
-              'ui.panel.lovelace.editor.card.config.required'
-            )})"
+      'ui.panel.lovelace.editor.card.config.required'
+    )})"
             .hass=${this.hass}
             .value="${this._config!.entity || ''}"
             .includeDomains=${['alarm_control_panel']}
@@ -168,42 +168,42 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
 
           <ha-textfield
             .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize(
-              'ui.panel.lovelace.editor.card.config.optional'
-            )})"
+      'ui.panel.lovelace.editor.card.config.optional'
+    )})"
             .value="${this._config!.name || ''}"
             @input=${(ev: Event) => this._updateConfig('name', String((ev.target as HTMLInputElement).value).trim())}
           ></ha-textfield>
         </div>
 
         ${stateObj
-          ? html`
+        ? html`
               <div class="config-item">
                 <span>${localize('editor.available_actions', this.hass.language)}</span>
               </div>
               <div class="config-row checkbox-list">
                 ${[...calcSupportedActions(stateObj), ArmActions.Disarm].map(e => {
-                  const supportedStates = calcSupportedActions(stateObj).map(e => ActionToState[e]);
-                  const isHidden = calcStateConfig(ActionToState[e], this._config!).hide;
-                  return html`
+          const supportedStates = calcSupportedActions(stateObj).map(e => ActionToState[e]);
+          const isHidden = calcStateConfig(ActionToState[e], this._config!).hide;
+          return html`
                     <div class="checkbox-item ${isHidden ? 'disabled' : ''}">
                       <ha-checkbox
                         ?checked=${!isHidden}
                         ?disabled=${(!isHidden &&
-                          supportedStates.filter(el => !calcStateConfig(el, this._config!).hide).length == 1) ||
-                          e == ArmActions.Disarm}
+              supportedStates.filter(el => !calcStateConfig(el, this._config!).hide).length == 1) ||
+            e == ArmActions.Disarm}
                         @change=${(ev: Event) =>
-                          this._updateStateConfig(
-                            ActionToState[e],
-                            (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
-                          )}
+              this._updateStateConfig(
+                ActionToState[e],
+                (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
+              )}
                       >
                       </ha-checkbox>
                       <span
                         @click=${(ev: Event) => {
-                          const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
-                          checkbox.click();
-                          checkbox.blur();
-                        }}
+              const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
+              checkbox.click();
+              checkbox.blur();
+            }}
                       >
                         ${this.hass!.localize(`ui.card.alarm_control_panel.${e}`)}
                       </span>
@@ -216,44 +216,23 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
                       </ha-icon-button>
                     </div>
                   `;
-                })}
+        })}
               </div>
             `
-          : ''}
+        : ''}
 
         <div class="grid">
           <ha-formfield .label=${localize('editor.button_scale_actions', this.hass.language)}>
             <ha-slider
               value=${this._config!.button_scale_actions || 1}
               @change=${(ev: Event) =>
-                this._updateConfig('button_scale_actions', Number((ev.target as HTMLInputElement).value))}
+        this._updateConfig('button_scale_actions', Number((ev.target as HTMLInputElement).value))}
               min="${minButtonScale}"
               max="${maxButtonScale}"
               step="0.1"
-              pin
+              labeled
             ></ha-slider>
           </ha-formfield>
-
-          <ha-formfield .label=${localize('editor.button_scale_keypad', this.hass.language)}>
-            <ha-slider
-              value=${this._config!.button_scale_keypad || 1}
-              @change=${(ev: Event) =>
-                this._updateConfig('button_scale_keypad', Number((ev.target as HTMLInputElement).value))}
-              min="${minButtonScale}"
-              max="${maxButtonScale}"
-              step="0.1"
-              pin
-              ?disabled=${!stateObj || !hasKeypad}
-            ></ha-slider>
-          </ha-formfield>
-
-          <ha-formfield .label=${localize('editor.use_clear_icon', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.use_clear_icon}
-              @change=${(ev: Event) => this._updateConfig('use_clear_icon', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad}
-            ></ha-switch
-          ></ha-formfield>
 
           <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
             <ha-switch
@@ -262,22 +241,11 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             ></ha-switch
           ></ha-formfield>
 
-          <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.keep_keypad_visible}
-              @change=${(ev: Event) =>
-                this._updateConfig('keep_keypad_visible', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj ||
-                !hasKeypad ||
-                this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required}
-            ></ha-switch
-          ></ha-formfield>
-
           <ha-formfield .label=${localize('editor.show_ready_indicator', this.hass.language)}>
             <ha-switch
               .checked=${this._config!.show_ready_indicator}
               @change=${(ev: Event) =>
-                this._updateConfig('show_ready_indicator', (ev.target as HTMLInputElement).checked)}
+        this._updateConfig('show_ready_indicator', (ev.target as HTMLInputElement).checked)}
             ></ha-switch
           ></ha-formfield>
 
@@ -285,7 +253,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             <ha-switch
               .checked=${this._config!.show_bypassed_sensors}
               @change=${(ev: Event) =>
-                this._updateConfig('show_bypassed_sensors', (ev.target as HTMLInputElement).checked)}
+        this._updateConfig('show_bypassed_sensors', (ev.target as HTMLInputElement).checked)}
             ></ha-switch
           ></ha-formfield>
 
