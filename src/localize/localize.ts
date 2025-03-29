@@ -7,6 +7,7 @@ import * as it from './languages/it.json';
 import * as nl from './languages/nl.json';
 import * as pt_Br from './languages/pt-BR.json';
 import * as zh_Hans from './languages/zh-Hans.json';
+import * as ru from './languages/ru.json';
 
 var languages: any = {
   cs: cs,
@@ -18,6 +19,7 @@ var languages: any = {
   nl: nl,
   'pt-BR': pt_Br,
   'zh-Hans': zh_Hans,
+  ru: ru,
 };
 
 export function localize(
