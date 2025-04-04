@@ -5,6 +5,7 @@ import * as es from './languages/es.json';
 import * as fr from './languages/fr.json';
 import * as it from './languages/it.json';
 import * as nl from './languages/nl.json';
+import * as nl from './languages/sv.json';
 import * as pt_Br from './languages/pt-BR.json';
 import * as zh_Hans from './languages/zh-Hans.json';
 
@@ -16,6 +17,7 @@ var languages: any = {
   fr: fr,
   it: it,
   nl: nl,
+  sv: sv,
   'pt-BR': pt_Br,
   'zh-Hans': zh_Hans,
 };
