@@ -1,0 +1,28 @@
+{
+  "arm_options": {
+    "heading": "Alternativ vid aktivering",
+    "skip_delay": "Hoppa över lämna fördröjning",
+    "force": "Förbikoppla öppna sensorer"
+  },
+  "editor": {
+    "keep_keypad_visible": "Håll knappsatsen alltid synlig, även när ingen kodinmatning krävs.",
+    "button_scale_actions": "Ändra storlek på åtgärdsknapparna.",
+    "button_scale_keypad": "Ändra storlek på knapparna på knappsatsen.",
+    "use_clear_icon": "Visa ikon (istället för text) på knappsatsen för att radera kodinmatning.",
+    "show_messages": "Visa diagnostiska meddelanden när larmet utlöses eller inte kan aktiveras.",
+    "show_ready_indicator": "Visa redo/ej redo-indikator på lägesknapparna.",
+    "show_bypassed_sensors": "Visa varningsmeddelande när larmet är aktiverat med förbikopplade sensorer.",
+    "available_actions": "Tillgängliga åtgärder:",
+  "action_dialog": {
+    "title": "Anpassa visningen av åtgärden '{action}'",
+    "show_button": "Visa knapp för denna åtgärd",
+    "button_label": "Anpassad knappetikett",
+    "state_label": "Anpassad tillståndsetikett"
+  }
+  },
+  "errors": {
+    "blocking_sensors": "Kunde inte aktivera på grund av följande sensorer",
+    "triggered_sensors": "Larmet utlöstes av följande sensorer",
+    "bypassed_sensors": "Det finns förbikopplade sensorer"
+    }
+}
