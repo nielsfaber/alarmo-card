@@ -1,29 +1,29 @@
 import * as cs from './languages/cs.json';
 import * as de from './languages/de.json';
+import * as el from './languages/el.json';
 import * as en from './languages/en.json';
 import * as es from './languages/es.json';
 import * as fr from './languages/fr.json';
 import * as it from './languages/it.json';
 import * as nl from './languages/nl.json';
-import * as nl from './languages/sv.json';
 import * as pt_Br from './languages/pt-BR.json';
-import * as el_GR from './languages/el-GR.json';
-import * as zh_Hans from './languages/zh-Hans.json';
 import * as ru from './languages/ru.json';
+import * as sv from './languages/sv.json';
+import * as zh_Hans from './languages/zh-Hans.json';
 
 var languages: any = {
   cs: cs,
   de: de,
+  el: el,
   en: en,
   es: es,
   fr: fr,
   it: it,
   nl: nl,
-  sv: sv,
   'pt-BR': pt_Br,
-  'el-GR': el_GR,
-  'zh-Hans': zh_Hans,
   ru: ru,
+  sv: sv,
+  'zh-Hans': zh_Hans,
 };
 
 export function localize(
@@ -32,7 +32,7 @@ export function localize(
   search: string | string[] = '',
   replace: string | string[] = ''
 ) {
-  const lang = language.replace(/['"]+/g, '').replace('-', '_');
+  const lang = language.replace(/['"]+/g, '');
 
   var translated: string;
 
