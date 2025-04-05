@@ -12,6 +12,7 @@
     "show_messages": "Afficher les messages de diagnostic lorsque l'alarme est déclenchée ou ne peut pas être armée.",
     "show_ready_indicator": "Afficher l'indicateur prêt/pas prêt sur les boutons de mode d'armement.",
     "show_bypassed_sensors": "Afficher un avertissement lorsque l'alarme est armée avec des capteurs ignorés.",
+    "use_code_dialog": "Affichez le clavier pour saisir le code sous forme de boîte de dialogue contextuelle.",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",

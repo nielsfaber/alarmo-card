@@ -235,6 +235,47 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             ></ha-slider>
           </ha-formfield>
 
+          <ha-formfield .label=${localize('editor.button_scale_keypad', this.hass.language)}>
+            <ha-slider
+              value=${this._config!.button_scale_keypad || 1}
+              @change=${(ev: Event) =>
+        this._updateConfig('button_scale_keypad', Number((ev.target as HTMLInputElement).value))}
+              min="${minButtonScale}"
+              max="${maxButtonScale}"
+              step="0.1"
+              labeled
+              ?disabled=${!stateObj || !hasKeypad || this._config?.use_code_dialog}
+            ></ha-slider>
+          </ha-formfield>
+
+          <ha-formfield .label=${localize('editor.use_clear_icon', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.use_clear_icon}
+              @change=${(ev: Event) => this._updateConfig('use_clear_icon', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj || !hasKeypad || this._config?.use_code_dialog}
+            ></ha-switch
+          ></ha-formfield>
+
+          <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.keep_keypad_visible}
+              @change=${(ev: Event) =>
+        this._updateConfig('keep_keypad_visible', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj ||
+      !hasKeypad ||
+      this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required ||
+      this._config?.use_code_dialog}
+            ></ha-switch
+          ></ha-formfield>
+
+          <ha-formfield .label=${localize('editor.use_code_dialog', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.use_code_dialog}
+              @change=${(ev: Event) => this._updateConfig('use_code_dialog', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj || !hasKeypad}
+            ></ha-switch
+          ></ha-formfield>
+
           <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
             <ha-switch
               .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}

@@ -1,9 +1,10 @@
 import { LitElement, html, TemplateResult, PropertyValues, CSSResult, css } from 'lit';
-import { property, customElement, state, query } from 'lit/decorators.js';
+import { property, customElement, state } from 'lit/decorators.js';
 import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
 
 import {
   CARD_VERSION,
+  FORMAT_NUMBER,
   defaultCardConfig,
   ActionToState,
   ArmActions,
@@ -38,6 +39,8 @@ import { HomeAssistant } from './lib/types';
 import { computeDomain } from './lib/compute-domain';
 import { fireEvent } from './lib/fire-event';
 
+const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
+
 @customElement('alarmo-card')
 export class AlarmoCard extends SubscribeMixin(LitElement) {
   @property({ attribute: false })
@@ -48,6 +51,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   @state()
   private _alarmoConfig?: AlarmoConfig;
+
+  @state()
+  private _input = '';
 
   @state()
   private warning = '';
@@ -69,6 +75,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   subscribedEntities: string[] = [];
 
+  _codeClearTimer = 0;
+
   public static async getConfigElement() {
     await import('./alarmo-card-editor');
     return document.createElement('alarmo-card-editor');
@@ -88,8 +96,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     };
   }
 
-  public getCardSize(): number {
-    return 4;
+  public async getCardSize(): Promise<number> {
+    if (!this._config || !this.hass) return 9;
+    const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
+    if (!stateObj || this._alarmoConfig?.code_format !== FORMAT_NUMBER) return 4;
+    return (!codeRequired(stateObj) && !this._config.keep_keypad_visible || this._config.use_code_dialog) ? 4 : 9;
   }
 
   public setConfig(config?: CardConfig & { button_scale?: any }): void {
@@ -143,17 +154,21 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     if (ev.data.area_id !== this.area_id) return;
     switch (ev.data.event) {
       case AlarmoEvents.Arm:
+        this._clearCode();
         break;
       case AlarmoEvents.Trigger:
         break;
       case AlarmoEvents.InvalidCodeProvided:
       case AlarmoEvents.NoCodeProvided:
+        this._showCodeError();
         this.subscribedEntities = [];
         break;
       case AlarmoEvents.FailedToArm:
         this.warning = 'blocking_sensors';
+        this._clearCode();
         break;
       case AlarmoEvents.CommandNotAllowed:
+        this._clearCode();
         break;
       case AlarmoEvents.TriggerTimeExpired:
         break;
@@ -191,6 +206,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     if (newState.state != oldState.state) {
       //stop watching entities (blocking or triggered sensors)
       this.subscribedEntities = [];
+    }
+
+    if (newState.state == AlarmStates.Disarmed) {
+      //wipe code in every card update (except InvalidCodeProvided/NoCodeProvided)
+      this._clearCode();
+    } else if (newState.last_changed !== oldState.last_changed) {
+      //assume the state was changed although not detected
+      this._clearCode();
     }
   }
 
@@ -290,6 +313,59 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         <div id="armActions" class="actions">
           ${this._renderActions()}
         </div>
+
+        ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) || this._config.use_code_dialog
+        ? html``
+        : html`
+              <ha-textfield
+                .value=${this._input}
+                .label=${this.hass.localize('ui.card.alarm_control_panel.code')}
+                ?disabled=${!codeRequired(stateObj)}
+                @input=${(ev: Event) => {
+            this._clearCodeError();
+            this._input = (ev.target as HTMLInputElement).value;
+            this._setCodeClearTimer();
+          }}
+                @focus=${this._clearCodeError}
+                type="password"
+                id="code_input"
+                .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
+              ></ha-textfield>
+            `}
+        ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
+        this._alarmoConfig?.code_format !== FORMAT_NUMBER ||
+        this._config.use_code_dialog
+        ? html``
+        : html`
+          <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
+            ${BUTTONS.map(value => {
+          return value === ''
+            ? html`
+              <alarmo-button
+                disabled
+                style="--content-scale: ${this._config!.button_scale_keypad}"
+                ?scaled=${this._config!.button_scale_keypad != 1}
+              ></alarmo-button>
+            `
+            : html`
+              <alarmo-button
+                .value="${value}"
+                @click=${this._handlePadClick}
+                ?disabled=${!codeRequired(stateObj)}
+                class="${value !== 'clear' ? 'numberKey' : ''}"
+                style="--content-scale: ${this._config!.button_scale_keypad}"
+                ?scaled=${this._config!.button_scale_keypad != 1}
+              >
+                ${value === 'clear'
+                ? this._config!.use_clear_icon
+                  ? html`<ha-icon icon="hass:backspace-outline"></ha-icon>`
+                  : html`<span>${this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)}</span>`
+                : html` <span>${value}</span>`}
+              </alarmo-button>
+            `;
+        })}
+          </div>
+        `}
       </ha-card>
     `;
   }
@@ -411,26 +487,18 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     return html``;
   }
 
+  private _handlePadClick(e: MouseEvent): void {
+    const val = (e.currentTarget! as any).value;
+    this._clearCodeError();
+    this._input = val === 'clear' ? '' : this._input + val;
+  }
+
   private async _handleActionClick(ev: Event, action: ArmActions): Promise<void> {
     (ev.target as HTMLElement).blur();
+    this._clearCodeError();
     const stateObj = this.hass!.states[this._config!.entity] as AlarmoEntity;
 
-    if (!codeRequired(stateObj)) {
-      if (action == ArmActions.Disarm) {
-        this.hass!.callService('alarmo', 'disarm', {
-          entity_id: this._config!.entity
-        });
-      } else {
-        this.hass!.callService('alarmo', 'arm', {
-          ...this.armOptions,
-          entity_id: this._config!.entity,
-          mode: ActionToState[action],
-        });
-      }
-      this.warning = '';
-      this.armOptions = { ...defaultArmOptions };
-    }
-    else {
+    if (this._config?.use_code_dialog && codeRequired(stateObj)) {
       const res = await new Promise(resolve => {
         const element = ev.target as HTMLElement;
         const params: CodeDialogParams = {
@@ -458,7 +526,63 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         this.armOptions = { ...defaultArmOptions };
       }
     }
+    else {
+      if (action == ArmActions.Disarm) {
+        this.hass!.callService('alarmo', 'disarm', {
+          entity_id: this._config!.entity,
+          code: this._input,
+        });
+      } else {
+        this.hass!.callService('alarmo', 'arm', {
+          ...this.armOptions,
+          entity_id: this._config!.entity,
+          mode: ActionToState[action],
+          code: this._input,
+        });
+      }
+      this.warning = '';
+      this.armOptions = { ...defaultArmOptions };
+    }
+  }
 
+  private _showCodeError() {
+    const inputField = this.shadowRoot?.querySelector('#code_input');
+    if (inputField) {
+      inputField.classList.remove('error');
+      inputField.classList.add('error');
+      (inputField as any).invalid = true;
+    }
+  }
+
+  private _clearCodeError() {
+    const inputField = this.shadowRoot?.querySelector('#code_input');
+    if (inputField && inputField.classList.contains('error')) {
+      inputField.classList.remove('error');
+      (inputField as any).invalid = false;
+      this._input = '';
+      this._cancelCodeClearTimer();
+    }
+  }
+
+  private _clearCode() {
+    this._input = '';
+    this._clearCodeError();
+    this._cancelCodeClearTimer();
+  }
+
+  private _setCodeClearTimer() {
+    this._cancelCodeClearTimer();
+    if (this._input.length) {
+      this._codeClearTimer = window.setTimeout(() => {
+        this._clearCode();
+      }, 120000); //clear code after 120 sec inactivity
+    }
+  }
+
+  private _cancelCodeClearTimer() {
+    if (this._codeClearTimer) {
+      clearTimeout(this._codeClearTimer);
+    }
   }
 
   private _toggleArmOptions(ev: CustomEvent) {
@@ -519,6 +643,41 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       }
       .actions alarmo-button {
         margin: 0 8px 8px;
+      }
+      ha-textfield {
+        margin: 8px auto;
+        max-width: 200px;
+        text-align: center;
+        margin-left: calc(50% - 200px / 2);
+      }
+      ha-textfield.error {
+        animation: shake 0.2s ease-in-out 0s 2;
+      }
+      #keypad {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: auto;
+        width: 100%;
+      }
+      #keypad alarmo-button {
+        padding: 8px;
+        width: 30%;
+        box-sizing: border-box;
+      }
+      @keyframes shake {
+        0% {
+          margin-left: calc(50% - 200px / 2);
+        }
+        25% {
+          margin-left: calc(50% - 200px / 2 + 10px);
+        }
+        75% {
+          margin-left: calc(50% - 200px / 2 - 10px);
+        }
+        100% {
+          margin-left: calc(50% - 200px / 2);
+        }
       }
       div.messagebox {
         width: 90%;
