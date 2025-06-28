@@ -617,10 +617,10 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         margin: 0px auto;
         padding: 20px 0px;
         box-sizing: border-box;
+        gap: 20px;
       }
       .header .icon {
         display: flex;
-        padding-right: 20px;
       }
       .header .summary {
         display: flex;
@@ -649,6 +649,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         max-width: 200px;
         text-align: center;
         margin-left: calc(50% - 200px / 2);
+        margin-right: calc(50% - 200px / 2);
       }
       ha-textfield.error {
         animation: shake 0.2s ease-in-out 0s 2;
@@ -659,6 +660,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         flex-wrap: wrap;
         margin: auto;
         width: 100%;
+        direction: ltr;
       }
       #keypad alarmo-button {
         padding: 8px;
