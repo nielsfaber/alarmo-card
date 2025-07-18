@@ -1,4 +1,4 @@
-import * as cs from './languages/ar.json';
+import * as ar from './languages/ar.json';
 import * as cs from './languages/cs.json';
 import * as de from './languages/de.json';
 import * as el from './languages/el.json';
