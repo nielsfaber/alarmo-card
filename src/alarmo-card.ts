@@ -77,6 +77,9 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   _codeClearTimer = 0;
 
+  _last_command?: string;
+  _last_code?: string;
+
   public static async getConfigElement() {
     await import('./alarmo-card-editor');
     return document.createElement('alarmo-card-editor');
@@ -165,6 +168,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         break;
       case AlarmoEvents.FailedToArm:
         this.warning = 'blocking_sensors';
+        this._last_command = ev.data.command;
+        this._last_code = this._input;
         this._clearCode();
         break;
       case AlarmoEvents.CommandNotAllowed:
@@ -293,7 +298,6 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             <alarmo-state-badge
               .hass=${this.hass}
               .entity=${this._config.entity}
-              @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
               style="--alarm-state-color: ${computeStateColor(stateObj)}"
             >
             </alarmo-state-badge>
@@ -447,6 +451,16 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 `;
           })}
             </div>
+          ${this.warning == 'blocking_sensors' && stateObj.attributes.open_sensors
+          ? html`
+            <alarmo-button
+              @click=${this._forceRetryClick}
+              style="--content-scale: ${this._config!.button_scale_actions}"
+              ?scaled=${this._config!.button_scale_actions != 1}
+            >
+              <span>${localize('arm_options.force', this.hass.language)}</span>
+            </alarmo-button>
+          ` : ''}
           </div>
           <div class="messagebox-right"></div>
         </div>
@@ -599,6 +613,18 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     setTimeout(() => {
       (el.firstElementChild as HTMLElement).blur();
     }, 50);
+  }
+
+  private _forceRetryClick() {
+    if (!this.hass || !this._config || !this._last_command) return;
+    let action = this._last_command;
+
+    this.hass!.callService('alarmo', 'arm', {
+      entity_id: this._config!.entity,
+      mode: ActionToState[action],
+      code: this._last_code,
+      force: true,
+    });
   }
 
   static get styles(): CSSResult {
@@ -757,6 +783,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         margin: 5px 0px;
         justify-content: center;
         align-items: center;
+      }
+      div.messagebox alarmo-button {
+        display: flex;
+        justify-self: center;
+        margin-bottom: 10px;
       }
       ha-button-menu {
         position: absolute;

@@ -1,3 +1,4 @@
+import { mdiAirplane, mdiHome, mdiLock, mdiLockOpenVariant, mdiSecurity, mdiWeatherNight } from '@mdi/js';
 import { CardConfig } from './types';
 
 export const CARD_VERSION = 'v1.6.2';
@@ -34,8 +35,16 @@ export enum ArmActions {
   ArmNight = 'arm_night',
   ArmVacation = 'arm_vacation',
   ArmCustomBypass = 'arm_custom_bypass',
-  Disarm = 'disarm',
-  SwitchMode = 'switch_mode',
+  Disarm = 'disarm'
+}
+
+export const ActionToIcon = {
+  [ArmActions.ArmAway]: mdiLock,
+  [ArmActions.ArmHome]: mdiHome,
+  [ArmActions.ArmNight]: mdiWeatherNight,
+  [ArmActions.ArmVacation]: mdiAirplane,
+  [ArmActions.ArmCustomBypass]: mdiSecurity,
+  [ArmActions.Disarm]: mdiLockOpenVariant,
 }
 
 export const ActionToState = {

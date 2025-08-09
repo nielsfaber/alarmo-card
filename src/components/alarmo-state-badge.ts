@@ -1,8 +1,9 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { ICONS, PENDING_STATES } from '../const';
 import { fetchCountdown } from '../data/websockets';
 import { HomeAssistant } from '../lib/types';
+import { fireEvent } from '../lib/fire-event';
 
 class AlarmoStateBadge extends LitElement {
   @property()
@@ -14,6 +15,11 @@ class AlarmoStateBadge extends LitElement {
   duration: number = 0;
   datetime: Date | null = null;
   timer = 0;
+
+  private _touchStarted = false;
+
+  @state()
+  public _hover = false;
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!changedProps.size) return true;
@@ -36,6 +42,23 @@ class AlarmoStateBadge extends LitElement {
   firstUpdated() {
     const state = this.hass.states[this.entity].state;
     if (PENDING_STATES.includes(state)) this.startTimer();
+
+    this.addEventListener("click", this.handleClick);
+    this.addEventListener("touchstart", () => {
+      this._touchStarted = true;
+    });
+    this.addEventListener("touchend", () => {
+      setTimeout(() => {
+        this._touchStarted = false;
+      }, 10);
+    });
+    this.addEventListener("mouseenter", () => {
+      if (this._touchStarted) return;
+      this._hover = true;
+    });
+    this.addEventListener("mouseleave", () => {
+      this._hover = false;
+    });
   }
 
   async startTimer() {
@@ -74,10 +97,25 @@ class AlarmoStateBadge extends LitElement {
   }
 
   private _stateValue(state: string) {
-    if (this.datetime && this.duration) {
+    if (this._hover && PENDING_STATES.includes(state) && this.timer) {
+      return html` <ha-icon icon="mdi:skip-forward"></ha-icon> `;
+    }
+    else if (this.datetime && this.duration) {
       return html` ${Math.max(Math.round(this.getRemaining()), 0)} `;
     } else {
       return html` <ha-icon .icon=${ICONS[state]}></ha-icon> `;
+    }
+  }
+
+  handleClick() {
+    const state = this.hass.states[this.entity].state;
+    if (PENDING_STATES.includes(state) && this.timer) {
+      this.hass!.callService('alarmo', 'skip_delay', {
+        entity_id: this.entity
+      });
+    }
+    else {
+      fireEvent(this, 'hass-more-info', { entityId: this.entity });
     }
   }
 
