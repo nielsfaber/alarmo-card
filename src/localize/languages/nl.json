@@ -13,6 +13,7 @@
     "show_ready_indicator": "Toon gereed/niet gereed-indicator op inschakelmodusknoppen.",
     "show_bypassed_sensors": "Toon melding wanneer het alarm is ingeschakeld met omzeilde sensoren.",
     "use_code_dialog": "Geef het toetsenbord voor het invoeren van de code weer als een pop-upvenster.",
+    "hide_keypad": "Verberg het toetsenbord voor het invoeren van de code.",
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",

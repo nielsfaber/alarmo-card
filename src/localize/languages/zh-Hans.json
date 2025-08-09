@@ -13,6 +13,7 @@
         "show_ready_indicator": "在手臂模式按钮上显示就绪/未就绪指示器。",
         "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
         "use_code_dialog": "以弹出对话框的形式显示用于输入代码的键盘。",
+        "hide_keypad": "隐藏用于输入代码的键盘按钮。",
         "available_actions": "可用动作：",
         "action_dialog": {
             "title": "自定义动作'{action}'的显示",

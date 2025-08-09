@@ -13,6 +13,7 @@
     "show_ready_indicator": "Zeigt die Bereitschafts-/Nicht-Bereitschaftsanzeige auf den Scharfschaltmodus-Tasten an.",
     "show_bypassed_sensors": "Warnung anzeigen, wenn der Alarm mit umgangenen Sensoren aktiviert wird.",
     "use_code_dialog": "Zeigen Sie die Tastatur zur Codeeingabe als Popup-Dialog an.",
+    "hide_keypad": "Blenden Sie die Tasten der Tastatur zur Codeeingabe aus.",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",

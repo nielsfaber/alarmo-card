@@ -13,6 +13,7 @@
     "show_ready_indicator": "Zobrazit indikátor připraveno/nepřipraveno na tlačítkách režimu aktivace.",
     "show_bypassed_sensors": "Zobrazit varování při aktivaci alarmu s přemostěnými senzory.",
     "use_code_dialog": "Zobrazte klávesnici pro zadání kódu jako vyskakovací dialog.",
+    "hide_keypad": "Skrýt tlačítka klávesnice pro zadávání kódu.",
     "available_actions": "Dostupné akce:",
     "action_dialog": {
       "title": "Upravit zobrazení akce '{action}'",

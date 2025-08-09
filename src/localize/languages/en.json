@@ -13,6 +13,7 @@
     "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
     "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
     "use_code_dialog": "Display the keypad for entering the code as a popup dialog.",
+    "hide_keypad": "Hide the keypad buttons for entering the code.",
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",

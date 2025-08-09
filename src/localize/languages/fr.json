@@ -13,6 +13,7 @@
     "show_ready_indicator": "Afficher l'indicateur prêt/pas prêt sur les boutons de mode d'armement.",
     "show_bypassed_sensors": "Afficher un avertissement lorsque l'alarme est armée avec des capteurs ignorés.",
     "use_code_dialog": "Affichez le clavier pour saisir le code sous forme de boîte de dialogue contextuelle.",
+    "hide_keypad": "Masquer les boutons du clavier pour saisir le code.",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",

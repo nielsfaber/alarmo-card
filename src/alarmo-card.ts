@@ -338,7 +338,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             `}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
         this._alarmoConfig?.code_format !== FORMAT_NUMBER ||
-        this._config.use_code_dialog
+        this._config.use_code_dialog ||
+        this._config.hide_keypad
         ? html``
         : html`
           <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
@@ -512,7 +513,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     this._clearCodeError();
     const stateObj = this.hass!.states[this._config!.entity] as AlarmoEntity;
 
-    if (this._config?.use_code_dialog && codeRequired(stateObj)) {
+    if (this._config?.use_code_dialog && !this._config.hide_keypad && codeRequired(stateObj)) {
       const res = await new Promise(resolve => {
         const element = ev.target as HTMLElement;
         const params: CodeDialogParams = {

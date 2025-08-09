@@ -256,6 +256,14 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             ></ha-switch
           ></ha-formfield>
 
+          <ha-formfield .label=${localize('editor.hide_keypad', this.hass.language)}>
+            <ha-switch
+              .checked=${this._config!.hide_keypad}
+              @change=${(ev: Event) => this._updateConfig('hide_keypad', (ev.target as HTMLInputElement).checked)}
+              ?disabled=${!stateObj || !hasKeypad}
+            ></ha-switch
+          ></ha-formfield>
+
           <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
             <ha-switch
               .checked=${this._config!.keep_keypad_visible}
@@ -264,7 +272,8 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
               ?disabled=${!stateObj ||
       !hasKeypad ||
       this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required ||
-      this._config?.use_code_dialog}
+      this._config?.use_code_dialog ||
+      this._config?.hide_keypad}
             ></ha-switch
           ></ha-formfield>
 
@@ -272,7 +281,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             <ha-switch
               .checked=${this._config!.use_code_dialog}
               @change=${(ev: Event) => this._updateConfig('use_code_dialog', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad}
+              ?disabled=${!stateObj || !hasKeypad || this._config.hide_keypad}
             ></ha-switch
           ></ha-formfield>
 

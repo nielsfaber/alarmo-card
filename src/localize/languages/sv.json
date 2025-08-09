@@ -13,6 +13,7 @@
     "show_ready_indicator": "Visa redo/ej redo-indikator på lägesknapparna.",
     "show_bypassed_sensors": "Visa varningsmeddelande när larmet är aktiverat med förbikopplade sensorer.",
     "use_code_dialog": "Visa knappsatsen för att ange koden som en popup-dialogruta.",
+    "hide_keypad": "Dölj knapparna på tangentbordet för att ange koden.",
     "available_actions": "Tillgängliga åtgärder:",
     "action_dialog": {
       "title": "Anpassa visningen av åtgärden '{action}'",

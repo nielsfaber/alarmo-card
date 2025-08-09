@@ -13,6 +13,7 @@
     "show_ready_indicator": "Mostrar indicador de disponível/não disponível nos botões do modo de armar.",
     "show_bypassed_sensors": "Mostrar aviso quando o alarme for ativado com sensores ignorados.",
     "use_code_dialog": "Exiba o teclado para inserir o código como uma caixa de diálogo pop-up.",
+    "hide_keypad": "Oculte os botões do teclado para inserir o código.",
     "available_actions": "Ações disponíveis:",
     "action_dialog": {
       "title": "Personalize a exibição da ação '{action}'",
