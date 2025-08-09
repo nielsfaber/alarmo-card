@@ -10,17 +10,9 @@ class AlarmoButton extends LitElement {
 
   render() {
     return html`
-      ${this.scaled
-        ? html`
-            <button ?disabled=${this.disabled}>
-              <slot></slot>
-            </button>
-          `
-        : html`
-            <mwc-button ?disabled=${this.disabled} ?outlined=${!this.disabled}>
-              <slot></slot>
-            </mwc-button>
-          `}
+      <button ?disabled=${this.disabled}>
+        <slot></slot>
+      </button>
     `;
   }
 
@@ -31,44 +23,60 @@ class AlarmoButton extends LitElement {
   static get styles() {
     return css`
       button {
+        position: relative;
         width: 100%;
-        border-width: calc(var(--content-scale, 1) * 1px);
-        border-color: var(--mdc-button-outline-color, rgba(0, 0, 0, 0.12));
-        color: var(--mdc-theme-primary, #6200ee);
-        border-radius: var(--mdc-shape-small, 4px);
+        border: 1px solid var(--outline-color);
+        border-radius: 4px;
+        background: transparent;
+        color: var(--wa-color-brand-on-normal);
         padding: calc(var(--content-scale, 1) * 0.875rem);
-        background-color: transparent;
-        font-size: calc(var(--content-scale, 1) * 0.875rem);
-        font-weight: var(--mdc-typography-button-font-weight, 500);
-        letter-spacing: var(--mdc-typography-button-letter-spacing, 0.0892857em);
-        text-decoration: var(--mdc-typography-button-text-decoration, none);
-        text-transform: var(--mdc-typography-button-text-transform, uppercase);
+        font-size: calc(var(--content-scale, 1) * 1rem);
+        letter-spacing: 0.04em;
+        font-weight: 500;
         -webkit-font-smoothing: antialiased;
-        font-family: var(--mdc-typography-button-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+        font-family: Roboto, sans-serif;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        z-index: 1;
+        transition: border-color 0.1s ease;
+      }
+      button:before {
+        position: absolute;
+        pointer-events: none;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: '';
+        border-radius: 4px;
+        background: var(--primary-color);
+        opacity: 0;
+        z-index: -2;
+        transition: opacity 0.1s ease-in-out;
       }
       button:not(:disabled) {
         cursor: pointer;
-        transition: background-color 0.1s ease;
       }
       button:disabled {
         color: var(--disabled-text-color);
         border: none;
       }
       button:not(:disabled):hover {
-        background-color: rgba(var(--rgb-primary-color), 0.06);
+        border: 1px solid var(--outline-color);
+      }
+      button:not(:disabled):hover:before {
+        opacity: 0.12;
       }
       button:not(:disabled):active {
-        background-color: rgba(var(--rgb-primary-color), 0.12);
+        border: 1px solid var(--outline-hover-color);
+      }
+      button:not(:disabled):active:before {
+        opacity: 0.24;
       }
       button:focus {
         outline: none;
-      }
-      mwc-button {
-        width: 100%;
       }
       ::slotted(ha-icon) {
         --mdc-icon-size: calc(var(--content-scale, 1) * 1.5rem);
