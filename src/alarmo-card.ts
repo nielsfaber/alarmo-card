@@ -314,7 +314,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
         ${this._renderWarning()}
 
-        <div id="armActions" class="actions">
+        <div id="actions" class="actions">
           ${this._renderActions()}
         </div>
 
@@ -342,7 +342,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         this._config.hide_keypad
         ? html``
         : html`
-          <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
+          <div id="keypad" class="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
             ${BUTTONS.map(value => {
           return value === ''
             ? html`
@@ -350,6 +350,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 disabled
                 style="--content-scale: ${this._config!.button_scale_keypad}"
                 ?scaled=${this._config!.button_scale_keypad != 1}
+                class="placeholder"
               ></alarmo-button>
             `
             : html`
@@ -645,6 +646,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         padding: 20px 0px;
         box-sizing: border-box;
         gap: 20px;
+        margin: 0px 50px;
       }
       .header .icon {
         display: flex;
@@ -794,6 +796,11 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         position: absolute;
         right: 4px;
         top: 4px;
+      }
+      @media all and (max-width: 250px) {
+        ha-button-menu {
+          display: none;
+        }
       }
       mwc-list-item {
         --mdc-theme-secondary: var(--primary-color);

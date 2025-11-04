@@ -25,10 +25,10 @@ class AlarmoButton extends LitElement {
       button {
         position: relative;
         width: 100%;
-        border: 1px solid var(--outline-color);
-        border-radius: 4px;
-        background: transparent;
-        color: var(--wa-color-brand-on-normal);
+        border: 1px solid var(--alarmo-button-border-color, var(--outline-color));
+        border-radius: var(--alarmo-button-border-radius, 4px);
+        background: var(--alarmo-button-background-color, var(--card-background-color));
+        color: var(--alarmo-button-color, var(--primary-color));
         padding: calc(var(--content-scale, 1) * 0.875rem);
         font-size: calc(var(--content-scale, 1) * 1rem);
         letter-spacing: 0.04em;
@@ -50,8 +50,8 @@ class AlarmoButton extends LitElement {
         bottom: 0;
         left: 0;
         content: '';
-        border-radius: 4px;
-        background: var(--primary-color);
+        border-radius: var(--alarmo-button-border-radius, 4px);
+        background: var(--alarmo-button-color, var(--primary-color));
         opacity: 0;
         z-index: -2;
         transition: opacity 0.1s ease-in-out;
@@ -64,13 +64,13 @@ class AlarmoButton extends LitElement {
         border: none;
       }
       button:not(:disabled):hover {
-        border: 1px solid var(--outline-color);
+        border: 1px solid var(--alarmo-button-border-color, var(--outline-color));
       }
       button:not(:disabled):hover:before {
         opacity: 0.12;
       }
       button:not(:disabled):active {
-        border: 1px solid var(--outline-hover-color);
+        border: 1px solid var(--alarmo-button-border-color, var(--outline-hover-color));
       }
       button:not(:disabled):active:before {
         opacity: 0.24;
@@ -89,6 +89,10 @@ class AlarmoButton extends LitElement {
       }
       ::slotted span {
         display: flex;
+      }
+      :host(.placeholder) button {
+        background: transparent;
+        border: none;
       }
     `;
   }
