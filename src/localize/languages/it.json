@@ -8,7 +8,6 @@
     "keep_keypad_visible": "Mantenere la tastiera sempre visibile, anche quando nessun codice è richiesto.",
     "button_scale_actions": "Fattore di scala da applicare per ridimensionare i pulsanti di azione.",
     "button_scale_keypad": "Fattore di scala da applicare per ridimensionare i pulsanti della tastiera.",
-    "use_clear_icon": "Mostrare l'icona (invece del testo) sulla tastiera per cancellare il codice digitato.",
     "show_messages": "Mostrare messaggi diagnostici quando l'allarme viene attivato o non può essere inserito.",
     "show_ready_indicator": "Mostra l'indicatore pronto/non pronto sui pulsanti della modalità di inserimento.",
     "show_bypassed_sensors": "Mostra avviso quando l'allarme è armato con sensori esclusi.",
@@ -19,6 +18,7 @@
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",
       "show_button": "Mostra il pulsante per questa azione",
       "button_label": "Sovrascrivere l'etichetta del pulsante",
+      "button_icon": "Icona del pulsante visualizzato",
       "state_label": "Sovrascrivere l'etichetta di stato"
     }
   },

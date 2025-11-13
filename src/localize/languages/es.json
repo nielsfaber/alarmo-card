@@ -8,7 +8,6 @@
     "keep_keypad_visible": "Mantener el teclado siempre visible, también cuando no se requiere ninguna entrada de código.",
     "button_scale_actions": "Factor de escalado para cambiar el tamaño de los botones de acción.",
     "button_scale_keypad": "Factor de escalado para cambiar el tamaño de los botones del teclado.",
-    "use_clear_icon": "Mostrar icono (en lugar de texto) en el teclado para borrar la entrada de código.",
     "show_messages": "Mostrar mensajes de diagnóstico cuando se activa la alarma o no se puede activar.",
     "show_ready_indicator": "Mostrar indicador listo/no listo en los botones de modo armado.",
     "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
@@ -19,6 +18,7 @@
       "title": "Personalizar la visualización de la acción '{action}'",
       "show_button": "mostrar botón para esta acción",
       "button_label": "Sobrescribir el texto del botón",
+      "button_icon": "Icono de botón mostrado",
       "state_label": "Sobrescribir el texto de estado"
     }
   },

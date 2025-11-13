@@ -8,7 +8,6 @@
     "keep_keypad_visible": "Houd het keypad altijd zichtbaar, ook wanneer er geen code vereist is.",
     "button_scale_actions": "Schaalfactor actieknoppen",
     "button_scale_keypad": "Schaalfactor keypadknoppen",
-    "use_clear_icon": "Toon pictogram (in plaats van tekst) in keypad om code-invoer te wissen.",
     "show_messages": "Toon diagnostische berichten wanneer het alarm wordt geactiveerd of niet kan worden ingeschakeld.",
     "show_ready_indicator": "Toon gereed/niet gereed-indicator op inschakelmodusknoppen.",
     "show_bypassed_sensors": "Toon melding wanneer het alarm is ingeschakeld met omzeilde sensoren.",
@@ -17,9 +16,10 @@
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",
-      "show_button": "Toon knop voor deze actie",
-      "button_label": "Knoplabel overschrijven",
-      "state_label": "Statuslabel overschrijven"
+      "show_button": "Toon deze actie in de kaart",
+      "button_label": "Weergegeven naam voor actie",
+      "button_icon": "Weergegeven icoon voor actie",
+      "state_label": "Weergegeven status"
     }
   },
   "errors": {

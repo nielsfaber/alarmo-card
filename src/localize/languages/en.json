@@ -8,7 +8,6 @@
     "keep_keypad_visible": "Keep the keypad always visible, also when no code input is required.",
     "button_scale_actions": "Scaling factor to apply for resizing the action buttons.",
     "button_scale_keypad": "Scaling factor to apply for resizing the keypad buttons.",
-    "use_clear_icon": "Show icon (instead of text) in keypad for clearing code input.",
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
     "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
     "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
@@ -18,8 +17,9 @@
     "action_dialog": {
       "title": "Customize display of action '{action}'",
       "show_button": "Show button for this action",
-      "button_label": "Override button label",
-      "state_label": "Override state label"
+      "button_label": "Override displayed action label",
+      "button_icon": "Override displayed icon",
+      "state_label": "Override displayed state label"
     }
   },
   "errors": {

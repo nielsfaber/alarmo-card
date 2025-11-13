@@ -1,30 +1,30 @@
 {
-    "arm_options": {
-        "heading": "警戒选项",
-        "skip_delay": "跳过离开延迟",
-        "force": "绕过开放的传感器"
-    },
-    "editor": {
-        "keep_keypad_visible": "保持小键盘总是可见，即使不需要输入密码",
-        "button_scale_actions": "调整动作按键大小的缩放系数",
-        "button_scale_keypad": "调整小键盘按键大小的缩放系数",
-        "use_clear_icon": "在小键盘上显示图标（而不是文字），用于清除密码输入。",
-        "show_messages": "当警报被触发或无法警戒时，显示诊断信息。",
-        "show_ready_indicator": "在手臂模式按钮上显示就绪/未就绪指示器。",
-        "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
-        "use_code_dialog": "以弹出对话框的形式显示用于输入代码的键盘。",
-        "hide_keypad": "隐藏用于输入代码的键盘按钮。",
-        "available_actions": "可用动作：",
-        "action_dialog": {
-            "title": "自定义动作'{action}'的显示",
-            "show_button": "显示此操作的按钮",
-            "button_label": "覆盖按钮标签",
-            "state_label": "覆盖状态标签"
-        }
-    },
-    "errors": {
-        "blocking_sensors": "由于以下传感器而无法警戒",
-        "triggered_sensors": "警报是由以下传感器触发的",
-        "bypassed_sensors": "有绕过的传感器"
+  "arm_options": {
+    "heading": "警戒选项",
+    "skip_delay": "跳过离开延迟",
+    "force": "绕过开放的传感器"
+  },
+  "editor": {
+    "keep_keypad_visible": "保持小键盘总是可见，即使不需要输入密码",
+    "button_scale_actions": "调整动作按键大小的缩放系数",
+    "button_scale_keypad": "调整小键盘按键大小的缩放系数",
+    "show_messages": "当警报被触发或无法警戒时，显示诊断信息。",
+    "show_ready_indicator": "在手臂模式按钮上显示就绪/未就绪指示器。",
+    "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
+    "use_code_dialog": "以弹出对话框的形式显示用于输入代码的键盘。",
+    "hide_keypad": "隐藏用于输入代码的键盘按钮。",
+    "available_actions": "可用动作：",
+    "action_dialog": {
+      "title": "自定义动作'{action}'的显示",
+      "show_button": "显示此操作的按钮",
+      "button_label": "覆盖按钮标签",
+      "button_icon": "显示的按钮图标",
+      "state_label": "覆盖状态标签"
     }
+  },
+  "errors": {
+    "blocking_sensors": "由于以下传感器而无法警戒",
+    "triggered_sensors": "警报是由以下传感器触发的",
+    "bypassed_sensors": "有绕过的传感器"
+  }
 }

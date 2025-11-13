@@ -20,18 +20,17 @@ import './components/alarmo-state-badge';
 import './components/alarmo-sensor-badge';
 import './components/alarmo-button';
 import './components/alarmo-code-dialog';
+import './components/alarmo-actions-bar';
 
 import { SubscribeMixin } from './subscribe-mixin';
 import { localize } from './localize/localize';
 import {
-  calcSupportedActions,
   computeStateDisplay,
   computeNameDisplay,
   codeRequired,
   computeStateColor,
 } from './data/entity';
-import { calcStateConfig, validateConfig } from './data/config';
-import { isEmpty } from './helpers';
+import { validateConfig } from './data/config';
 import { fetchEntities, fetchConfig, fetchReadyToArmModes } from './data/websockets';
 import { mdiDotsVertical } from '@mdi/js';
 import { CodeDialogParams } from './components/alarmo-code-dialog';
@@ -357,15 +356,13 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               <alarmo-button
                 .value="${value}"
                 @click=${this._handlePadClick}
-                ?disabled=${!codeRequired(stateObj)}
-                class="${value !== 'clear' ? 'numberKey' : ''}"
+                ?disabled=${!codeRequired(stateObj) || value === 'clear' && !this._input.length}
+                class="${value !== 'clear' ? 'numberKey' : 'clear'}"
                 style="--content-scale: ${this._config!.button_scale_keypad}"
                 ?scaled=${this._config!.button_scale_keypad != 1}
               >
                 ${value === 'clear'
-                ? this._config!.use_clear_icon
-                  ? html`<ha-icon icon="hass:backspace-outline"></ha-icon>`
-                  : html`<span>${this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)}</span>`
+                ? html`<ha-icon icon="mdi:close" style="--mdc-icon-size: calc(${this._config!.button_scale_keypad} * 24px)"></ha-icon>`
                 : html` <span>${value}</span>`}
               </alarmo-button>
             `;
@@ -379,47 +376,17 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   private _renderActions() {
     if (!this.hass || !this._config) return html``;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
-
-    const actions =
-      stateObj.state === AlarmStates.Disarmed
-        ? calcSupportedActions(stateObj).filter(e => !calcStateConfig(ActionToState[e], this._config!).hide)
-        : [ArmActions.Disarm];
-
     const showReadyStatus = this._config.show_ready_indicator;
 
-    return actions.map(action => {
-      const stateConfig = calcStateConfig(ActionToState[action], this._config!);
-      const readyStatus = Array.isArray(this.readyForArmModes) && this.readyForArmModes.includes(ActionToState[action]);
-
-      return html`
-        <alarmo-button
-          @click=${(ev: Event) => this._handleActionClick(ev, action)}
-          style="--content-scale: ${this._config!.button_scale_actions}"
-          ?scaled=${this._config!.button_scale_actions != 1}
-        >
-          ${showReadyStatus && action != ArmActions.Disarm
-          ? html`
-                <ha-icon
-                  icon="mdi:circle-medium"
-                  style="${this.readyForArmModes === null
-              ? `color: var(--label-badge-grey)`
-              : readyStatus
-                ? `color: var(--success-color)`
-                : `color: var(--error-color)`}"
-                  class="leading"
-                ></ha-icon>
-              `
-          : ''}
-          ${isEmpty(stateConfig.button_label)
-          ? html`
-                <span>${this.hass!.localize(`ui.card.alarm_control_panel.${action}`)}</span>
-              `
-          : html`
-                <span>${stateConfig.button_label}</span>
-              `}
-        </alarmo-button>
-      `;
-    });
+    return html`
+      <alarmo-actions-bar
+        @button-clicked=${(ev: CustomEvent) => this._handleActionClick(ev, ev.detail.action)}
+        .hass=${this.hass}
+        .config=${this._config}
+        .readyForArmModes=${showReadyStatus ? this.readyForArmModes : undefined}
+        style="--content-scale: ${this._config!.button_scale_actions}"
+      ></alarmo-actions-bar>
+    `;
   }
 
   private _renderWarning() {
@@ -627,6 +594,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       code: this._last_code,
       force: true,
     });
+    this._last_command = undefined;
+    this._last_code = undefined;
   }
 
   static get styles(): CSSResult {
@@ -654,7 +623,6 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       .header .summary {
         display: flex;
         flex-direction: column;
-        gap: 3px;
       }
       .header .name {
         font-size: 24px;
@@ -674,7 +642,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         margin: 0 8px 8px;
       }
       ha-textfield {
-        margin: 8px auto;
+        margin: 15px auto;
         max-width: 200px;
         text-align: center;
         margin-left: calc(50% - 200px / 2);
@@ -684,17 +652,33 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         animation: shake 0.2s ease-in-out 0s 2;
       }
       #keypad {
-        display: flex;
         justify-content: center;
         flex-wrap: wrap;
         margin: auto;
-        width: 100%;
         direction: ltr;
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        grid-auto-rows: auto;
+        grid-gap: var(--ha-space-4);
       }
       #keypad alarmo-button {
-        padding: 8px;
-        width: 30%;
-        box-sizing: border-box;
+        width: calc(var(--content-scale, 1) * 56px);
+        height: calc(var(--content-scale, 1) * 56px);
+        --alarmo-button-font-size: 24px;
+        --alarmo-button-background-color: var(--primary-text-color);
+        --alarmo-button-background-opacity: 0.05;
+        --alarmo-button-border-radius: 50%;
+        --alarmo-button-border-color: none;
+        --alarmo-button-color: var(--primary-text-color);
+        font-weight: 500;
+      }
+      #keypad alarmo-button.clear:not([disabled]) {
+        --alarmo-button-background-color: var(--red-color);
+        --alarmo-button-color: var(--red-color);
+        --alarmo-button-background-opacity: 0.10;
+      }
+      #keypad alarmo-button.placeholder {
+        visibility: hidden;
       }
       @keyframes shake {
         0% {

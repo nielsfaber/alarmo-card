@@ -1,4 +1,3 @@
-import { mdiAirplane, mdiHome, mdiLock, mdiLockOpenVariant, mdiSecurity, mdiWeatherNight } from '@mdi/js';
 import { CardConfig } from './types';
 
 export const CARD_VERSION = 'v1.6.3';
@@ -39,12 +38,12 @@ export enum ArmActions {
 }
 
 export const ActionToIcon = {
-  [ArmActions.ArmAway]: mdiLock,
-  [ArmActions.ArmHome]: mdiHome,
-  [ArmActions.ArmNight]: mdiWeatherNight,
-  [ArmActions.ArmVacation]: mdiAirplane,
-  [ArmActions.ArmCustomBypass]: mdiSecurity,
-  [ArmActions.Disarm]: mdiLockOpenVariant,
+  [ArmActions.ArmAway]: 'mdi:lock',
+  [ArmActions.ArmHome]: 'mdi:home',
+  [ArmActions.ArmNight]: 'mdi:moon-waning-crescent',
+  [ArmActions.ArmVacation]: 'mdi:airplane',
+  [ArmActions.ArmCustomBypass]: 'mdi:shield',
+  [ArmActions.Disarm]: 'mdi:shield-off',
 }
 
 export const ActionToState = {
@@ -77,7 +76,6 @@ export const defaultCardConfig: CardConfig = {
   entity: '',
   name: '',
   keep_keypad_visible: false,
-  use_clear_icon: false,
   button_scale_actions: 1,
   button_scale_keypad: 1,
   states: {},

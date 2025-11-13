@@ -6,7 +6,6 @@ export type CardConfig = {
   entity: string;
   name: string;
   keep_keypad_visible: boolean;
-  use_clear_icon: boolean;
   button_scale_keypad: number;
   button_scale_actions: number;
   states: Partial<Record<AlarmStates, StateConfig>>;
@@ -20,6 +19,7 @@ export type CardConfig = {
 export type StateConfig = {
   hide: boolean;
   button_label: string;
+  button_icon: string;
   state_label: string;
 };
 
