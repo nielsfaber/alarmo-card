@@ -19,7 +19,8 @@
       "show_button": "显示此操作的按钮",
       "button_label": "覆盖按钮标签",
       "button_icon": "显示的按钮图标",
-      "state_label": "覆盖状态标签"
+      "state_label": "覆盖状态标签",
+      "color": "覆盖操作使用的颜色"
     }
   },
   "errors": {

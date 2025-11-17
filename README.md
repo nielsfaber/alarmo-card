@@ -151,6 +151,7 @@ Note that the alarm entity may not support all `armed_xxx` states. States which 
 | `button_label` | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the text on the button.<br>Only useful if the button is not hidden. | (Use translation from HA) |
 | `button_icon`  | string  | `disarmed`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass`                                         | Overwrites the icon on the button.<br>Only useful if the button is not hidden. | (state dependent)         |
 | `state_label`  | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the text displayed in the card when the alarm is in this state.     | (Use translation from HA) |
+| `color`        | string  | `disarmed`<br>`triggered`<br>`arming`<br>`pending`<br>`armed_away`<br>`armed_home`<br>`armed_night`<br>`armed_vacation`<br>`armed_custom_bypass` | Overwrites the color used in the card for displaying the badge and action bar. | (Use defaults from HA)    |
 
 **Example of using state configuration**
 

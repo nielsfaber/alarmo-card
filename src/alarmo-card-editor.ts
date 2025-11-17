@@ -1,4 +1,4 @@
-import { LitElement, html, TemplateResult, CSSResult, css } from 'lit';
+import { LitElement, html, TemplateResult, CSSResult, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
 import { mdiArrowLeft, mdiPencil } from '@mdi/js';
 import { AlarmoEntity, CardConfig, StateConfig, AlarmoConfig } from './types';
@@ -12,6 +12,7 @@ import {
   FORMAT_NUMBER,
   defaultCardConfig,
   ActionToIcon,
+  ColorOptions,
 } from './const';
 import { calcSupportedActions } from './data/entity';
 import { calcStateConfig } from './data/config';
@@ -161,6 +162,53 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             state_label: String((ev.target as HTMLInputElement).value).trim(),
           })}
           ></ha-textfield>
+
+          <ha-select
+            .icon=${isDefined(stateConfig.color)}
+            label="${localize('editor.action_dialog.color', this.hass.language)}"
+            .value=${stateConfig.color || ''}
+            @closed=${(ev: Event) => { ev.stopPropagation() }}
+            @selected=${(ev: InputEvent) => {
+          ev.stopPropagation();
+          this._updateStateConfig(ActionToState[this._editAction!], {
+            color: (ev.target as HTMLInputElement).value,
+          });
+        }}
+            fixedMenuPosition
+            naturalMenuWidth
+          >
+          ${stateConfig.color
+          ? html`
+              <span slot="icon">
+                <span class="circle-color" style="--circle-color: ${Object.values(ColorOptions).includes(stateConfig.color as ColorOptions) ? `var(--${stateConfig.color}-color)` : stateConfig.color}">
+                </span>
+              </span>
+            `
+          : nothing}
+            ${isDefined(stateConfig.color) && stateConfig.color.length && !Object.values(ColorOptions).includes(stateConfig.color as ColorOptions)
+          ? html`
+                <ha-list-item .value=${stateConfig.color} graphic="icon">
+                  ${stateConfig.color}
+                  <span slot="graphic">
+                    <span class="circle-color" style="--circle-color: ${stateConfig.color}">
+                    </span>
+                  </span>
+                </ha-list-item>
+            ` : nothing}
+            ${Object.values(ColorOptions).map(color => {
+            return html`
+                <ha-list-item .value=${color} graphic="icon">
+                  ${this.hass!.localize(
+              `ui.components.color-picker.colors.${color}`
+            ) || color}
+                  <span slot="graphic">
+                    <span class="circle-color" style="--circle-color: ${`var(--${color}-color)`}">
+                    </span>
+                  </span>
+                </ha-list-item>
+              `;
+          })}
+          </ha-select>
         </div>
       `;
     }
@@ -415,6 +463,15 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         display: flex;
         align-items: center;
         font-size: 18px;
+      }
+      .circle-color {
+        display: block;
+        background-color: var(--circle-color, var(--divider-color));
+        border: 1px solid var(--outline-color);
+        border-radius: var(--ha-border-radius-pill);
+        width: 20px;
+        height: 20px;
+        box-sizing: border-box;
       }
     `;
   }

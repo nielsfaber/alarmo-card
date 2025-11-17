@@ -19,7 +19,8 @@
       "show_button": "Mostrar botão para esta ação",
       "button_label": "Substituir texto do botão",
       "button_icon": "Ícone de botão exibido",
-      "state_label": "Substituir texto de status"
+      "state_label": "Substituir texto de status",
+      "color": "Substituir a cor usada para a ação"
     }
   },
   "errors": {

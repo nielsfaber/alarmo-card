@@ -19,7 +19,8 @@
       "show_button": "mostrar botón para esta acción",
       "button_label": "Sobrescribir el texto del botón",
       "button_icon": "Icono de botón mostrado",
-      "state_label": "Sobrescribir el texto de estado"
+      "state_label": "Sobrescribir el texto de estado",
+      "color": "Anular el color utilizado para la acción"
     }
   },
   "errors": {

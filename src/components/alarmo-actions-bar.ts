@@ -31,10 +31,9 @@ export class AlarmoActionsBar extends LitElement {
       const armMode = stateObj.attributes.arm_mode;
       if (armMode) state = armMode;
     }
-    const isArmed = ArmModes.includes(state) && state != AlarmStates.Disarmed;
 
     return html`
-      <div class="container ${isArmed ? 'armed' : ''}">
+      <div class="container">
         ${this._renderOptions(state)}
       </div>
     `;
@@ -94,10 +93,7 @@ export class AlarmoActionsBar extends LitElement {
         flex-wrap: wrap;
         padding: 4px;
         box-sizing: border-box;
-        --selected-color: var(--grey-color);
-      }
-      div.container.armed {
-        --selected-color: var(--green-color);
+        --selected-color: var(--alarm-state-color);
       }
       div.container::before {
         content: "";

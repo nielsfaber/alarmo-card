@@ -19,7 +19,8 @@
       "show_button": "Toon deze actie in de kaart",
       "button_label": "Weergegeven naam voor actie",
       "button_icon": "Weergegeven icoon voor actie",
-      "state_label": "Weergegeven status"
+      "state_label": "Weergegeven status",
+      "color": "Weergegeven kleur voor action"
     }
   },
   "errors": {

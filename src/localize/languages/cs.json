@@ -19,7 +19,8 @@
       "show_button": "Zobrazit tlačítko pro tuto akci",
       "button_label": "Přepsat popisek tlačítka",
       "button_icon": "Ikona zobrazeného tlačítka",
-      "state_label": "Přepsat popisek stavu"
+      "state_label": "Přepsat popisek stavu",
+      "color": "Přepsat barvu použitou pro akci"
     }
   },
   "errors": {

@@ -19,7 +19,8 @@
       "show_button": "Show button for this action",
       "button_label": "Override displayed action label",
       "button_icon": "Override displayed icon",
-      "state_label": "Override displayed state label"
+      "state_label": "Override displayed state label",
+      "color": "Override color used for the action"
     }
   },
   "errors": {

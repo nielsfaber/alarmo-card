@@ -1,8 +1,8 @@
 import { HassEntity } from 'home-assistant-js-websocket';
-import { ArmActions, AlarmStates } from '../const';
+import { ArmActions, AlarmStates, ActionToState, ColorOptions } from '../const';
 import { CardConfig } from '../types';
 import { calcStateConfig } from './config';
-import { isEmpty } from '../helpers';
+import { isDefined, isEmpty } from '../helpers';
 import { LocalizeFunc } from '../lib/types';
 import { computeDomain } from '../lib/compute-domain';
 
@@ -42,10 +42,26 @@ export const codeRequired = (stateObj: HassEntity) => {
   return stateObj.attributes.code_format !== null;
 };
 
-export const computeStateColor = (stateObj: HassEntity) => {
+export const computeStateColor = (stateObj: HassEntity, config: CardConfig, useArmMode = false) => {
   if (!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
 
-  const state = stateObj.state;
+  let state = stateObj.state;
+
+  if (useArmMode) {
+    const ArmModes = Object.values(ArmActions).map(e => ActionToState[e]);
+    if (!ArmModes.includes(state as AlarmStates)) {
+      const armMode = stateObj.attributes.arm_mode;
+      if (armMode) state = armMode;
+    }
+  }
+
+  if (Object.keys(config.states || {}).includes(state) && isDefined(config.states[state].color)) {
+    const color = config.states[state].color;
+    return Object.values(ColorOptions).includes(color)
+      ? `var(--${color}-color)`
+      : color;
+  }
+
   if (state == AlarmStates.Disarmed)
     return 'var(--state-alarm_control_panel-disarmed-color, var(--state-alarm_control_panel-inactive-color, var(--state-inactive-color)))';
   if (Object.values(AlarmStates).includes(state as any))

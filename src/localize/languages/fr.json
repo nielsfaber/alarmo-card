@@ -19,7 +19,8 @@
       "show_button": "Afficher le bouton pour cette action",
       "button_label": "Remplacer le libellé du bouton",
       "button_icon": "Icône de bouton affichée",
-      "state_label": "Remplacer l'étiquette d'état"
+      "state_label": "Remplacer l'étiquette d'état",
+      "color": "Remplacer la couleur utilisée pour l'action"
     }
   },
   "errors": {

@@ -297,7 +297,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
             <alarmo-state-badge
               .hass=${this.hass}
               .entity=${this._config.entity}
-              style="--alarm-state-color: ${computeStateColor(stateObj)}"
+              style="--alarm-state-color: ${computeStateColor(stateObj, this._config)}"
             >
             </alarmo-state-badge>
           </div>
@@ -384,7 +384,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         .hass=${this.hass}
         .config=${this._config}
         .readyForArmModes=${showReadyStatus ? this.readyForArmModes : undefined}
-        style="--content-scale: ${this._config!.button_scale_actions}"
+        style="--alarm-state-color: ${computeStateColor(stateObj, this._config, true)}; --content-scale: ${this._config!.button_scale_actions}"
       ></alarmo-actions-bar>
     `;
   }

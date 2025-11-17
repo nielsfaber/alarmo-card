@@ -19,7 +19,8 @@
       "show_button": "Taste für diese Aktion anzeigen",
       "button_label": "Überschreibung der Tastenbeschriftung",
       "button_icon": "Angezeigtes Schaltflächensymbol",
-      "state_label": "Überschreibung der Statusbezeichnung"
+      "state_label": "Überschreibung der Statusbezeichnung",
+      "color": "Die für die Aktion verwendete Farbe überschreiben"
     }
   },
   "errors": {

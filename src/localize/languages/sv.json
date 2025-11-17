@@ -19,7 +19,8 @@
       "show_button": "Visa knapp för denna åtgärd",
       "button_label": "Anpassad knappetikett",
       "button_icon": "Visad knappikon",
-      "state_label": "Anpassad tillståndsetikett"
+      "state_label": "Anpassad tillståndsetikett",
+      "color": "Åsidosättningsfärg som används för åtgärden"
     }
   },
   "errors": {

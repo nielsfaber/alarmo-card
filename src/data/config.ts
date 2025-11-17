@@ -29,6 +29,7 @@ export const calcStateConfig = (state: AlarmStates, config: Partial<CardConfig>)
     button_label: '',
     button_icon: '',
     state_label: '',
+    color: ''
   };
 
   if ((config.states || {}).hasOwnProperty(state)) result = { ...result, ...config.states![state] };
