@@ -659,7 +659,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         display: grid;
         grid-template-columns: repeat(3, auto);
         grid-auto-rows: auto;
-        grid-gap: var(--ha-space-4);
+        grid-gap: var(--ha-space-4, 16px);
       }
       #keypad alarmo-button {
         width: calc(var(--content-scale, 1) * 56px);
