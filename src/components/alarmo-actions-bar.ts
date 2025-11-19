@@ -42,17 +42,17 @@ export class AlarmoActionsBar extends LitElement {
   private _renderOptions(selectedOption: AlarmStates) {
 
     const stateObj = this.hass.states[this.config!.entity];
-    const supportedActions = calcSupportedActions(stateObj).filter(e => !calcStateConfig(ActionToState[e], this.config!).hide);
-    let options = [ArmActions.Disarm, ...supportedActions];
+    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)]
+      .filter(e => !calcStateConfig(ActionToState[e], this.config!).hide);
+    const hasTextLabel = options.map(e => calcStateConfig(ActionToState[e], this.config!)).some(e => !isDefined(e.button_label) || e.button_label.length);
 
     return options.map(e => {
       const isDisabled = isDefined(this.readyForArmModes) && !this.readyForArmModes.includes(ActionToState[e]) && e != ArmActions.Disarm;
-
       const stateConfig = calcStateConfig(ActionToState[e], this.config!);
 
       return html`
         <div class="button ${ActionToState[e] == selectedOption ? 'selected' : ''}" @click=${(ev: Event) => this._handleClick(ev, e)}>
-          <div class="content">
+          <div class="content ${hasTextLabel ? 'has-text' : ''}">
             <ha-icon icon="${isEmpty(stateConfig.button_icon) ? ActionToIcon[e] : stateConfig.button_icon}"></ha-icon>
             ${ActionToState[e] != selectedOption && isDefined(this.readyForArmModes)
           ? html`
@@ -62,7 +62,7 @@ export class AlarmoActionsBar extends LitElement {
               ></ha-icon>
             ` : nothing}
             <span>
-              ${isEmpty(stateConfig.button_label)
+              ${!isDefined(stateConfig.button_label)
           ? this.hass!.localize(`ui.card.alarm_control_panel.modes.${ActionToState[e]}`)
           : stateConfig.button_label
         }
@@ -124,7 +124,7 @@ export class AlarmoActionsBar extends LitElement {
         position: relative;
         inline-size: calc(100% - 4px);
         border-radius: calc(var(--content-scale, 1) * 6px);
-        height: calc(var(--content-scale, 1) * 40px);
+        height: calc(var(--content-scale, 1) * 26px);
         color: var(--primary-text-color);
         --mdc-icon-size: calc(var(--content-scale, 1) * 22px);
         align-items: center;
@@ -137,6 +137,9 @@ export class AlarmoActionsBar extends LitElement {
         gap: 4px;
         transition:
           color ease-in-out 180ms;
+      }
+      div.content.has-text {
+        height: calc(var(--content-scale, 1) * 40px);
       }
       div.content::before {
         content: "";

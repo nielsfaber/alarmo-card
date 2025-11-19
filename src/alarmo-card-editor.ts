@@ -166,16 +166,18 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           <ha-select
             .icon=${isDefined(stateConfig.color)}
             label="${localize('editor.action_dialog.color', this.hass.language)}"
-            .value=${stateConfig.color || ''}
+            .value=${stateConfig.color}
             @closed=${(ev: Event) => { ev.stopPropagation() }}
             @selected=${(ev: InputEvent) => {
           ev.stopPropagation();
+          const value = (ev.target as HTMLInputElement).value;
           this._updateStateConfig(ActionToState[this._editAction!], {
-            color: (ev.target as HTMLInputElement).value,
+            color: value || undefined,
           });
         }}
             fixedMenuPosition
             naturalMenuWidth
+            clearable
           >
           ${stateConfig.color
           ? html`
@@ -385,7 +387,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
     const removeUndefined = obj =>
       pick(
         obj,
-        Object.keys(obj).filter(e => !isEmpty(obj[e]))
+        Object.keys(obj).filter(e => isDefined(obj[e] || typeof obj[e] === 'string'))
       );
 
     let stateConfig = this._config?.states || {};
