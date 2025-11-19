@@ -256,8 +256,6 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               <ha-button-menu
                 corner="BOTTOM_START"
                 multi
-                @action=${this._toggleArmOptions}
-                @click=${(ev: Event) => ev.preventDefault()}
               >
                 <ha-icon-button slot="trigger" .label=${this.hass.localize('ui.common.menu')} .path=${mdiDotsVertical}>
                 </ha-icon-button>
@@ -266,25 +264,17 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                     ${localize('arm_options.heading', this.hass.language)}
                   </span>
                 </mwc-list-item>
-                <mwc-list-item graphic="icon">
+                <mwc-list-item graphic="icon" @click=${(ev: Event) => this._toggleArmOptions(ev, 'skip_delay')}>
                   <ha-icon
                     slot="graphic"
                     icon="${this.armOptions.skip_delay ? 'mdi:check' : ''}"
-                    @click=${(ev: Event) => {
-            (ev.target as HTMLInputElement).parentElement?.click();
-            ev.stopPropagation();
-          }}
                   ></ha-icon>
                   ${localize('arm_options.skip_delay', this.hass.language)}
                 </mwc-list-item>
-                <mwc-list-item graphic="icon">
+                <mwc-list-item graphic="icon" @click=${(ev: Event) => this._toggleArmOptions(ev, 'force')}>
                   <ha-icon
                     slot="graphic"
                     icon="${this.armOptions.force ? 'mdi:check' : ''}"
-                    @click=${(ev: Event) => {
-            (ev.target as HTMLInputElement).parentElement?.click();
-            ev.stopPropagation();
-          }}
                   ></ha-icon>
                   ${localize('arm_options.force', this.hass.language)}
                 </mwc-list-item>
@@ -568,20 +558,15 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
   }
 
-  private _toggleArmOptions(ev: CustomEvent) {
-    switch (ev.detail.index) {
-      case 0:
-        this.armOptions = { ...this.armOptions, skip_delay: !this.armOptions.skip_delay };
-        break;
-      case 1:
-        this.armOptions = { ...this.armOptions, force: !this.armOptions.force };
-        break;
+  private _toggleArmOptions(ev: Event, option: 'skip_delay' | 'force') {
+    ev.stopImmediatePropagation();
+    (ev.target as HTMLInputElement).blur();
+    if (option == 'skip_delay') {
+      this.armOptions = { ...this.armOptions, skip_delay: !this.armOptions.skip_delay };
     }
-    ev.preventDefault();
-    const el = ev.target as HTMLElement;
-    setTimeout(() => {
-      (el.firstElementChild as HTMLElement).blur();
-    }, 50);
+    else if (option == 'force') {
+      this.armOptions = { ...this.armOptions, force: !this.armOptions.force };
+    }
   }
 
   private _forceRetryClick() {
