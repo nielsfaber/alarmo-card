@@ -45,7 +45,7 @@ export const codeRequired = (stateObj: HassEntity) => {
 export const computeStateColor = (stateObj: HassEntity, config: CardConfig, useArmMode = false) => {
   if (!stateObj || !stateObj.state) return 'var(--state-unavailable-color)';
 
-  let state = stateObj.state;
+  let state = <AlarmStates>stateObj.state;
 
   if (useArmMode) {
     const ArmModes = Object.values(ArmActions).map(e => ActionToState[e]);
@@ -53,11 +53,13 @@ export const computeStateColor = (stateObj: HassEntity, config: CardConfig, useA
       const armMode = stateObj.attributes.arm_mode;
       if (armMode) state = armMode;
     }
+    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)].filter(e => !calcStateConfig(ActionToState[e], config!).hide);
+    if (options.length == 1) state = ActionToState[options[0]];
   }
 
-  if (Object.keys(config.states || {}).includes(state) && isDefined(config.states[state].color)) {
-    const color = config.states[state].color;
-    return Object.values(ColorOptions).includes(color)
+  if (Object.keys(config.states || {}).includes(state) && isDefined((config.states[state] || {}).color)) {
+    const color = config.states[state]!.color!;
+    return Object.values(ColorOptions).includes(color as ColorOptions)
       ? `var(--${color}-color)`
       : color;
   }
