@@ -46,6 +46,15 @@ export class AlarmoActionsBar extends LitElement {
       .filter(e => !calcStateConfig(ActionToState[e], this.config!).hide);
     const hasTextLabel = options.map(e => calcStateConfig(ActionToState[e], this.config!)).some(e => !isDefined(e.button_label) || e.button_label.length);
 
+    options.sort((a, b) => {
+      const orderA = calcStateConfig(ActionToState[a], this.config!).button_order;
+      const orderB = calcStateConfig(ActionToState[b], this.config!).button_order;
+      if (!isDefined(orderA) && !isDefined(orderB)) return 0;
+      else if (isDefined(orderA) && !isDefined(orderB)) return -1;
+      else if (!isDefined(orderA) && isDefined(orderB)) return 1;
+      else return orderA! - orderB!;
+    });
+
     return options.map(e => {
       const isDisabled = isDefined(this.readyForArmModes) && !this.readyForArmModes.includes(ActionToState[e]) && e != ArmActions.Disarm;
       const stateConfig = calcStateConfig(ActionToState[e], this.config!);

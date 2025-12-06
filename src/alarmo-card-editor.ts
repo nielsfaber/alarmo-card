@@ -1,6 +1,6 @@
 import { LitElement, html, TemplateResult, CSSResult, css, nothing } from 'lit';
 import { property, customElement, state } from 'lit/decorators.js';
-import { mdiArrowLeft, mdiPencil } from '@mdi/js';
+import { mdiArrowLeft, mdiCheckboxBlankOutline, mdiCheckboxMarked, mdiDragHorizontalVariant, mdiPencil } from '@mdi/js';
 import { AlarmoEntity, CardConfig, StateConfig, AlarmoConfig } from './types';
 import { localize } from './localize/localize';
 import {
@@ -16,7 +16,7 @@ import {
 } from './const';
 import { calcSupportedActions } from './data/entity';
 import { calcStateConfig } from './data/config';
-import { pick, isEmpty, isDefined } from './helpers';
+import { pick, isDefined } from './helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 import { fetchEntities, fetchConfig } from './data/websockets';
 import { HomeAssistant, LovelaceCardEditor } from './lib/types';
@@ -244,43 +244,8 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
               <div class="config-item">
                 <span>${localize('editor.available_actions', this.hass.language)}</span>
               </div>
-              <div class="config-row checkbox-list">
-                ${[ArmActions.Disarm, ...calcSupportedActions(stateObj)].map(e => {
-          const supportedStates = calcSupportedActions(stateObj).map(e => ActionToState[e]);
-          const isHidden = calcStateConfig(ActionToState[e], this._config!).hide;
-          return html`
-                    <div class="checkbox-item ${isHidden ? 'disabled' : ''}">
-                      <ha-checkbox
-                        ?checked=${!isHidden}
-                        ?disabled=${(!isHidden &&
-              supportedStates.filter(el => !calcStateConfig(el, this._config!).hide).length == 1) ||
-            e == ArmActions.Disarm}
-                        @change=${(ev: Event) =>
-              this._updateStateConfig(
-                ActionToState[e],
-                (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
-              )}
-                      >
-                      </ha-checkbox>
-                      <span
-                        @click=${(ev: Event) => {
-              const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
-              checkbox.click();
-              checkbox.blur();
-            }}
-                      >
-                        ${this.hass!.localize(`ui.card.alarm_control_panel.${e}`)}
-                      </span>
-                      <ha-icon-button
-                        .path=${mdiPencil}
-                        style="color: var(--secondary-text-color); --mdc-icon-button-size: 42px"
-                        ?disabled=${calcStateConfig(ActionToState[e], this._config!).hide}
-                        @click=${() => this._editActionClick(e)}
-                      >
-                      </ha-icon-button>
-                    </div>
-                  `;
-        })}
+              <div class="config-row">
+                ${this._renderActionOptions()}
               </div>
             `
         : ''}
@@ -369,6 +334,93 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
     `;
   }
 
+  public _renderActionOptions() {
+    if (!this._config || !this.hass || !this._config.entity) return nothing;
+
+    const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
+    const supportedActions = calcSupportedActions(stateObj);
+
+    let items = [ArmActions.Disarm, ...supportedActions].map(e => ({
+      id: e,
+      label: this.hass!.localize(`ui.card.alarm_control_panel.${e}`),
+      hidden: calcStateConfig(ActionToState[e], this._config!).hide,
+      order: calcStateConfig(ActionToState[e], this._config!).button_order
+    }));
+
+    items.sort((a, b) => {
+      if (a.hidden && !b.hidden) return 1;
+      else if (b.hidden && !a.hidden) return -1;
+      else if (!isDefined(a.order) && !isDefined(b.order)) return 0;
+      else if (isDefined(a.order) && !isDefined(b.order)) return -1;
+      else if (!isDefined(a.order) && isDefined(b.order)) return 1;
+      else return a.order! - b.order!;
+    });
+
+    return html`
+      <ha-sortable
+        handle-selector=".handle"
+        draggable-selector=".draggable"
+        @item-moved=${(ev: CustomEvent) => this._handleActionsMoved(ev, items.map(e => ActionToState[e.id]))}
+      >
+        <div class="sortable-list">
+        ${items.map((item, i) => {
+      return html`
+          <div class="sortable-item ${item.hidden ? '' : 'draggable'}"">
+            <ha-svg-icon
+              class="handle"
+              style="cursor: grab"
+              .path=${mdiDragHorizontalVariant}
+            ></ha-svg-icon>
+
+            <ha-icon-button
+              .path=${item.hidden ? mdiCheckboxBlankOutline : mdiCheckboxMarked}
+              style="${item.hidden ? '' : 'color: var(--primary-color)'}"
+              ?disabled=${(!item.hidden && items.filter(e => !e.hidden).length <= 2) || item.id == ArmActions.Disarm}
+              @click=${(ev: Event) => {
+          this._updateStateConfig(
+            ActionToState[item.id],
+            item.hidden ? { hide: undefined } : { hide: true }
+          );
+          if (item.hidden) {
+            let ev = new CustomEvent('', { detail: { oldIdx: i, nexIdx: items.filter(e => !e.hidden).length } });
+            this._handleActionsMoved(ev, items.map(e => ActionToState[e.id]));
+          }
+          (ev.target as HTMLElement).blur();
+        }}
+            >
+            </ha-icon-button>
+            <span>${item.label}</span>
+            <ha-icon-button
+              .path=${mdiPencil}
+              style="color: var(--secondary-text-color); --mdc-icon-button-size: 42px"
+              ?disabled=${item.hidden}
+              @click=${() => this._editActionClick(item.id)}
+            >
+            </ha-icon-button>
+          </div>
+        `})}
+        </div>
+      </ha-sortable>
+    `;
+  }
+
+  private _handleActionsMoved(ev: CustomEvent, keys: AlarmStates[]) {
+    const oldIdx = ev.detail.oldIndex;
+    const newIdx = ev.detail.newIndex;
+    let item = keys[oldIdx];
+
+    keys = keys.filter((_e, i) => i != oldIdx);
+    keys.splice(newIdx, 0, item);
+    let stateConfig = { ...this._config!.states };
+    keys.forEach((key, i) => {
+      stateConfig = {
+        ...stateConfig,
+        [key]: { ...(stateConfig[key] || {}), button_order: (i + 1) }
+      }
+    });
+    this._updateConfig('states', stateConfig);
+  }
+
   private _updateConfig(property: string, value: any) {
     if (!this.hass) return;
     this._config = { ...this._config, [property]: value };
@@ -437,24 +489,16 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         flex-direction: column;
         flex: 1 0 300px;
       }
-      div.checkbox-list {
+      div.sortable-list {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
         gap: 0px 8px;
       }
-      div.checkbox-item {
+      div.sortable-item {
         display: flex;
-        flex-direction: row;
-        flex: 1 0 49%;
         font-size: 0.875rem;
         align-items: center;
-      }
-      div.checkbox-item.disabled {
-        color: var(--disabled-text-color);
-      }
-      .checkbox-item span {
-        cursor: pointer;
       }
       .header {
         display: flex;

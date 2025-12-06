@@ -22,6 +22,7 @@ export type StateConfig = {
   button_icon: string;
   state_label: string;
   color: string;
+  button_order: number;
 };
 
 export type AlarmoEvent = HassEvent & {
