@@ -16,7 +16,15 @@
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",
-      "show_button": "Mostra il pulsante per questa azione",
+      "show_button": {
+        "title": "Visibilità del pulsante di azione",
+        "options": {
+          "always": "Sempre visualizzato",
+          "never": "Mai visualizzato",
+          "disarmed": "Mostra solo quando disarmato",
+          "armed": "Mostra solo quando disarmato"
+        }
+      },
       "button_label": "Sovrascrivere l'etichetta del pulsante",
       "button_icon": "Icona del pulsante visualizzato",
       "state_label": "Sovrascrivere l'etichetta di stato",

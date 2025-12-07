@@ -16,7 +16,15 @@
     "available_actions": "Dostupné akce:",
     "action_dialog": {
       "title": "Upravit zobrazení akce '{action}'",
-      "show_button": "Zobrazit tlačítko pro tuto akci",
+      "show_button": {
+        "title": "Viditelnost akčního tlačítka",
+        "options": {
+          "always": "Vždy zobrazeno",
+          "never": "Nikdy zobrazeno",
+          "disarmed": "Zobrazit pouze při odzbrojení",
+          "armed": "Zobrazit pouze při zapnutí"
+        }
+      },
       "button_label": "Přepsat popisek tlačítka",
       "button_icon": "Ikona zobrazeného tlačítka",
       "state_label": "Přepsat popisek stavu",

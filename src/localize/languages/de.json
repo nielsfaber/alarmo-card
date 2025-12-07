@@ -16,7 +16,15 @@
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",
-      "show_button": "Taste für diese Aktion anzeigen",
+      "show_button": {
+        "title": "Sichtbarkeit der Aktionsschaltfläche",
+        "options": {
+          "always": "Immer angezeigt",
+          "never": "Nie angezeigt",
+          "disarmed": "Nur im deaktivierten Zustand anzeigen",
+          "armed": "Nur im aktivierten Zustand anzeigen"
+        }
+      },
       "button_label": "Überschreibung der Tastenbeschriftung",
       "button_icon": "Angezeigtes Schaltflächensymbol",
       "state_label": "Überschreibung der Statusbezeichnung",

@@ -256,6 +256,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               <ha-button-menu
                 corner="BOTTOM_START"
                 multi
+                id="cornerMenu"
               >
                 <ha-icon-button slot="trigger" .label=${this.hass.localize('ui.common.menu')} .path=${mdiDotsVertical}>
                 </ha-icon-button>
@@ -322,7 +323,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 @focus=${this._clearCodeError}
                 type="password"
                 id="code_input"
-                .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
+                .inputMode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
               ></ha-textfield>
             `}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||

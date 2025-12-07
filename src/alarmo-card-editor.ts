@@ -101,30 +101,52 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           </div>
         </div>
 
-        <div class="checkbox-item">
-          <ha-checkbox
-            ?checked=${!stateConfig.hide}
-            ?disabled=${(!stateConfig.hide &&
-          calcSupportedActions(stateObj!)
-            .map(e => ActionToState[e])
-            .filter(e => !calcStateConfig(e, this._config!).hide).length == 1) ||
-        this._editAction == ArmActions.Disarm}
-            @change=${(ev: Event) =>
-          this._updateStateConfig(
-            ActionToState[this._editAction!],
-            (ev.target as HTMLInputElement).checked ? { hide: undefined } : { hide: true }
-          )}
-          >
-          </ha-checkbox>
-          <span
-            @click=${(ev: Event) => {
-          const checkbox = (ev.target as HTMLElement).previousElementSibling as HTMLElement;
-          checkbox.click();
-          checkbox.blur();
-        }}
-          >
-            ${localize('editor.action_dialog.show_button', this.hass.language)}
-          </span>
+        <div>
+          <span>${localize('editor.action_dialog.show_button.title', this.hass.language)}</span>
+          <div style="display: flex; flex-direction: row">
+            <ha-formfield label="${localize('editor.action_dialog.show_button.options.always', this.hass.language)}">
+              <ha-radio
+                name="show_button"
+                value="never"
+                @change=${() => this._updateStateConfig(ActionToState[this._editAction!], { hide: undefined })}
+                ?checked=${!isDefined(stateConfig.hide) || [false, 'never'].includes(stateConfig.hide)}
+              >
+              </ha-radio>
+            </ha-formfield>
+
+            <ha-formfield label="${localize('editor.action_dialog.show_button.options.never', this.hass.language)}">
+              <ha-radio
+                name="show_button"
+                value="always"
+                @change=${() => this._updateStateConfig(ActionToState[this._editAction!], { hide: 'always' })}
+                ?checked=${[true, 'always'].includes(stateConfig.hide || false)}
+              >
+              </ha-radio>
+            </ha-formfield>
+
+            ${this._editAction == ArmActions.Disarm
+          ? html`
+            <ha-formfield label="${localize('editor.action_dialog.show_button.options.armed', this.hass.language)}">
+              <ha-radio
+                name="show_button"
+                value="disarmed"
+                @change=${() => this._updateStateConfig(ActionToState[this._editAction!], { hide: 'disarmed' })}
+                ?checked=${stateConfig.hide == 'disarmed'}
+              >
+              </ha-radio>
+            </ha-formfield>`
+          : html`
+            <ha-formfield label="${localize('editor.action_dialog.show_button.options.disarmed', this.hass.language)}">
+              <ha-radio
+                name="show_button"
+                value="armed"
+                @change=${() => this._updateStateConfig(ActionToState[this._editAction!], { hide: 'armed' })}
+                ?checked=${stateConfig.hide == 'armed'}
+              >
+              </ha-radio>
+            </ha-formfield>
+              `}
+          </div>
         </div>
 
         <div class="grid">
@@ -343,7 +365,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
     let items = [ArmActions.Disarm, ...supportedActions].map(e => ({
       id: e,
       label: this.hass!.localize(`ui.card.alarm_control_panel.${e}`),
-      hidden: calcStateConfig(ActionToState[e], this._config!).hide,
+      hidden: ['always', true].includes(calcStateConfig(ActionToState[e], this._config!).hide || false),
       order: calcStateConfig(ActionToState[e], this._config!).button_order
     }));
 
@@ -379,7 +401,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
               @click=${(ev: Event) => {
           this._updateStateConfig(
             ActionToState[item.id],
-            item.hidden ? { hide: undefined } : { hide: true }
+            item.hidden ? { hide: undefined } : { hide: 'always' }
           );
           if (item.hidden) {
             let ev = new CustomEvent('', { detail: { oldIdx: i, nexIdx: items.filter(e => !e.hidden).length } });

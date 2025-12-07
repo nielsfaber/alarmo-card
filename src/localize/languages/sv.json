@@ -16,7 +16,15 @@
     "available_actions": "Tillgängliga åtgärder:",
     "action_dialog": {
       "title": "Anpassa visningen av åtgärden '{action}'",
-      "show_button": "Visa knapp för denna åtgärd",
+      "show_button": {
+        "title": "Synlighet för åtgärdsknapp",
+        "options": {
+          "always": "Visas alltid",
+          "never": "Visas aldrig",
+          "disarmed": "Visa endast vid avaktivering",
+          "armed": "Visa endast vid aktivering"
+        }
+      },
       "button_label": "Anpassad knappetikett",
       "button_icon": "Visad knappikon",
       "state_label": "Anpassad tillståndsetikett",

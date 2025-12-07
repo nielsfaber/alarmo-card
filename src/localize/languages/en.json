@@ -16,7 +16,15 @@
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",
-      "show_button": "Show button for this action",
+      "show_button": {
+        "title": "Button visibility",
+        "options": {
+          "always": "Always shown",
+          "never": "Never shown",
+          "disarmed": "Show only when disarmed",
+          "armed": "Hide only when disarmed"
+        }
+      },
       "button_label": "Override displayed action label",
       "button_icon": "Override displayed icon",
       "state_label": "Override displayed state label",

@@ -250,7 +250,7 @@ export class AlarmoCodeDialog
             id="code"
             .label=${this.hass.localize("ui.dialogs.enter_code.input_label")}
             type="password"
-            inputmode="text"
+            inputMode="text"
             @input=${(ev: Event) => {
           this._clearCodeError();
           this._input = (ev.target as HTMLInputElement).value;
@@ -286,7 +286,7 @@ export class AlarmoCodeDialog
             id="code"
             .label=${this.hass.localize("ui.dialogs.enter_code.input_label")}
             type="password"
-            inputmode="numeric"
+            inputMode="numeric"
             @input=${(ev: Event) => {
         this._clearCodeError();
         this._input = (ev.target as HTMLInputElement).value;

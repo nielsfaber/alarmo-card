@@ -16,8 +16,10 @@ export type CardConfig = {
   hide_keypad: boolean;
 };
 
+export type HideOptions = 'always' | 'never' | 'disarmed' | 'armed';
+
 export type StateConfig = {
-  hide: boolean;
+  hide: boolean | HideOptions;
   button_label: string;
   button_icon: string;
   state_label: string;

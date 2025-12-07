@@ -16,7 +16,15 @@
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",
-      "show_button": "Afficher le bouton pour cette action",
+      "show_button": {
+        "title": "Visibilité du bouton d'action",
+        "options": {
+          "always": "Toujours affiché",
+          "never": "Jamais affiché",
+          "disarmed": "Afficher uniquement si désarmé",
+          "armed": "Afficher uniquement si armé"
+        }
+      },
       "button_label": "Remplacer le libellé du bouton",
       "button_icon": "Icône de bouton affichée",
       "state_label": "Remplacer l'étiquette d'état",

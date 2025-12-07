@@ -16,7 +16,15 @@
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",
-      "show_button": "Toon deze actie in de kaart",
+      "show_button": {
+        "title": "Actieknop weergave",
+        "options": {
+          "always": "Altijd zichtbaar",
+          "never": "Nooit zichtbaar",
+          "disarmed": "Toon alleen bij uitgeschakeld",
+          "armed": "Zichtbaar tenzij uitgeschakeld"
+        }
+      },
       "button_label": "Weergegeven naam voor actie",
       "button_icon": "Weergegeven icoon voor actie",
       "state_label": "Weergegeven status",

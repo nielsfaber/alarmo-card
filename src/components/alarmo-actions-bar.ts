@@ -40,10 +40,26 @@ export class AlarmoActionsBar extends LitElement {
   }
 
   private _renderOptions(selectedOption: AlarmStates) {
-
     const stateObj = this.hass.states[this.config!.entity];
+
+    const calcButtonVisible = (action: ArmActions) => {
+      const hideCfg = calcStateConfig(ActionToState[action], this.config!).hide;
+      if (typeof hideCfg === 'boolean' || !isDefined(hideCfg)) return !hideCfg;
+
+      switch (hideCfg) {
+        case 'always':
+          return false;
+        case 'never':
+          return true;
+        case 'armed':
+          return stateObj.state == 'disarmed';
+        case 'disarmed':
+          return stateObj.state !== 'disarmed';
+      }
+    }
+
     const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)]
-      .filter(e => !calcStateConfig(ActionToState[e], this.config!).hide);
+      .filter(calcButtonVisible);
     const hasTextLabel = options.map(e => calcStateConfig(ActionToState[e], this.config!)).some(e => !isDefined(e.button_label) || e.button_label.length);
 
     options.sort((a, b) => {
@@ -72,7 +88,9 @@ export class AlarmoActionsBar extends LitElement {
             ` : nothing}
             <span>
               ${!isDefined(stateConfig.button_label)
-          ? this.hass!.localize(`ui.card.alarm_control_panel.modes.${ActionToState[e]}`)
+          ? e == ArmActions.Disarm && stateObj.state !== AlarmStates.Disarmed
+            ? this.hass!.localize(`ui.card.alarm_control_panel.${e}`)
+            : this.hass!.localize(`ui.card.alarm_control_panel.modes.${ActionToState[e]}`)
           : stateConfig.button_label
         }
             </span>
