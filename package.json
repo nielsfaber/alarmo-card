@@ -1,6 +1,6 @@
 {
   "name": "alarmo_card",
-  "version": "1.6.4",
+  "version": "1.6.6",
   "description": "Alarmo card",
   "main": "dist/alarmo-card.js",
   "type": "module",
