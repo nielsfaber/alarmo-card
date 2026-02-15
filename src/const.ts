@@ -29,6 +29,17 @@ export const ICONS: Record<AlarmStates, string> = {
   [AlarmStates.Pending]: 'hass:shield-outline',
   [AlarmStates.Triggered]: 'hass:bell-ring',
 };
+export const BUTTON_ICONS: Record<AlarmStates, string> = {
+  [AlarmStates.ArmedAway]: 'mdi:lock',
+  [AlarmStates.ArmedHome]: 'mdi:home',
+  [AlarmStates.ArmedNight]: 'mdi:moon-waning-crescent',
+  [AlarmStates.ArmedVacation]: 'mdi:airplane',
+  [AlarmStates.ArmedCustomBypass]: 'mdi:shield',
+  [AlarmStates.Disarmed]: 'hass:shield-off',
+  [AlarmStates.Arming]: 'hass:shield-outline',
+  [AlarmStates.Pending]: 'hass:shield-outline',
+  [AlarmStates.Triggered]: 'hass:bell-ring',
+};
 
 export enum ArmActions {
   ArmAway = 'arm_away',

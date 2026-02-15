@@ -1,14 +1,15 @@
 import { css, CSSResult, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { computeDomain, fireEvent, HomeAssistant } from 'custom-card-helpers';
-import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
+import { computeDomain, computeEntity, HomeAssistant } from 'custom-card-helpers';
+import { HassEntity, STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import {
   ActionToState,
   AlarmoEvents,
   AlarmStates,
   ArmActions,
-  BUTTONS,
+  BUTTON_ICONS,
   CARD_VERSION,
   defaultArmOptions,
   defaultCardConfig,
@@ -18,19 +19,13 @@ import {
 import { AlarmoConfig, AlarmoEntity, AlarmoEvent, CardConfig } from './types';
 
 import './alarmo-card-editor';
-import './components/alarmo-state-badge';
+import './components/alarmo-state-icon';
 import './components/alarmo-sensor-badge';
 import './components/alarmo-button';
 
 import { SubscribeMixin } from './subscribe-mixin';
 import { localize } from './localize/localize';
-import {
-  calcSupportedActions,
-  codeRequired,
-  computeNameDisplay,
-  computeStateColor,
-  computeStateDisplay,
-} from './data/entity';
+import { calcSupportedActions, codeRequired, computeStateColor, computeStateDisplay } from './data/entity';
 import { calcStateConfig, validateConfig } from './data/config';
 import { isEmpty } from './helpers';
 import { fetchConfig, fetchEntities, fetchReadyToArmModes } from './data/websockets';
@@ -212,6 +207,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
   }
 
+
   protected render(): TemplateResult {
     if (!this._config || !this.hass || this.backendConnection === null) {
       return html``;
@@ -240,8 +236,17 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       `;
     }
 
+    const name = this._config.name || stateObj.attributes.friendly_name || '';
+    const color = computeStateColor(stateObj);
+    const stateDisplay = computeStateDisplay(stateObj, this.hass.localize, this._config);
+    const stateWarningDisplay = this.computeWarning();
+
+    const style = {
+      '--tile-color': color,
+    };
+
     return html`
-      <ha-card>
+      <ha-card style="${styleMap(style)}">
         ${stateObj.state === AlarmStates.Disarmed
           ? html`
             <ha-button-menu
@@ -283,88 +288,42 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           `
           : ''}
 
-        <div class="header">
-          <div class="icon">
-            <alarmo-state-badge
+        <div class="container">
+          <div class="content">
+            <alarmo-state-icon
               .hass=${this.hass}
               .entity=${this._config.entity}
-              @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
-              style="--alarm-state-color: ${computeStateColor(stateObj)}"
             >
-            </alarmo-state-badge>
+            </alarmo-state-icon>
+
+            ${this.warning ? html`
+              <ha-tile-info
+                id="info"
+                .primary=${localize('errors.'+this.warning, this.hass.language)}
+                .secondary=${stateWarningDisplay}
+              ></ha-tile-info>` : html`
+              <ha-tile-info
+                id="info"
+                .primary=${stateDisplay}
+              ></ha-tile-info>`}
           </div>
-          <div class="summary">
-            ${this._config.show_name ? html`
-              <div class="primary">
-                ${computeNameDisplay(stateObj, this._config)}
-              </div>
-            ` : ''}
-            <div class="${this._config.show_name ? 'secondary' : 'primary'}">
-              ${computeStateDisplay(stateObj, this.hass.localize, this._config)}
-            </div>
+          <div class="features">
+            ${this.renderFeatures()}
           </div>
         </div>
-
-        ${this._renderWarning()}
-
-        ${this._renderActions()}
-
-        ${this._renderInput()}
-
-        ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
-        this._alarmoConfig?.code_format !== FORMAT_NUMBER
-          ? html``
-          : html`
-            <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
-              ${BUTTONS.map(value => {
-                return value === 'disarm'
-                  ? html`
-                    <alarmo-button
-                      ?disabled="${stateObj.state === AlarmStates.Disarmed}"
-                      style="--content-scale: ${this._config!.button_scale_keypad}"
-                      ?scaled=${this._config!.button_scale_keypad != 1}
-                      @click=${(ev: Event) => this._handleActionClick(ev, ArmActions.Disarm)}
-                    >
-                      <span>${this.hass!.localize(`ui.card.alarm_control_panel.disarm`)}</span>
-                    </alarmo-button>
-                  `
-                  : html`
-                    <alarmo-button
-                      .value="${value}"
-                      @click=${this._handlePadClick}
-                      ?disabled=${!codeRequired(stateObj)}
-                      class="${value !== 'clear' ? 'numberKey' : ''}"
-                      style="--content-scale: ${this._config!.button_scale_keypad}"
-                      ?scaled=${this._config!.button_scale_keypad != 1}
-                    >
-                      ${value === 'clear'
-                        ? this._config!.use_clear_icon
-                          ? html`
-                            <ha-icon icon="hass:backspace-outline"></ha-icon>
-                          `
-                          : html`
-                            <span>${this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)}</span>
-                          `
-                        : html`
-                          <span>${value}</span>
-                        `}
-                    </alarmo-button>
-                  `;
-              })}
-            </div>
-          `}
       </ha-card>
     `;
   }
 
-  private _renderActions() {
+
+  private renderFeatures() {
     if (!this.hass || !this._config) return html``;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
 
     const actions =
       stateObj.state === AlarmStates.Disarmed
         ? calcSupportedActions(stateObj).filter(e => !calcStateConfig(ActionToState[e], this._config!).hide)
-        : [];
+        : [ArmActions.Disarm];
 
     const showReadyStatus = this._config.show_ready_indicator;
 
@@ -373,22 +332,21 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
 
     return html`
-      <div id="armActions" class="actions">
+      <div class="actions-container">
         ${actions.map(action => {
-          const stateConfig = calcStateConfig(ActionToState[action], this._config!);
-          const readyStatus = Array.isArray(this.readyForArmModes) && this.readyForArmModes.includes(ActionToState[action]);
+          const actionState = ActionToState[action];
+          const stateConfig = calcStateConfig(actionState, this._config!);
+          const readyStatus = Array.isArray(this.readyForArmModes) && this.readyForArmModes.includes(actionState);
 
           return html`
-            <alarmo-button
-              @click=${(ev: Event) => this._handleActionClick(ev, action)}
-              style="--content-scale: ${this._config!.button_scale_actions}"
-              ?scaled=${this._config!.button_scale_actions != 1}
+            <div role="button" class="action-button"
+                 @click=${(ev: Event) => this._handleActionClick(ev, this.hass!, stateObj, action)}
             >
-              ${showReadyStatus && action != ArmActions.Disarm
+              ${showReadyStatus
                 ? html`
                   <ha-icon
-                    icon="mdi:circle-medium"
-                    style="${this.readyForArmModes === null
+                    .icon=${BUTTON_ICONS[actionState]}
+                    style="${this.readyForArmModes === null || actionState === AlarmStates.Disarmed
                       ? `color: var(--label-badge-grey)`
                       : readyStatus
                         ? `color: var(--success-color)`
@@ -404,7 +362,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 : html`
                   <span>${stateConfig.button_label}</span>
                 `}
-            </alarmo-button>
+            </div>
           `;
         })}
       </div>`;
@@ -418,83 +376,42 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       ? html``
       : html`
         <div id="code_input" class="code-input">
-          
+
           ${this._input.length ? this._input.split('').map(() => {
             return html`
               <div class="code-char">●</div>`;
-          }) : html`<div class="code-placeholder">Enter code</div>`}
+          }) : html`
+            <div class="code-placeholder">Enter code</div>`}
       `;
   }
 
-  private _renderWarning() {
-    if (!this.hass || !this._config || !this._config.show_messages) return html``;
+  private computeWarning() {
+    if (!this.hass || !this._config || !this._config.show_messages) return null;
     const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
     if (
       (stateObj.attributes.open_sensors && stateObj.state == AlarmStates.Triggered) ||
       (this.warning == 'blocking_sensors' && stateObj.attributes.open_sensors)
     ) {
-      return html`
-        <div class="messagebox">
-          <div class="messagebox-left"></div>
-          <div class="messagebox-inner">
-            <div class="description">
-              <div class="description-filler"></div>
-              <span>
-                <ha-icon icon="hass:alert"></ha-icon>
-                ${this.warning == 'blocking_sensors'
-                  ? localize('errors.blocking_sensors', this.hass.language)
-                  : localize('errors.triggered_sensors', this.hass.language)}
-              </span>
-              <div class="description-filler"></div>
-            </div>
-            <div class="content">
-              ${Object.entries(stateObj.attributes.open_sensors).map(([e]) => {
-                if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
-                return html`
-                  <div class="badge">
-                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e}></alarmo-sensor-badge>
-                  </div>
-                `;
-              })}
-            </div>
-          </div>
-          <div class="messagebox-right"></div>
-        </div>
-      `;
+      return Object.keys(stateObj.attributes.open_sensors).map((e) => {
+        if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
+        const validEntity = e in this.hass!.states;
+        let stateObj = { ...this.hass!.states[e] } as HassEntity;
+        return validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : e;
+      });
     }
     if (
       stateObj.state.startsWith('armed_') &&
       stateObj.attributes.bypassed_sensors?.length &&
       this._config.show_bypassed_sensors
     ) {
-      return html`
-        <div class="messagebox warning">
-          <div class="messagebox-left"></div>
-          <div class="messagebox-inner">
-            <div class="description">
-              <div class="description-filler"></div>
-              <span>
-                <ha-icon icon="hass:alert"></ha-icon>
-                ${localize('errors.bypassed_sensors', this.hass.language)}
-              </span>
-              <div class="description-filler"></div>
-            </div>
-            <div class="content">
-              ${stateObj.attributes.bypassed_sensors.map(e => {
-                if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
-                return html`
-                  <div class="badge">
-                    <alarmo-sensor-badge .hass=${this.hass} .entity=${e}></alarmo-sensor-badge>
-                  </div>
-                `;
-              })}
-            </div>
-          </div>
-          <div class="messagebox-right"></div>
-        </div>
-      `;
+      return stateObj.attributes.bypassed_sensors.map(e => {
+        if (!this.subscribedEntities.includes(e)) this.subscribedEntities.push(e);
+        const validEntity = e in this.hass!.states;
+        let stateObj = { ...this.hass!.states[e] } as HassEntity;
+        return validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : e;
+      });
     }
-    return html``;
+    return null;
   }
 
   private _handlePadClick(e: MouseEvent): void {
@@ -503,14 +420,30 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     this._input = val === 'clear' ? '' : this._input + val;
   }
 
-  private _handleActionClick(ev: Event, action: ArmActions): void {
+  private async _handleActionClick(ev: Event, hass: HomeAssistant, stateObj: any, action: ArmActions) {
+    const element = ev.target as Element;
     (ev.target as HTMLElement).blur();
     this._clearCodeError();
 
     if (action == ArmActions.Disarm) {
+      const helpers = await (window as any).loadCardHelpers();
+
+      const response = await helpers.showEnterCodeDialog(element, {
+        codeFormat: stateObj.attributes.code_format,
+        title: hass.localize(
+          `ui.card.alarm_control_panel.disarm`,
+        ),
+        submitText: hass.localize(
+          `ui.card.alarm_control_panel.disarm`,
+        ),
+      });
+      if (response == null) {
+        throw new Error('Code dialog closed');
+      }
+
       this.hass!.callService('alarmo', 'disarm', {
         entity_id: this._config!.entity,
-        code: this._input,
+        code: response,
       });
     } else {
       this.hass!.callService('alarmo', 'arm', {
@@ -582,194 +515,132 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
 
   static get styles(): CSSResult {
     return css`
+        :host {
+            --tile-color: var(--state-inactive-color);
+            -webkit-tap-highlight-color: transparent;
+            --features-background: var(--disabled-color);
+            --features-background-opacity: 0.2;
+            --features-focused-opacity: 0.15;
+            --features-color: var(--state-alarm_control_panel-disarmed-color, var(--state-alarm_control_panel-inactive-color, var(--state-inactive-color)));
+        }
+
         ha-card {
-            padding-bottom: 16px;
-            position: relative;
+            --ha-ripple-color: var(--tile-color);
+            --ha-ripple-hover-opacity: 0.04;
+            --ha-ripple-pressed-opacity: 0.12;
             height: 100%;
-            box-sizing: border-box;
+            transition: box-shadow 180ms ease-in-out,
+            border-color 180ms ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .header {
+        ha-card.active {
+            --tile-color: var(--state-icon-color);
+        }
+
+        .container {
+            margin: calc(-1 * var(--ha-card-border-width, 1px));
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .container.horizontal {
+            flex-direction: row;
+        }
+
+        .content {
+            position: relative;
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
-            margin: 0px auto;
-            padding: 20px 0px 10px;
+            padding: 10px;
+            flex: 1;
+            min-width: 0;
             box-sizing: border-box;
+            pointer-events: none;
+            gap: 10px;
         }
 
-        .header .icon {
-            display: flex;
-            padding-right: 20px;
+        .features {
+            --feature-color: var(--tile-color);
+            padding: 0 12px 12px 12px;
         }
 
-        .header .summary {
+        .actions-container {
+            position: relative;
             display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .header .primary {
-            font-size: 24px;
-            display: flex;
-        }
-
-        .header .secondary {
-            font-size: 14px;
-            display: flex;
-        }
-
-        .actions {
-            height: 72px;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .code-input {
-            height: 48px;
-            max-width: 200px;
-            margin: 12px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            background-color: rgba(var(--rgb-primary-text-color), 0.05);
+            gap: 10px;
+            height: 42px;
             border-radius: 12px;
-            color: var(--primary-text-color);
-        }
-        .code-input.error {
-            animation: shake 0.2s ease-in-out 0s 2;
-        }
-        .code-char {
-            font-size: 24px;
-        }
-        .code-placeholder {
-            font-size: 18px;
-            opacity: .5;
+            overflow: hidden;
         }
 
-        #keypad {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: auto;
+        .actions-container::before {
+            position: absolute;
+            content: "";
+            top: 0px;
+            left: 0px;
+            height: 100%;
             width: 100%;
+            background: var(--features-background);
+            opacity: var(--features-background-opacity);
         }
 
-        #keypad alarmo-button {
-            padding: 8px;
-            width: 30%;
-            box-sizing: border-box;
-        }
-
-        @keyframes shake {
-            0% {
-                margin-left: calc(50% - 200px / 2);
-            }
-            25% {
-                margin-left: calc(50% - 200px / 2 + 10px);
-            }
-            75% {
-                margin-left: calc(50% - 200px / 2 - 10px);
-            }
-            100% {
-                margin-left: calc(50% - 200px / 2);
-            }
-        }
-
-        div.messagebox {
-            width: 90%;
-            margin: 0px auto 20px;
+        .action-button {
+            --mdc-icon-size: 20px;
+            cursor: pointer;
+            position: relative;
+            flex: 1;
+            height: 100%;
+            width: 100%;
             display: flex;
-            flex-direction: row;
+            align-items: center;
             justify-content: center;
-            align-items: stretch;
-            --border-color: var(--label-badge-red);
-        }
-
-        div.messagebox.warning {
-            --border-color: var(--label-badge-yellow);
-        }
-
-        div.messagebox.warning alarmo-sensor-badge {
-            --label-badge-red: var(--label-badge-yellow);
-        }
-
-        div.messagebox-left {
-            display: flex;
-            width: 10px;
-            border: 1px solid var(--border-color);
-            border-width: 1px 0px 1px 1px;
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-
-        div.messagebox-right {
-            display: flex;
-            width: 10px;
-            border: 1px solid var(--border-color);
-            border-width: 1px 1px 1px 0px;
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-
-        div.messagebox-inner {
-            flex-direction: column;
-            border-bottom: 1px solid var(--border-color);
-            flex: 1 1;
-        }
-
-        div.messagebox .description {
-            display: flex;
-            flex-direction: row;
-        }
-
-        div.messagebox .description span {
-            color: var(--label-badge-red);
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 0;
             font-weight: 500;
-            display: flex;
-            margin-top: -10px;
-            padding: 0px 5px;
-            flex-shrink: 2;
+            gap: 8px;
         }
 
-        div.messagebox.warning .description span {
-            color: #d0863d;
+        .action-button::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: var(--features-color);
+            opacity: 0;
+            transition: background-color ease-in-out 180ms, opacity ease-in-out 80ms;
         }
 
-        div.messagebox .description-filler {
-            flex: 1;
-            border-top: 1px solid var(--border-color);
-            min-width: 5px;
+        .action-button:hover::before {
+            opacity: var(--features-focused-opacity);
         }
 
-        div.messagebox .description ha-icon {
-            --mdc-icon-size: 24px;
-            margin: 0px 4px 0px 0px;
+        ha-tile-icon {
+            position: relative;
+            padding: 6px;
+            margin: -6px;
         }
 
-        div.messagebox .content {
-            display: flex;
-            flex-basis: 100%;
-            padding: 5px;
-            justify-content: space-around;
-            align-items: center;
-            flex: 1;
-            flex-direction: row;
-            flex-wrap: wrap;
-            color: var(--primary-text-color);
+        ha-tile-badge {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            inset-inline-end: 3px;
+            inset-inline-start: initial;
         }
 
-        div.messagebox .content .badge {
-            width: 64px;
-            margin: 5px 0px;
-            justify-content: center;
-            align-items: center;
+        ha-tile-info {
+            position: relative;
+            min-width: 0;
+            transition: background-color 180ms ease-in-out;
+            box-sizing: border-box;
         }
 
         ha-button-menu {
@@ -804,3 +675,76 @@ console.info(
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
+
+/* OLD
+<div class="header">
+          <div class="icon">
+            <alarmo-state-badge
+              .hass=${this.hass}
+              .entity=${this._config.entity}
+              @click=${() => fireEvent(this, 'hass-more-info', { entityId: this._config!.entity })}
+              style="--alarm-state-color: ${computeStateColor(stateObj)}"
+            >
+            </alarmo-state-badge>
+          </div>
+          <div class="summary">
+            ${this._config.show_name ? html`
+              <div class="primary">
+                ${computeNameDisplay(stateObj, this._config)}
+              </div>
+            ` : ''}
+            <div class="${this._config.show_name ? 'secondary' : 'primary'}">
+              ${computeStateDisplay(stateObj, this.hass.localize, this._config)}
+            </div>
+          </div>
+        </div>
+
+        ${this._renderWarning()}
+
+        ${this._renderActions()}
+
+        ${this._renderInput()}
+
+        ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
+        this._alarmoConfig?.code_format !== FORMAT_NUMBER
+          ? html``
+          : html`
+            <div id="keypad" style="max-width: ${this._config.button_scale_keypad * 300}px">
+              ${BUTTONS.map(value => {
+                return value === 'disarm'
+                  ? html`
+                    <alarmo-button
+                      ?disabled="${stateObj.state === AlarmStates.Disarmed}"
+                      style="--content-scale: ${this._config!.button_scale_keypad}"
+                      ?scaled=${this._config!.button_scale_keypad != 1}
+                      @click=${(ev: Event) => this._handleActionClick(ev, ArmActions.Disarm)}
+                    >
+                      <span>${this.hass!.localize(`ui.card.alarm_control_panel.disarm`)}</span>
+                    </alarmo-button>
+                  `
+                  : html`
+                    <alarmo-button
+                      .value="${value}"
+                      @click=${this._handlePadClick}
+                      ?disabled=${!codeRequired(stateObj)}
+                      class="${value !== 'clear' ? 'numberKey' : ''}"
+                      style="--content-scale: ${this._config!.button_scale_keypad}"
+                      ?scaled=${this._config!.button_scale_keypad != 1}
+                    >
+                      ${value === 'clear'
+                        ? this._config!.use_clear_icon
+                          ? html`
+                            <ha-icon icon="hass:backspace-outline"></ha-icon>
+                          `
+                          : html`
+                            <span>${this.hass!.localize(`ui.card.alarm_control_panel.clear_code`)}</span>
+                          `
+                        : html`
+                          <span>${value}</span>
+                        `}
+                    </alarmo-button>
+                  `;
+              })}
+            </div>
+          `}
+ */

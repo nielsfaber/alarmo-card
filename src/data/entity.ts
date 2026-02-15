@@ -1,9 +1,9 @@
 import { HassEntity } from 'home-assistant-js-websocket';
-import { ArmActions, AlarmStates } from '../const';
-import { CardConfig } from '../types';
+import { AlarmStates, ArmActions } from '../const';
+import { AlarmoEntity, CardConfig } from '../types';
 import { calcStateConfig } from './config';
 import { isEmpty } from '../helpers';
-import { LocalizeFunc, computeDomain } from 'custom-card-helpers';
+import { computeDomain, LocalizeFunc } from 'custom-card-helpers';
 
 export const calcSupportedActions = (stateObj: HassEntity) => {
   if (!stateObj) return [];
@@ -32,6 +32,7 @@ export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc
   if (!translation) translation = localize(`component.${domain}.entity_component._.state.${stateObj.state}`);
   return translation;
 };
+
 
 export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => {
   return !isEmpty(config.name) ? config.name : stateObj.attributes.friendly_name;

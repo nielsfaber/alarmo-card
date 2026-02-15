@@ -22,8 +22,8 @@
     }
   },
   "errors": {
-    "blocking_sensors": "Could not arm due to the following sensors",
-    "triggered_sensors": "Alarm was triggered by the following sensors",
+    "blocking_sensors": "Blocking sensors",
+    "triggered_sensors": "Alarm triggered by",
     "bypassed_sensors": "There are bypassed sensors"
   }
 }
