@@ -214,21 +214,6 @@ export class AlarmoCodeDialog
     this._showClearButton = false;
   }
 
-  private createCloseHeading = (
-    hass: HomeAssistant | undefined,
-    title: string | TemplateResult
-  ) => html`
-  <div class="header_title">
-    <ha-icon-button
-      .label=${hass?.localize("ui.common.close") ?? "Close"}
-      .path=${mdiClose}
-      dialogAction="close"
-      class="header_button"
-    ></ha-icon-button>
-    <span>${title}</span>
-  </div>
-`;
-
   protected render() {
     if (!this._params || !this.hass) {
       return nothing;
@@ -241,7 +226,8 @@ export class AlarmoCodeDialog
         <ha-dialog
           open
           @closed=${this._cancel}
-          .heading=${this.hass.localize("ui.dialogs.enter_code.title")}
+          header-title="${this.hass.localize("ui.dialogs.enter_code.title")}"
+          width="small"
         >
           <ha-textfield
             class="input"
@@ -258,12 +244,14 @@ export class AlarmoCodeDialog
         }}
             @focus=${this._clearCodeError}
           ></ha-textfield>
-          <ha-button slot="secondaryAction" dialogAction="cancel">
-            ${this.hass.localize("ui.common.cancel")}
-          </ha-button>
-          <ha-button @click=${this._submit} slot="primaryAction">
-            ${this.hass.localize("ui.common.submit")}
-          </ha-button>
+          <ha-dialog-footer>
+            <ha-button slot="secondaryAction" data-dialog="close" appearance="plain">
+              ${this.hass.localize("ui.common.cancel")}
+            </ha-button>
+            <ha-button @click=${this._submit} slot="primaryAction">
+              ${this.hass.localize("ui.common.submit")}
+            </ha-button>
+          </ha-dialog-footer>
         </ha-dialog>
       `;
     }
@@ -271,12 +259,9 @@ export class AlarmoCodeDialog
     return html`
       <ha-dialog
         open
-        .heading=${this.createCloseHeading(
-      this.hass,
-      this.hass.localize("ui.dialogs.enter_code.title")
-    )}
+        header-title="${this.hass.localize("ui.dialogs.enter_code.title")}"
         @closed=${this._cancel}
-        hideActions
+        width="small"
       >
         <div class="container">
           <ha-textfield

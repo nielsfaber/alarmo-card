@@ -323,7 +323,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             <ha-switch
               .checked=${this._config!.use_code_dialog}
               @change=${(ev: Event) => this._updateConfig('use_code_dialog', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad || this._config.hide_keypad}
+              ?disabled=${!stateObj || (!this._alarmoConfig?.code_arm_required && !this._alarmoConfig?.code_disarm_required)}
             ></ha-switch
           ></ha-formfield>
 
