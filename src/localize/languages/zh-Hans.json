@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "无效的",
     "blocking_sensors": "由于以下传感器而无法警戒",
     "triggered_sensors": "警报是由以下传感器触发的",
     "bypassed_sensors": "有绕过的传感器"

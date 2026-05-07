@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Ungültig",
     "blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
     "triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst",
     "bypassed_sensors": "Es gibt umgangene Sensoren"

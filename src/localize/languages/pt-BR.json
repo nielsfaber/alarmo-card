@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Inválido",
     "blocking_sensors": "Não foi possível armar devido aos seguintes sensores",
     "triggered_sensors": "O alarme foi disparado pelos seguintes sensores",
     "bypassed_sensors": "Existem sensores ignorados"

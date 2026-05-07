@@ -150,7 +150,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         </div>
 
         <div class="grid">
-          <ha-textfield
+          <ha-input
             label="${localize('editor.action_dialog.button_label', this.hass.language)}"
             .value="${stateConfig.button_label || ''}"
             placeholder="${this.hass!.localize(`ui.card.alarm_control_panel.${this._editAction}`)}"
@@ -159,7 +159,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           this._updateStateConfig(ActionToState[this._editAction!], {
             button_label: String((ev.target as HTMLInputElement).value).trim(),
           })}
-          ></ha-textfield>
+          ></ha-input>
 
           <ha-icon-picker
             .hass=${this.hass}
@@ -173,7 +173,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             >
           </ha-icon-picker>
 
-          <ha-textfield
+          <ha-input
             label="${localize('editor.action_dialog.state_label', this.hass.language)}"
             .value="${stateConfig.state_label || ''}"
             placeholder="${this.hass.localize(
@@ -183,7 +183,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
           this._updateStateConfig(ActionToState[this._editAction!], {
             state_label: String((ev.target as HTMLInputElement).value).trim(),
           })}
-          ></ha-textfield>
+          ></ha-input>
 
           <ha-select
             .icon=${isDefined(stateConfig.color)}
@@ -252,13 +252,13 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
             allow-custom-entity
           ></ha-entity-picker>
 
-          <ha-textfield
+          <ha-input
             .label="${this.hass.localize('ui.panel.lovelace.editor.card.generic.name')} (${this.hass.localize(
       'ui.panel.lovelace.editor.card.config.optional'
     )})"
             .value="${this._config!.name || ''}"
             @input=${(ev: Event) => this._updateConfig('name', String((ev.target as HTMLInputElement).value).trim())}
-          ></ha-textfield>
+          ></ha-input>
         </div>
 
         ${stateObj
@@ -497,7 +497,7 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         display: flex;
         align-items: center;
       }
-      ha-textfield {
+      ha-input {
         width: 100%;
       }
       div.grid {

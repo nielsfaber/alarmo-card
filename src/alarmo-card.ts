@@ -308,7 +308,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) || this._config.use_code_dialog
         ? html``
         : html`
-              <ha-textfield
+              <ha-input
                 .value=${this._input}
                 .label=${this.hass.localize('ui.card.alarm_control_panel.code')}
                 ?disabled=${!codeRequired(stateObj)}
@@ -320,8 +320,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 @focus=${this._clearCodeError}
                 type="password"
                 id="code_input"
-                .inputMode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
-              ></ha-textfield>
+                .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
+              ></ha-input>
             `}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
         this._alarmoConfig?.code_format !== FORMAT_NUMBER ||
@@ -521,7 +521,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     if (inputField) {
       inputField.classList.remove('error');
       inputField.classList.add('error');
-      (inputField as any).invalid = true;
+      (inputField as any).hint = localize('errors.invalid_pin', this.hass!.language);
     }
   }
 
@@ -529,7 +529,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     const inputField = this.shadowRoot?.querySelector('#code_input');
     if (inputField && inputField.classList.contains('error')) {
       inputField.classList.remove('error');
-      (inputField as any).invalid = false;
+      (inputField as any).hint = '';
       this._input = '';
       this._cancelCodeClearTimer();
     }
@@ -624,15 +624,22 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       .actions alarmo-button {
         margin: 0 8px 8px;
       }
-      ha-textfield {
+      ha-input {
         margin: 15px auto;
         max-width: 200px;
         text-align: center;
         margin-left: calc(50% - 200px / 2);
         margin-right: calc(50% - 200px / 2);
       }
-      ha-textfield.error {
+      ha-input.error {
         animation: shake 0.2s ease-in-out 0s 2;
+        --ha-color-border-neutral-loud: var(--ha-color-on-danger-quiet);
+      }
+      ha-input.error:not([value='']) {
+        --secondary-text-color: var(--ha-color-on-danger-quiet);
+      }
+      ha-input.error::part(wa-hint) {
+        color: var(--ha-color-on-danger-quiet);
       }
       #keypad {
         justify-content: center;

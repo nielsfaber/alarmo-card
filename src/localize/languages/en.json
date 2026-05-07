@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Invalid",
     "blocking_sensors": "Could not arm due to the following sensors",
     "triggered_sensors": "Alarm was triggered by the following sensors",
     "bypassed_sensors": "There are bypassed sensors"

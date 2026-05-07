@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Invalide",
     "blocking_sensors": "Impossible d'armer en raison du(es) capteur(s) suivant(s)",
     "triggered_sensors": "L'alarme a été déclenchée par le(s) capteur(s) suivant(s)",
     "bypassed_sensors": "Il y a des capteurs ignorés"

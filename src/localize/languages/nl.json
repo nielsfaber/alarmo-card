@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Ongeldig",
     "blocking_sensors": "Kon niet inschakelen vanwege de volgende sensoren",
     "triggered_sensors": "Alarm werd geactiveerd door de volgende sensoren",
     "bypassed_sensors": "Er zijn omzeilde sensoren"

@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Non valido",
     "blocking_sensors": "Impossibile inserire l'allarme a causa dei seguenti sensori",
     "triggered_sensors": "L'allarme è stato attivato dai seguenti sensori",
     "bypassed_sensors": "Sono presenti sensori esclusi"

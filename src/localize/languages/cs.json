@@ -32,6 +32,7 @@
     }
   },
   "errors": {
+    "invalid_pin": "Neplatný",
     "blocking_sensors": "Nelze aktivovat kvůli následujícím senzorům",
     "triggered_sensors": "Alarm byl spuštěn následujícími senzory",
     "bypassed_sensors": "Jsou tam přemostěné senzory"
