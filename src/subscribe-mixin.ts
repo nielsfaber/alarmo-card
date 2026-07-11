@@ -25,7 +25,7 @@ export const SubscribeMixin = <T extends Constructor<ReactiveElement>>(superClas
         while (this.__unsubs.length) {
           const unsub = this.__unsubs.pop()!;
           if (unsub instanceof Promise) {
-            unsub.then(unsubFunc => unsubFunc());
+            unsub.then((unsubFunc) => unsubFunc());
           } else {
             unsub();
           }
@@ -46,7 +46,7 @@ export const SubscribeMixin = <T extends Constructor<ReactiveElement>>(superClas
     }
 
     private __checkSubscribed(): void {
-      if (this.__unsubs !== undefined || !((this as unknown) as Element).isConnected || this.hass === undefined) {
+      if (this.__unsubs !== undefined || !(this as unknown as Element).isConnected || this.hass === undefined) {
         return;
       }
       this.__unsubs = this.hassSubscribe();

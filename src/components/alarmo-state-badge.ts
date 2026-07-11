@@ -43,20 +43,20 @@ class AlarmoStateBadge extends LitElement {
     const state = this.hass.states[this.entity].state;
     if (PENDING_STATES.includes(state)) this.startTimer();
 
-    this.addEventListener("click", this.handleClick);
-    this.addEventListener("touchstart", () => {
+    this.addEventListener('click', this.handleClick);
+    this.addEventListener('touchstart', () => {
       this._touchStarted = true;
     });
-    this.addEventListener("touchend", () => {
+    this.addEventListener('touchend', () => {
       setTimeout(() => {
         this._touchStarted = false;
       }, 10);
     });
-    this.addEventListener("mouseenter", () => {
+    this.addEventListener('mouseenter', () => {
       if (this._touchStarted) return;
       this._hover = true;
     });
-    this.addEventListener("mouseleave", () => {
+    this.addEventListener('mouseleave', () => {
       this._hover = false;
     });
   }
@@ -68,7 +68,7 @@ class AlarmoStateBadge extends LitElement {
         this.duration = countdownConfig.delay;
         this.datetime = new Date(new Date().getTime() + countdownConfig.remaining * 1000);
       })
-      .catch((_e) => { });
+      .catch((_e) => {});
 
     this.timer = window.setInterval(() => {
       this.requestUpdate();
@@ -99,8 +99,7 @@ class AlarmoStateBadge extends LitElement {
   private _stateValue(state: string) {
     if (this._hover && PENDING_STATES.includes(state) && this.timer) {
       return html` <ha-icon icon="mdi:skip-forward"></ha-icon> `;
-    }
-    else if (this.datetime && this.duration) {
+    } else if (this.datetime && this.duration) {
       return html` ${Math.max(Math.round(this.getRemaining()), 0)} `;
     } else {
       return html` <ha-icon .icon=${ICONS[state]}></ha-icon> `;
@@ -111,10 +110,9 @@ class AlarmoStateBadge extends LitElement {
     const state = this.hass.states[this.entity].state;
     if (PENDING_STATES.includes(state) && this.timer) {
       this.hass!.callService('alarmo', 'skip_delay', {
-        entity_id: this.entity
+        entity_id: this.entity,
       });
-    }
-    else {
+    } else {
       fireEvent(this, 'hass-more-info', { entityId: this.entity });
     }
   }

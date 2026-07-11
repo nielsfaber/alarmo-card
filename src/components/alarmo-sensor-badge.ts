@@ -31,9 +31,9 @@ class AlarmoSensorBadge extends LitElement {
     const value = validEntity
       ? computeStateDisplay(stateObj, this.hass.localize)
       : this.hass.localize(
-        'state.default.unavailable',
-        this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
-      );
+          'state.default.unavailable',
+          this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
+        );
     const name = validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : this.entity;
     let binaryState = this.state ? true : stateObj.state == 'on';
 
@@ -41,10 +41,7 @@ class AlarmoSensorBadge extends LitElement {
       <div class="badge-container" @click=${() => fireEvent(this, 'hass-more-info', { entityId: this.entity! })}>
         <div class="label-badge ${binaryState ? 'active' : ''}" id="badge">
           <div class="value">
-            <ha-state-icon
-              .hass=${this.hass}
-              .stateObj=${stateObj}
-            ></ha-state-icon>
+            <ha-state-icon .hass=${this.hass} .stateObj=${stateObj}></ha-state-icon>
             <div class="label">
               <span>${value}</span>
             </div>

@@ -6,6 +6,8 @@ import { computeDomain } from '../lib/compute-domain';
 export const validateConfig = (config?: Partial<CardConfig> & { button_scale?: any }) => {
   if (!config || !config.entity || computeDomain(config.entity) !== 'alarm_control_panel') {
     throw new Error('Invalid configuration provided for entity');
+  } else if (isDefined(config.code) && typeof config.code !== 'string') {
+    throw new Error('Invalid configuration provided for code');
   } else if (
     isDefined(config.button_scale_keypad) &&
     (typeof config.button_scale_keypad !== 'number' ||
@@ -25,7 +27,7 @@ export const validateConfig = (config?: Partial<CardConfig> & { button_scale?: a
 
 export const calcStateConfig = (state: AlarmStates, config: Partial<CardConfig>) => {
   let result: Partial<StateConfig> = {
-    hide: false
+    hide: false,
   };
 
   if ((config.states || {}).hasOwnProperty(state)) result = { ...result, ...config.states![state] };

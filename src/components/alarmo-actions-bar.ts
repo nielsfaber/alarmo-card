@@ -8,10 +8,8 @@ import { CardConfig } from '../types';
 import { calcSupportedActions } from '../data/entity';
 import { calcStateConfig } from '../data/config';
 
-
-@customElement("alarmo-actions-bar")
+@customElement('alarmo-actions-bar')
 export class AlarmoActionsBar extends LitElement {
-
   @property({ attribute: false })
   public hass!: HomeAssistant;
 
@@ -26,17 +24,13 @@ export class AlarmoActionsBar extends LitElement {
 
     const stateObj = this.hass.states[this.config.entity];
     let state = stateObj.state as AlarmStates;
-    const ArmModes = Object.values(ArmActions).map(e => ActionToState[e]);
+    const ArmModes = Object.values(ArmActions).map((e) => ActionToState[e]);
     if (!ArmModes.includes(state)) {
       const armMode = stateObj.attributes.arm_mode;
       if (armMode) state = armMode;
     }
 
-    return html`
-      <div class="container">
-        ${this._renderOptions(state)}
-      </div>
-    `;
+    return html` <div class="container">${this._renderOptions(state)}</div> `;
   }
 
   private _renderOptions(selectedOption: AlarmStates) {
@@ -56,11 +50,12 @@ export class AlarmoActionsBar extends LitElement {
         case 'disarmed':
           return stateObj.state !== 'disarmed';
       }
-    }
+    };
 
-    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)]
-      .filter(calcButtonVisible);
-    const hasTextLabel = options.map(e => calcStateConfig(ActionToState[e], this.config!)).some(e => !isDefined(e.button_label) || e.button_label.length);
+    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)].filter(calcButtonVisible);
+    const hasTextLabel = options
+      .map((e) => calcStateConfig(ActionToState[e], this.config!))
+      .some((e) => !isDefined(e.button_label) || e.button_label.length);
 
     options.sort((a, b) => {
       const orderA = calcStateConfig(ActionToState[a], this.config!).button_order;
@@ -71,33 +66,41 @@ export class AlarmoActionsBar extends LitElement {
       else return orderA! - orderB!;
     });
 
-    return options.map(e => {
-      const isDisabled = isDefined(this.readyForArmModes) && !this.readyForArmModes.includes(ActionToState[e]) && e != ArmActions.Disarm;
+    return options.map((e) => {
+      const isDisabled =
+        isDefined(this.readyForArmModes) && !this.readyForArmModes.includes(ActionToState[e]) && e != ArmActions.Disarm;
       const stateConfig = calcStateConfig(ActionToState[e], this.config!);
 
       return html`
-        <div class="button ${ActionToState[e] == selectedOption ? 'selected' : ''}" @click=${(ev: Event) => this._handleClick(ev, e)}>
+        <div
+          class="button ${ActionToState[e] == selectedOption ? 'selected' : ''}"
+          @click=${(ev: Event) => this._handleClick(ev, e)}
+        >
           <div class="content ${hasTextLabel ? 'has-text' : ''}">
             <ha-icon icon="${isEmpty(stateConfig.button_icon) ? ActionToIcon[e] : stateConfig.button_icon}"></ha-icon>
-            ${ActionToState[e] != selectedOption && isDefined(this.readyForArmModes)
-          ? html`
-              <ha-icon
-                icon="${isDisabled ? 'mdi:circle-medium' : 'mdi:circle-medium'}"
-                class="badge ${isDisabled ? 'error' : 'success'}"
-              ></ha-icon>
-            ` : nothing}
+            ${
+              ActionToState[e] != selectedOption && isDefined(this.readyForArmModes)
+                ? html`
+                    <ha-icon
+                      icon="${isDisabled ? 'mdi:circle-medium' : 'mdi:circle-medium'}"
+                      class="badge ${isDisabled ? 'error' : 'success'}"
+                    ></ha-icon>
+                  `
+                : nothing
+            }
             <span>
-              ${!isDefined(stateConfig.button_label)
-          ? e == ArmActions.Disarm && stateObj.state !== AlarmStates.Disarmed
-            ? this.hass!.localize(`ui.card.alarm_control_panel.${e}`)
-            : this.hass!.localize(`ui.card.alarm_control_panel.modes.${ActionToState[e]}`)
-          : stateConfig.button_label
-        }
+              ${
+                !isDefined(stateConfig.button_label)
+                  ? e == ArmActions.Disarm && stateObj.state !== AlarmStates.Disarmed
+                    ? this.hass!.localize(`ui.card.alarm_control_panel.${e}`)
+                    : this.hass!.localize(`ui.card.alarm_control_panel.modes.${ActionToState[e]}`)
+                  : stateConfig.button_label
+              }
             </span>
           </div>
         </div>
       `;
-    })
+    });
   }
 
   private _handleClick(ev: Event, action: ArmActions) {
@@ -123,7 +126,7 @@ export class AlarmoActionsBar extends LitElement {
         --selected-color: var(--alarm-state-color);
       }
       div.container::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -162,14 +165,13 @@ export class AlarmoActionsBar extends LitElement {
         overvlow: hidden;
         flex: 1;
         gap: 4px;
-        transition:
-          color ease-in-out 180ms;
+        transition: color ease-in-out 180ms;
       }
       div.content.has-text {
         height: calc(var(--content-scale, 1) * 40px);
       }
       div.content::before {
-        content: "";
+        content: '';
         position: absolute;
         z-index: -1;
         top: 0;
@@ -208,7 +210,8 @@ export class AlarmoActionsBar extends LitElement {
         font-weight: 400;
         font-size: calc(var(--content-scale, 1) * 1rem);
       }
-      div.button.selected div.content ha-icon, div.button.selected div.content {
+      div.button.selected div.content ha-icon,
+      div.button.selected div.content {
         color: white;
       }
       @media (max-width: 280px) {
@@ -227,6 +230,6 @@ export class AlarmoActionsBar extends LitElement {
       div.content ha-icon.error {
         color: var(--red-color);
       }
-    `
+    `;
   }
 }

@@ -1,3 +1,3 @@
 export function computeDomain(entityId: string): string {
-  return entityId.substring(0, entityId.indexOf("."));
+  return entityId.substring(0, entityId.indexOf('.'));
 }

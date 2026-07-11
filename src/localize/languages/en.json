@@ -11,6 +11,7 @@
     "show_messages": "Display diagnostic messages when alarm is triggered or cannot be armed.",
     "show_ready_indicator": "Show ready/not ready indicator on arm mode buttons.",
     "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
+    "code": "Override alarm code for this card instance.",
     "use_code_dialog": "Display the keypad for entering the code as a popup dialog.",
     "hide_keypad": "Hide the keypad buttons for entering the code.",
     "available_actions": "Available actions:",

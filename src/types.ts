@@ -5,6 +5,7 @@ export type CardConfig = {
   type: string;
   entity: string;
   name: string;
+  code: string;
   keep_keypad_visible: boolean;
   button_scale_keypad: number;
   button_scale_actions: number;

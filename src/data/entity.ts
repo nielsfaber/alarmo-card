@@ -48,20 +48,20 @@ export const computeStateColor = (stateObj: HassEntity, config: CardConfig, useA
   let state = <AlarmStates>stateObj.state;
 
   if (useArmMode) {
-    const ArmModes = Object.values(ArmActions).map(e => ActionToState[e]);
+    const ArmModes = Object.values(ArmActions).map((e) => ActionToState[e]);
     if (!ArmModes.includes(state as AlarmStates)) {
       const armMode = stateObj.attributes.arm_mode;
       if (armMode) state = armMode;
     }
-    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)].filter(e => !calcStateConfig(ActionToState[e], config!).hide);
+    const options = [ArmActions.Disarm, ...calcSupportedActions(stateObj)].filter(
+      (e) => !calcStateConfig(ActionToState[e], config!).hide
+    );
     if (options.length == 1) state = ActionToState[options[0]];
   }
 
   if (Object.keys(config.states || {}).includes(state) && isDefined((config.states[state] || {}).color)) {
     const color = config.states[state]!.color!;
-    return Object.values(ColorOptions).includes(color as ColorOptions)
-      ? `var(--${color}-color)`
-      : color;
+    return Object.values(ColorOptions).includes(color as ColorOptions) ? `var(--${color}-color)` : color;
   }
 
   if (state == AlarmStates.Disarmed)
