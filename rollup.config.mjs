@@ -13,6 +13,7 @@ const plugins = [
   babel({
     babelHelpers: 'bundled',
     presets: ['@babel/preset-env'],
+    exclude: 'node_modules/**',
   }),
   terser()
 ];

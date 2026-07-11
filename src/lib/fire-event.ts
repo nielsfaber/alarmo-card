@@ -22,9 +22,9 @@ export const fireEvent = (
 ) => {
   const event = new CustomEvent(type, {
     detail: detail ?? {},
-    bubbles: options.bubbles === undefined ? true : options.bubbles,
-    cancelable: Boolean(options.cancelable),
-    composed: options.composed === undefined ? true : options.composed,
+    bubbles: options?.bubbles === undefined ? true : options?.bubbles,
+    cancelable: Boolean(options?.cancelable),
+    composed: options?.composed === undefined ? true : options?.composed,
   });
   node.dispatchEvent(event);
   return event;
