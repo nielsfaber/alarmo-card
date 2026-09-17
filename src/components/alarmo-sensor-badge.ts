@@ -1,6 +1,7 @@
 import { LitElement, html, css, PropertyValues, TemplateResult, CSSResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { HassEntity } from 'home-assistant-js-websocket';
+import { computeEntityName } from '../entity-name';
 import { computeStateDisplay } from '../data/entity';
 import { HomeAssistant, NumberFormat } from '../lib/types';
 import { computeEntity } from '../lib/compute-entity';
@@ -34,7 +35,7 @@ class AlarmoSensorBadge extends LitElement {
         'state.default.unavailable',
         this.hass.locale || { language: this.hass.language, number_format: NumberFormat.language }
       );
-    const name = validEntity ? stateObj.attributes.friendly_name || computeEntity(stateObj.entity_id) : this.entity;
+    const name = validEntity ? computeEntityName(this.hass, stateObj, undefined) || computeEntity(stateObj.entity_id) : this.entity;
     let binaryState = this.state ? true : stateObj.state == 'on';
 
     return html`

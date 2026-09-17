@@ -128,7 +128,7 @@ Configuration using UI mode:
 | ----------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | `type`                  | string  | **Required** | `custom:alarmo-card`                                                                                                                                                            |                    |
 | `entity`                | string  | **Required** | Alarm_control_panel entity                                                                                                                                                      |                    |
-| `name`                  | string  | Optional     | Displayed name (next to icon)                                                                                                                                                   | (Take from entity) |
+| `name`                  | string / list | Optional | Displayed name (next to icon). Accepts a [structured name](#structured-names) on Home Assistant 2026.4 and later                                                                                                                                                   | (Take from entity) |
 | `keep_keypad_visible`   | boolean | Optional     | Keep the keypad always visible, also when no code input is required.<br>Only useful if numerical code is used.                                                                  | `false`            |
 | `button_scale_actions`  | number  | Optional     | Scaling factor to apply to the size of the action buttons (between 1.0 and 2.5)                                                                                                 | `1.0`              |
 | `button_scale_keypad`   | number  | Optional     | Scaling factor to apply to the size of the keypad buttons (between 1.0 and 2.5)                                                                                                 | `1.0`              |
@@ -178,6 +178,29 @@ Result:
 ![example result](https://github.com/nielsfaber/alarmo-card/blob/main/screenshots/state-config-example.png?raw=true "example result")
 
 ---
+
+## Structured names
+
+*Requires Home Assistant 2026.4 or later. On earlier versions a structured `name` falls back to the entity'"'"'s friendly name.*
+
+Home Assistant composes an entity'"'"'s display name out of its registry context
+(entity, device, area, floor) rather than one `friendly_name` string. `name` can be
+a list of those parts instead of a plain string, so it keeps following renames and
+matches what the built-in cards show:
+
+```yaml
+type: custom:alarmo-card
+entity: alarm_control_panel.alarmo
+name:
+  - type: area
+  - type: entity
+```
+
+Available part types are `entity`, `device`, `area`, `floor`, and
+`text` (a literal, written as `{type: text, text: Alarm}`). Parts that resolve to
+nothing are dropped. A plain string `name` keeps working exactly as before.
+
+See the [Home Assistant developer documentation](https://developers.home-assistant.io/docs/frontend/data#hassformatentitynamestateobj-name-options) for details.
 
 ## Say thank you
 If you want to make donation as appreciation of my work, you can do so via PayPal or buy me a coffee. Thank you!

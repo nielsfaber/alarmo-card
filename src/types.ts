@@ -1,10 +1,17 @@
 import { HassEvent, HassEntity } from 'home-assistant-js-websocket';
 import { AlarmStates, AlarmoEvents } from './const';
 
+/** A `name` option: a plain string, or name parts resolved from the registry. */
+export type EntityName = string | EntityNameItem | EntityNameItem[];
+
+export type EntityNameItem =
+  | { type: 'entity' | 'device' | 'area' | 'floor' }
+  | { type: 'text'; text: string };
+
 export type CardConfig = {
   type: string;
   entity: string;
-  name: string;
+  name: EntityName;
   keep_keypad_visible: boolean;
   button_scale_keypad: number;
   button_scale_actions: number;

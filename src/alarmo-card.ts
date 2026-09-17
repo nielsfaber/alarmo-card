@@ -37,6 +37,7 @@ import { CodeDialogParams } from './components/alarmo-code-dialog';
 import { HomeAssistant } from './lib/types';
 import { computeDomain } from './lib/compute-domain';
 import { fireEvent } from './lib/fire-event';
+import { entityNamesChanged } from './entity-name';
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'clear'];
 
@@ -185,6 +186,12 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (changedProps.has('_config')) return true;
 
+    // Names resolve against the entity/device/area/floor registries, and HA swaps
+    // the real formatEntityName in asynchronously once translations load. Neither
+    // changes an entity state, so nothing below would catch a rename.
+    if (entityNamesChanged(changedProps.get('hass') as HomeAssistant | undefined, this.hass))
+      return true;
+
     const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
     if (
       !oldHass ||
@@ -291,7 +298,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           </div>
           <div class="summary">
             <div class="name">
-              ${computeNameDisplay(stateObj, this._config)}
+              ${computeNameDisplay(this.hass, stateObj, this._config)}
             </div>
             <div class="state">
               ${computeStateDisplay(stateObj, this.hass.localize, this._config)}

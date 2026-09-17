@@ -4,6 +4,8 @@ import { CardConfig } from '../types';
 import { calcStateConfig } from './config';
 import { isDefined, isEmpty } from '../helpers';
 import { LocalizeFunc } from '../lib/types';
+import { HomeAssistant } from '../lib/types';
+import { computeEntityName } from '../entity-name';
 import { computeDomain } from '../lib/compute-domain';
 
 export const calcSupportedActions = (stateObj: HassEntity) => {
@@ -34,8 +36,12 @@ export const computeStateDisplay = (stateObj: HassEntity, localize: LocalizeFunc
   return translation;
 };
 
-export const computeNameDisplay = (stateObj: HassEntity, config: CardConfig) => {
-  return !isEmpty(config.name) ? config.name : stateObj.attributes.friendly_name;
+export const computeNameDisplay = (
+  hass: HomeAssistant | undefined,
+  stateObj: HassEntity,
+  config: CardConfig
+) => {
+  return computeEntityName(hass, stateObj, !isEmpty(config.name) ? config.name : undefined);
 };
 
 export const codeRequired = (stateObj: HassEntity) => {
