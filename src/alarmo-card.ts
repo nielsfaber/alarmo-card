@@ -464,7 +464,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     this._input = val === 'clear' ? '' : this._input + val;
   }
 
-  private async _handleActionClick(ev: Event, action: ArmActions): Promise<void> {
+  private async _handleActionClick(ev: Event, action: ArmActions, armOptions = this.armOptions): Promise<void> {
     (ev.target as HTMLElement).blur();
     this._clearCodeError();
     const stateObj = this.hass!.states[this._config!.entity] as AlarmoEntity;
@@ -477,7 +477,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           area_id: this.area_id,
           entity_id: this._config!.entity,
           action: action,
-          armOptions: this.armOptions,
+          armOptions,
           cancel: () => {
             resolve(null);
           },
@@ -505,7 +505,7 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         });
       } else {
         this.hass!.callService('alarmo', 'arm', {
-          ...this.armOptions,
+          ...armOptions,
           entity_id: this._config!.entity,
           mode: ActionToState[action],
           code: this._input,
@@ -567,9 +567,15 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
   }
 
-  private _forceRetryClick() {
+  private _forceRetryClick(ev: Event) {
     if (!this.hass || !this._config || !this._last_command) return;
-    let action = this._last_command;
+    const action = this._last_command as ArmActions;
+    const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
+
+    if (this._config.use_code_dialog && !this._config.hide_keypad && codeRequired(stateObj)) {
+      this._handleActionClick(ev, action, { ...this.armOptions, force: true });
+      return;
+    }
 
     this.hass!.callService('alarmo', 'arm', {
       entity_id: this._config!.entity,
