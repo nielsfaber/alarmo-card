@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Show warning message when alarm is armed with bypassed sensors.",
     "use_code_dialog": "Display the keypad for entering the code as a popup dialog.",
     "hide_keypad": "Hide the keypad buttons for entering the code.",
+    "auto_submit": "Submit the code automatically as soon as it is complete (a wrong code is ignored silently).",
+    "auto_submit_anywhere": "Also accept the code when it appears anywhere in what is typed.",
+    "auto_submit_rate_limit": "Auto-submit, maximum digits per minute:",
     "available_actions": "Available actions:",
     "action_dialog": {
       "title": "Customize display of action '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Invalid",
     "blocking_sensors": "Could not arm due to the following sensors",
     "triggered_sensors": "Alarm was triggered by the following sensors",
-    "bypassed_sensors": "There are bypassed sensors"
+    "bypassed_sensors": "There are bypassed sensors",
+    "auto_submit_too_fast": "Typed too fast to check every digit. Type the code again.",
+    "auto_submit_failed": "Could not send the code to Alarmo. Check the connection and type the code again.",
+    "auto_submit_unavailable": "Auto-submit is unavailable: the code lengths could not be loaded.",
+    "auto_submit_rate_limited": "Too many digits typed. Try again in {seconds} s."
   }
 }

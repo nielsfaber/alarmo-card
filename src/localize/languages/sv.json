@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Visa varningsmeddelande när larmet är aktiverat med förbikopplade sensorer.",
     "use_code_dialog": "Visa knappsatsen för att ange koden som en popup-dialogruta.",
     "hide_keypad": "Dölj knapparna på tangentbordet för att ange koden.",
+    "auto_submit": "Skicka koden automatiskt så snart den är komplett (en felaktig kod ignoreras tyst).",
+    "auto_submit_anywhere": "Godkänn även koden när den förekommer var som helst i det som skrivs.",
+    "auto_submit_rate_limit": "Automatisk sändning, max antal siffror per minut:",
     "available_actions": "Tillgängliga åtgärder:",
     "action_dialog": {
       "title": "Anpassa visningen av åtgärden '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Ogiltig",
     "blocking_sensors": "Kunde inte aktivera på grund av följande sensorer",
     "triggered_sensors": "Larmet utlöstes av följande sensorer",
-    "bypassed_sensors": "Det finns förbikopplade sensorer"
+    "bypassed_sensors": "Det finns förbikopplade sensorer",
+    "auto_submit_too_fast": "Du skrev för snabbt för att varje siffra ska kunna kontrolleras. Ange koden igen.",
+    "auto_submit_failed": "Kunde inte skicka koden till Alarmo. Kontrollera anslutningen och ange koden igen.",
+    "auto_submit_unavailable": "Automatisk sändning är inte tillgänglig: kodlängderna kunde inte läsas in.",
+    "auto_submit_rate_limited": "För många siffror har angetts. Försök igen om {seconds} s."
   }
 }

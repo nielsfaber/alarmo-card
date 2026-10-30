@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Mostrar advertencia cuando la alarma está activada con sensores omitidos.",
     "use_code_dialog": "Muestra el teclado para ingresar el código como un cuadro de diálogo emergente.",
     "hide_keypad": "Ocultar los botones del teclado para ingresar el código.",
+    "auto_submit": "Enviar el código automáticamente en cuanto esté completo (un código incorrecto se ignora sin aviso).",
+    "auto_submit_anywhere": "Aceptar también el código cuando aparezca en cualquier parte de lo escrito.",
+    "auto_submit_rate_limit": "Envío automático, máximo de dígitos por minuto:",
     "available_actions": "Acciones disponibles:",
     "action_dialog": {
       "title": "Personalizar la visualización de la acción '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Inválido",
     "blocking_sensors": "No se pudo armar debido a los siguientes sensores",
     "triggered_sensors": "La alarma fue disparada por los siguientes sensores",
-    "bypassed_sensors": "Hay sensores omitidos"
+    "bypassed_sensors": "Hay sensores omitidos",
+    "auto_submit_too_fast": "Escritura demasiado rápida para comprobar cada dígito. Vuelva a ingresar el código.",
+    "auto_submit_failed": "No se pudo enviar el código a Alarmo. Compruebe la conexión y vuelva a ingresar el código.",
+    "auto_submit_unavailable": "El envío automático no está disponible: no se pudieron cargar las longitudes de los códigos.",
+    "auto_submit_rate_limited": "Demasiados dígitos ingresados. Inténtelo de nuevo en {seconds} s."
   }
 }

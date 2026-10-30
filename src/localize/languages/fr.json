@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Afficher un avertissement lorsque l'alarme est armée avec des capteurs ignorés.",
     "use_code_dialog": "Affichez le clavier pour saisir le code sous forme de boîte de dialogue contextuelle.",
     "hide_keypad": "Masquer les boutons du clavier pour saisir le code.",
+    "auto_submit": "Valider le code automatiquement dès qu'il est complet (un code erroné est ignoré sans message).",
+    "auto_submit_anywhere": "Accepter aussi le code s'il se trouve n'importe où dans la saisie.",
+    "auto_submit_rate_limit": "Validation automatique, nombre maximal de chiffres par minute :",
     "available_actions": "Actions disponibles:",
     "action_dialog": {
       "title": "Personnaliser l'affichage de l'action '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Invalide",
     "blocking_sensors": "Impossible d'armer en raison du(es) capteur(s) suivant(s)",
     "triggered_sensors": "L'alarme a été déclenchée par le(s) capteur(s) suivant(s)",
-    "bypassed_sensors": "Il y a des capteurs ignorés"
+    "bypassed_sensors": "Il y a des capteurs ignorés",
+    "auto_submit_too_fast": "Saisie trop rapide pour vérifier chaque chiffre. Retapez le code.",
+    "auto_submit_failed": "Impossible d'envoyer le code à Alarmo. Vérifiez la connexion et retapez le code.",
+    "auto_submit_unavailable": "Validation automatique indisponible : les longueurs de code n'ont pas pu être chargées.",
+    "auto_submit_rate_limited": "Trop de chiffres saisis. Réessayez dans {seconds} s."
   }
 }

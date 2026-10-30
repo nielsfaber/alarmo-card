@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Zobrazit varování při aktivaci alarmu s přemostěnými senzory.",
     "use_code_dialog": "Zobrazte klávesnici pro zadání kódu jako vyskakovací dialog.",
     "hide_keypad": "Skrýt tlačítka klávesnice pro zadávání kódu.",
+    "auto_submit": "Odeslat kód automaticky, jakmile je zadán celý (chybný kód je tiše ignorován).",
+    "auto_submit_anywhere": "Přijmout kód i tehdy, když se objeví kdekoli v zadaném textu.",
+    "auto_submit_rate_limit": "Automatické odeslání, maximální počet číslic za minutu:",
     "available_actions": "Dostupné akce:",
     "action_dialog": {
       "title": "Upravit zobrazení akce '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Neplatný",
     "blocking_sensors": "Nelze aktivovat kvůli následujícím senzorům",
     "triggered_sensors": "Alarm byl spuštěn následujícími senzory",
-    "bypassed_sensors": "Jsou tam přemostěné senzory"
+    "bypassed_sensors": "Jsou tam přemostěné senzory",
+    "auto_submit_too_fast": "Psali jste příliš rychle na to, aby bylo možné zkontrolovat každou číslici. Zadejte kód znovu.",
+    "auto_submit_failed": "Kód se nepodařilo odeslat do Alarmo. Zkontrolujte připojení a zadejte kód znovu.",
+    "auto_submit_unavailable": "Automatické odeslání není k dispozici: délky kódů se nepodařilo načíst.",
+    "auto_submit_rate_limited": "Zadáno příliš mnoho číslic. Zkuste to znovu za {seconds} s."
   }
 }
