@@ -275,115 +275,94 @@ export class AlarmoCardEditor extends LitElement implements LovelaceCardEditor {
         : ''}
 
         <div class="grid">
-          <ha-formfield .label=${localize('editor.button_scale_actions', this.hass.language)}>
-            <ha-slider
-              .value=${this._config!.button_scale_actions || 1}
-              @change=${(ev: Event) =>
+          <ha-slider
+            .label=${localize('editor.button_scale_actions', this.hass.language)}
+            .value=${this._config!.button_scale_actions || 1}
+            @change=${(ev: Event) =>
         this._updateConfig('button_scale_actions', Number((ev.target as HTMLInputElement).value))}
-              min="${minButtonScale}"
-              max="${maxButtonScale}"
-              step="0.1"
-              labeled
-            ></ha-slider>
-          </ha-formfield>
+            min="${minButtonScale}"
+            max="${maxButtonScale}"
+            step="0.1"
+            labeled
+          ></ha-slider>
 
-          <ha-formfield .label=${localize('editor.button_scale_keypad', this.hass.language)}>
-            <ha-slider
-              .value=${this._config!.button_scale_keypad || 1}
-              @change=${(ev: Event) =>
+          <ha-slider
+            .label=${localize('editor.button_scale_keypad', this.hass.language)}
+            .value=${this._config!.button_scale_keypad || 1}
+            @change=${(ev: Event) =>
         this._updateConfig('button_scale_keypad', Number((ev.target as HTMLInputElement).value))}
-              min="${minButtonScale}"
-              max="${maxButtonScale}"
-              step="0.1"
-              labeled
-              ?disabled=${!stateObj || !hasKeypad || this._config?.use_code_dialog}
-            ></ha-slider>
-          </ha-formfield>
+            min="${minButtonScale}"
+            max="${maxButtonScale}"
+            step="0.1"
+            labeled
+            ?disabled=${!stateObj || !hasKeypad || this._config?.use_code_dialog}
+          ></ha-slider>
 
-          <ha-formfield .label=${localize('editor.hide_keypad', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.hide_keypad}
-              @change=${(ev: Event) => this._updateConfig('hide_keypad', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad}
-            ></ha-switch
-          ></ha-formfield>
+          <ha-switch
+            .checked=${this._config!.hide_keypad}
+            @change=${(ev: Event) => this._updateConfig('hide_keypad', (ev.target as HTMLInputElement).checked)}
+            ?disabled=${!stateObj || !hasKeypad}
+          >${localize('editor.hide_keypad', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.keep_keypad_visible', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.keep_keypad_visible}
-              @change=${(ev: Event) =>
+          <ha-switch
+            .checked=${this._config!.keep_keypad_visible}
+            @change=${(ev: Event) =>
         this._updateConfig('keep_keypad_visible', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj ||
+            ?disabled=${!stateObj ||
       !hasKeypad ||
       this._alarmoConfig?.code_arm_required == this._alarmoConfig?.code_disarm_required ||
       this._config?.use_code_dialog ||
       this._config?.hide_keypad}
-            ></ha-switch
-          ></ha-formfield>
+          >${localize('editor.keep_keypad_visible', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.use_code_dialog', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.use_code_dialog}
-              @change=${(ev: Event) => this._updateConfig('use_code_dialog', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || (!this._alarmoConfig?.code_arm_required && !this._alarmoConfig?.code_disarm_required)}
-            ></ha-switch
-          ></ha-formfield>
+          <ha-switch
+            .checked=${this._config!.use_code_dialog}
+            @change=${(ev: Event) => this._updateConfig('use_code_dialog', (ev.target as HTMLInputElement).checked)}
+            ?disabled=${!stateObj || (!this._alarmoConfig?.code_arm_required && !this._alarmoConfig?.code_disarm_required)}
+          >${localize('editor.use_code_dialog', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.show_messages', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
-              @change=${(ev: Event) => this._updateConfig('show_messages', (ev.target as HTMLInputElement).checked)}
-            ></ha-switch
-          ></ha-formfield>
+          <ha-switch
+            .checked=${this._config!.show_messages || !isDefined(this._config!.show_messages)}
+            @change=${(ev: Event) => this._updateConfig('show_messages', (ev.target as HTMLInputElement).checked)}
+          >${localize('editor.show_messages', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.show_ready_indicator', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.show_ready_indicator}
-              @change=${(ev: Event) =>
+          <ha-switch
+            .checked=${this._config!.show_ready_indicator}
+            @change=${(ev: Event) =>
         this._updateConfig('show_ready_indicator', (ev.target as HTMLInputElement).checked)}
-            ></ha-switch
-          ></ha-formfield>
+          >${localize('editor.show_ready_indicator', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.show_bypassed_sensors', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.show_bypassed_sensors}
-              @change=${(ev: Event) =>
+          <ha-switch
+            .checked=${this._config!.show_bypassed_sensors}
+            @change=${(ev: Event) =>
         this._updateConfig('show_bypassed_sensors', (ev.target as HTMLInputElement).checked)}
-            ></ha-switch
-          ></ha-formfield>
+          >${localize('editor.show_bypassed_sensors', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.auto_submit', this.hass.language)}>
-            <ha-switch
-              .checked=${this._config!.auto_submit}
-              @change=${(ev: Event) => this._updateConfig('auto_submit', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad}
-            ></ha-switch
-          ></ha-formfield>
+          <ha-switch
+            .checked=${this._config!.auto_submit}
+            @change=${(ev: Event) => this._updateConfig('auto_submit', (ev.target as HTMLInputElement).checked)}
+            ?disabled=${!stateObj || !hasKeypad}
+          >${localize('editor.auto_submit', this.hass.language)}</ha-switch>
 
-          <ha-formfield .label=${localize('editor.auto_submit_anywhere', this.hass.language)}>
-            <ha-switch
-              .checked=${!!this._config!.auto_submit && !!this._config!.auto_submit_anywhere}
-              @change=${(ev: Event) =>
-                this._updateConfig('auto_submit_anywhere', (ev.target as HTMLInputElement).checked)}
-              ?disabled=${!stateObj || !hasKeypad || !this._config!.auto_submit}
-            ></ha-switch
-          ></ha-formfield>
+          <ha-switch
+            .checked=${!!this._config!.auto_submit && !!this._config!.auto_submit_anywhere}
+            @change=${(ev: Event) =>
+              this._updateConfig('auto_submit_anywhere', (ev.target as HTMLInputElement).checked)}
+            ?disabled=${!stateObj || !hasKeypad || !this._config!.auto_submit}
+          >${localize('editor.auto_submit_anywhere', this.hass.language)}</ha-switch>
 
-          <ha-formfield
+          <ha-slider
             .label=${`${localize('editor.auto_submit_rate_limit', this.hass.language)} ${this._config!.auto_submit_rate_limit ?? defaultCardConfig.auto_submit_rate_limit}`}
-          >
-            <ha-slider
-              .value=${this._config!.auto_submit_rate_limit ?? defaultCardConfig.auto_submit_rate_limit}
-              @change=${this._rateLimitChanged}
-              min="${minAutoSubmitRateLimit}"
-              max="${maxAutoSubmitRateLimit}"
-              step="5"
-              labeled
-              ?disabled=${!stateObj || !hasKeypad || !this._config!.auto_submit}
-            ></ha-slider>
-          </ha-formfield>
+            .value=${this._config!.auto_submit_rate_limit ?? defaultCardConfig.auto_submit_rate_limit}
+            @change=${this._rateLimitChanged}
+            min="${minAutoSubmitRateLimit}"
+            max="${maxAutoSubmitRateLimit}"
+            step="5"
+            labeled
+            ?disabled=${!stateObj || !hasKeypad || !this._config!.auto_submit}
+          ></ha-slider>
 
-          <ha-formfield></ha-formfield>
+          <div></div>
         </div>
       </div>
     `;
