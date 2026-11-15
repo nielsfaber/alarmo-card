@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Mostra avviso quando l'allarme è armato con sensori esclusi.",
     "use_code_dialog": "Visualizza la tastiera per l'immissione del codice come finestra di dialogo popup.",
     "hide_keypad": "Nascondi i pulsanti della tastiera per l'inserimento del codice.",
+    "auto_submit": "Invia il codice automaticamente non appena è completo (un codice errato viene ignorato senza avvisi).",
+    "auto_submit_anywhere": "Accetta il codice anche quando compare in qualsiasi punto di ciò che viene digitato.",
+    "auto_submit_rate_limit": "Invio automatico, numero massimo di cifre al minuto:",
     "available_actions": "Azioni disponibili:",
     "action_dialog": {
       "title": "Personalizzare la visualizzazione dell'azione '{action}'",
@@ -35,6 +38,10 @@
     "invalid_pin": "Non valido",
     "blocking_sensors": "Impossibile inserire l'allarme a causa dei seguenti sensori",
     "triggered_sensors": "L'allarme è stato attivato dai seguenti sensori",
-    "bypassed_sensors": "Sono presenti sensori esclusi"
+    "bypassed_sensors": "Sono presenti sensori esclusi",
+    "auto_submit_too_fast": "Digitazione troppo veloce per controllare ogni cifra. Digita di nuovo il codice.",
+    "auto_submit_failed": "Impossibile inviare il codice ad Alarmo. Controlla la connessione e digita di nuovo il codice.",
+    "auto_submit_unavailable": "Invio automatico non disponibile: impossibile caricare le lunghezze dei codici.",
+    "auto_submit_rate_limited": "Troppe cifre digitate. Riprova tra {seconds} s."
   }
 }

@@ -9,6 +9,7 @@
     - [Diagnostics messages](#diagnostics-messages)
     - [Arming options](#arming-options)
     - [Card customization](#card-customization)
+    - [Auto-submit](#auto-submit)
   - [Installation](#installation)
   - [Updating](#updating)
   - [Configuration](#configuration)
@@ -59,6 +60,14 @@ The card allows the following customization options:
 * Choose which buttons for arming modes are visible.
 * Change the texts visible on the arming mode buttons and the text visible when the alarm is in this state.
 * Change the title of the alarm.
+
+### Auto-submit
+With the `auto_submit` option, a numeric code does not need to be confirmed: it is submitted as soon as the typed digits have the length of the code of an Alarmo user who is allowed to perform the action in the area of the alarm. With `auto_submit_anywhere`, the code is also found wherever it appears in what is typed.
+* On the card keypad / code field, only disarming is automatic (when disarmed, the arm mode is not known yet). In the code dialog (`use_code_dialog`), the action of the pressed button (arm mode or disarm) is performed.
+* A wrong code is ignored silently, so the code length is not revealed. Attempts are sent one at a time. Only the last 20 digits (or more if a user code is longer) are kept.
+* To prevent guessing, at most `auto_submit_rate_limit` digits (default 30) can be typed per minute. It can be set in the card editor with a slider (10 to 120). Further key presses are blocked and the card shows how long to wait.
+* To learn the code lengths, the card requests the Alarmo user list (only while `auto_submit` is on) and keeps only the lengths. They are refreshed when the Alarmo configuration changes.
+* The rate limit is applied by the card. Alarmo still checks and logs every attempt, but it has no rate limit of its own for calls made outside the card.
 
 
 ## Installation
@@ -137,6 +146,9 @@ Configuration using UI mode:
 | `show_messages`         | boolean | Optional     | Show diagnostic messages in the card when alarm is triggered or cannot be armed.                                                                                                | `true`             |
 | `show_ready_indicator`  | boolean | Optional     | Adds ready/not ready indicators to the arm mode buttons.                                                                                                                        | `true`             |
 | `show_bypassed_sensors` | boolean | Optional     | Show a warning message when the alarm is armed with bypassed sensors.                                                                                                           | `true`             |
+| `auto_submit`           | boolean | Optional     | Submit a numeric code automatically as soon as the typed digits have the length of an Alarmo user code. A wrong code is ignored silently. On the card this only disarms the alarm; in the code dialog (`use_code_dialog`) the action of the pressed button is performed.<br>See [Auto-submit](#auto-submit). | `false`            |
+| `auto_submit_anywhere`  | boolean | Optional     | With `auto_submit`, also accept the code wherever it appears in what is typed (e.g. code `3434` in `4345234345`).                                                              | `false`            |
+| `auto_submit_rate_limit`| number  | Optional     | With `auto_submit`, maximum number of digits that can be typed per minute (between 10 and 120). Further key presses are blocked until the limit frees up.                      | `30`               |
 | `states`                | object  | Optional     | Customize the display of states in the card.<br>See [state configuration](#state-configuration).                                                                                |                    |
 
 ### State configuration 

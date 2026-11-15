@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Toon melding wanneer het alarm is ingeschakeld met omzeilde sensoren.",
     "use_code_dialog": "Geef het toetsenbord voor het invoeren van de code weer als een pop-upvenster.",
     "hide_keypad": "Verberg het toetsenbord voor het invoeren van de code.",
+    "auto_submit": "Verstuur de code automatisch zodra deze volledig is (een verkeerde code wordt stil genegeerd).",
+    "auto_submit_anywhere": "Accepteer de code ook wanneer deze ergens in de invoer voorkomt.",
+    "auto_submit_rate_limit": "Automatisch versturen, maximaal aantal cijfers per minuut:",
     "available_actions": "Beschikbare acties:",
     "action_dialog": {
       "title": "Weergave van actie '{action}' aanpassen",
@@ -35,6 +38,10 @@
     "invalid_pin": "Ongeldig",
     "blocking_sensors": "Kon niet inschakelen vanwege de volgende sensoren",
     "triggered_sensors": "Alarm werd geactiveerd door de volgende sensoren",
-    "bypassed_sensors": "Er zijn omzeilde sensoren"
+    "bypassed_sensors": "Er zijn omzeilde sensoren",
+    "auto_submit_too_fast": "Te snel getypt om elk cijfer te controleren. Typ de code opnieuw.",
+    "auto_submit_failed": "Kon de code niet naar Alarmo versturen. Controleer de verbinding en typ de code opnieuw.",
+    "auto_submit_unavailable": "Automatisch versturen is niet beschikbaar: de codelengtes konden niet worden geladen.",
+    "auto_submit_rate_limited": "Te veel cijfers getypt. Probeer het opnieuw over {seconds} s."
   }
 }

@@ -14,6 +14,9 @@ export type CardConfig = {
   show_bypassed_sensors: boolean;
   use_code_dialog: boolean;
   hide_keypad: boolean;
+  auto_submit: boolean;
+  auto_submit_anywhere: boolean;
+  auto_submit_rate_limit: number;
 };
 
 export type HideOptions = 'always' | 'never' | 'disarmed' | 'armed';
@@ -31,6 +34,7 @@ export type AlarmoEvent = HassEvent & {
   data: { [key: string]: any } & {
     event: AlarmoEvents;
     area_id: string;
+    context_id?: number | null;
   };
 };
 
@@ -55,6 +59,15 @@ export interface AlarmoConfig {
   code_arm_required: boolean;
   code_disarm_required: boolean;
   code_format: 'number' | 'text';
+}
+
+export interface AlarmoUser {
+  enabled: boolean;
+  can_arm: boolean;
+  can_disarm: boolean;
+  code_format: string;
+  code_length: number;
+  area_limit: string[];
 }
 
 export interface CountdownConfig {

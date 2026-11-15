@@ -5,15 +5,26 @@ import { STATE_NOT_RUNNING, UnsubscribeFunc } from 'home-assistant-js-websocket'
 import {
   CARD_VERSION,
   FORMAT_NUMBER,
+  AUTO_SUBMIT_MAX_INPUT,
   defaultCardConfig,
   ActionToState,
   ArmActions,
   AlarmoEvents,
   AlarmStates,
   EVENT,
+  CONFIG_UPDATED_EVENT,
   defaultArmOptions,
 } from './const';
 import { CardConfig, AlarmoEvent, AlarmoEntity, AlarmoConfig } from './types';
+import {
+  AutoSubmitQueue,
+  CodeLengths,
+  DigitRateLimiter,
+  commonPrefixLength,
+  computeCodeLengths,
+  isAutoSubmitContext,
+  newInputCandidates,
+} from './auto-submit';
 
 import './alarmo-card-editor';
 import './components/alarmo-state-badge';
@@ -31,7 +42,7 @@ import {
   computeStateColor,
 } from './data/entity';
 import { validateConfig } from './data/config';
-import { fetchEntities, fetchConfig, fetchReadyToArmModes } from './data/websockets';
+import { fetchEntities, fetchConfig, fetchReadyToArmModes, fetchUsers } from './data/websockets';
 import { mdiDotsVertical } from '@mdi/js';
 import { CodeDialogParams } from './components/alarmo-code-dialog';
 import { HomeAssistant } from './lib/types';
@@ -79,6 +90,48 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
   _last_command?: string;
   _last_code?: string;
 
+  // Code lengths of the Alarmo users allowed to arm/disarm this alarm, used by auto_submit.
+  _codeLengths: CodeLengths = { arm: [], disarm: [] };
+
+  @state()
+  private _codeLengthsStatus: 'idle' | 'loading' | 'ready' | 'failed' = 'idle';
+
+  private _codeLengthsRequest = 0;
+
+  // Area ids of all Alarmo areas, needed to check user permissions for the master alarm.
+  private _areaIds: string[] = [];
+
+  // Part of the input already checked by auto_submit. Digits typed while the code lengths are loading are checked
+  // once they are known; codes are checked prefix by prefix, so a paste behaves like typing the digits one by one.
+  private _processedInput = '';
+
+  // Shared with the code dialog, so closing and reopening the dialog does not reset the limit.
+  private _rateLimiter = new DigitRateLimiter(defaultCardConfig.auto_submit_rate_limit);
+
+  // Seconds until digits may be typed again (0 when not limited).
+  @state()
+  private _rateLimitWait = 0;
+
+  private _rateLimitTimer = 0;
+
+  private _autoQueue = new AutoSubmitQueue(
+    (code, contextId, entity) =>
+      this.hass!.callService('alarmo', 'disarm', {
+        entity_id: entity,
+        code: code,
+        context_id: contextId,
+      }),
+    () => {
+      this._input = '';
+      this._processedInput = '';
+      this._showCodeError(localize('errors.auto_submit_too_fast', this.hass!.language));
+    },
+    () => {
+      this._showCodeError(localize('errors.auto_submit_failed', this.hass!.language));
+    },
+    (entity) => this.isConnected && !!this._config?.auto_submit && this._config.entity === entity
+  );
+
   public static async getConfigElement() {
     await import('./alarmo-card-editor');
     return document.createElement('alarmo-card-editor');
@@ -114,12 +167,46 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       config = { ...config, button_scale_keypad: config?.button_scale };
 
     validateConfig(config);
+    const previous = this._config;
     this._config = { ...defaultCardConfig, ...config };
+    this._rateLimiter.limit = this._config.auto_submit_rate_limit ?? defaultCardConfig.auto_submit_rate_limit;
+
+    if (previous && this.hass) {
+      if (previous.entity !== this._config.entity && (previous.auto_submit || this._config.auto_submit)) {
+        // The code lengths depend on the area of the alarm entity.
+        this._clearCode();
+        this.backendConnection = null;
+        this.loadBackendConfig();
+      } else if (previous.auto_submit !== this._config.auto_submit) {
+        if (!this._config.auto_submit) {
+          // Nothing queued may be sent once the feature is off, and turning it back on must not replay old input.
+          this._autoQueue.cancel();
+          this._processedInput = this._input;
+        }
+        this._loadCodeLengths();
+      }
+    }
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    // With auto_submit, leaving the view stops pending automatic attempts and forgets the typed code.
+    if (this._config?.auto_submit) this._clearCode();
+    this._stopRateLimitTimer();
   }
 
   public hassSubscribe(): Promise<UnsubscribeFunc>[] {
+    const onReconnect = () => this._loadCodeLengths();
+    this.hass!.connection.addEventListener('ready', onReconnect);
+    // Re-attached: Alarmo users may have changed in the meantime, and the rate limit may still apply.
+    this._loadCodeLengths();
+    if (this._rateLimiter.waitTime()) this._startRateLimitTimer();
     return [
       this.hass!.connection.subscribeMessage(ev => this._fetchData((ev as unknown) as AlarmoEvent), { type: EVENT }),
+      this.hass!.connection.subscribeMessage(() => this._loadCodeLengths(), { type: CONFIG_UPDATED_EVENT }).catch(
+        () => () => undefined
+      ),
+      Promise.resolve(() => this.hass?.connection.removeEventListener('ready', onReconnect)),
     ];
   }
 
@@ -137,11 +224,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       .then(res => {
         const match = res.find(e => e.entity_id == this._config!.entity);
         if (match) this.area_id = match.area_id ? match.area_id : null;
+        // The master alarm is listed with area_id 0.
+        this._areaIds = res.filter((e) => e.area_id).map((e) => String(e.area_id));
       })
       .then(() => fetchConfig(this.hass!))
       .then(res => {
         this._alarmoConfig = res;
         this.backendConnection = true;
+        this._loadCodeLengths();
       })
       .then(() => fetchReadyToArmModes(this.hass!, this._config!.entity))
       .then(res => {
@@ -152,16 +242,51 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       });
   }
 
+  private _loadCodeLengths() {
+    const request = ++this._codeLengthsRequest;
+    // User records are only requested when they are needed.
+    if (
+      !this.hass ||
+      !this._config?.auto_submit ||
+      !this.backendConnection ||
+      this._alarmoConfig?.code_format !== FORMAT_NUMBER
+    ) {
+      this._codeLengths = { arm: [], disarm: [] };
+      this._codeLengthsStatus = 'idle';
+      return;
+    }
+    this._codeLengthsStatus = 'loading';
+    fetchUsers(this.hass)
+      .then((users) => {
+        if (request !== this._codeLengthsRequest) return;
+        const targetAreas = this.area_id ? [String(this.area_id)] : this._areaIds;
+        this._codeLengths = computeCodeLengths(Object.values(users), targetAreas);
+        this._codeLengthsStatus = 'ready';
+        // Check digits typed while the lengths were loading.
+        if (this._input !== this._processedInput) this._autoSubmit();
+      })
+      .catch(() => {
+        if (request !== this._codeLengthsRequest) return;
+        this._codeLengths = { arm: [], disarm: [] };
+        this._codeLengthsStatus = 'failed';
+      });
+  }
+
   private async _fetchData(ev: AlarmoEvent): Promise<void> {
     if (ev.data.area_id !== this.area_id) return;
     switch (ev.data.event) {
       case AlarmoEvents.Arm:
         this._clearCode();
         break;
+      case AlarmoEvents.Disarm:
+        this._autoQueue.cancel();
+        break;
       case AlarmoEvents.Trigger:
         break;
       case AlarmoEvents.InvalidCodeProvided:
       case AlarmoEvents.NoCodeProvided:
+        // Failed automatic attempts (from any card with auto_submit) stay silent.
+        if (isAutoSubmitContext(ev.data.context_id)) break;
         this._showCodeError();
         this.subscribedEntities = [];
         break;
@@ -312,17 +437,14 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
                 .value=${this._input}
                 .label=${this.hass.localize('ui.card.alarm_control_panel.code')}
                 ?disabled=${!codeRequired(stateObj)}
-                @input=${(ev: Event) => {
-            this._clearCodeError();
-            this._input = (ev.target as HTMLInputElement).value;
-            this._setCodeClearTimer();
-          }}
+                @input=${this._handleCodeInput}
                 @focus=${this._clearCodeError}
                 type="password"
                 id="code_input"
                 .inputmode=${this._alarmoConfig?.code_format === FORMAT_NUMBER ? 'numeric' : 'text'}
               ></ha-input>
             `}
+        ${this._renderAutoSubmitStatus()}
         ${(!codeRequired(stateObj) && !this._config.keep_keypad_visible) ||
         this._alarmoConfig?.code_format !== FORMAT_NUMBER ||
         this._config.use_code_dialog ||
@@ -344,7 +466,8 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
               <alarmo-button
                 .value="${value}"
                 @click=${this._handlePadClick}
-                ?disabled=${!codeRequired(stateObj) || value === 'clear' && !this._input.length}
+                ?disabled=${!codeRequired(stateObj) ||
+              (value === 'clear' ? !this._input.length : this._isRateLimited())}
                 class="${value !== 'clear' ? 'numberKey' : 'clear'}"
                 style="--content-scale: ${this._config!.button_scale_keypad}"
                 ?scaled=${this._config!.button_scale_keypad != 1}
@@ -458,10 +581,118 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     return html``;
   }
 
+  private _renderAutoSubmitStatus() {
+    if (!this.hass || !this._config?.auto_submit || !this._autoSubmitApplies()) return html``;
+    if (this._codeLengthsStatus === 'failed') {
+      return html`
+        <div class="auto-submit-status">
+          <span>${localize('errors.auto_submit_unavailable', this.hass.language)}</span>
+          <ha-button appearance="plain" size="s" @click=${() => this._loadCodeLengths()}>
+            ${this.hass.localize('ui.common.retry') || 'Retry'}
+          </ha-button>
+        </div>
+      `;
+    }
+    if (this._rateLimitWait > 0) {
+      return html`
+        <div class="auto-submit-status">
+          <span>
+            ${localize('errors.auto_submit_rate_limited', this.hass.language, '{seconds}', String(this._rateLimitWait))}
+          </span>
+        </div>
+      `;
+    }
+    return html``;
+  }
+
   private _handlePadClick(e: MouseEvent): void {
     const val = (e.currentTarget! as any).value;
+    if (val !== 'clear' && !this._consumeDigits(1)) return;
     this._clearCodeError();
+    if (val === 'clear') {
+      this._autoQueue.cancel();
+      this._processedInput = '';
+    }
     this._input = val === 'clear' ? '' : this._input + val;
+    this._autoSubmit();
+  }
+
+  private _handleCodeInput(ev: Event): void {
+    const field = ev.target as HTMLInputElement;
+    const previous = this._input;
+    let value = field.value;
+    // Every character after the start shared with the previous input is checked again, so it counts for the rate
+    // limit (also when typed text replaces a selection). Rejected characters are dropped.
+    const common = commonPrefixLength(previous, value);
+    const changed = value.length - common;
+    if (changed > 0) {
+      const allowed = this._consumeDigits(changed);
+      if (allowed < changed) {
+        value = value.slice(0, common + allowed);
+        field.value = value;
+        if (value === previous) return;
+      }
+    }
+    this._clearCodeError();
+    this._input = value;
+    this._setCodeClearTimer();
+    this._autoSubmit();
+  }
+
+  // Whether the typed digits are submitted automatically: only disarming, since the arm mode is not known yet when
+  // the alarm is disarmed.
+  private _autoSubmitApplies(): boolean {
+    if (!this.isConnected || !this.hass || !this._config?.auto_submit) return false;
+    if (this._alarmoConfig?.code_format !== FORMAT_NUMBER) return false;
+    const stateObj = this.hass.states[this._config.entity] as AlarmoEntity;
+    return !!stateObj && stateObj.state !== AlarmStates.Disarmed && codeRequired(stateObj);
+  }
+
+  private _isRateLimited(): boolean {
+    return this._rateLimitWait > 0 && this._autoSubmitApplies();
+  }
+
+  // Records typed digits for the rate limit and returns how many are allowed.
+  private _consumeDigits(count: number): number {
+    if (!this._autoSubmitApplies()) return count;
+    const allowed = this._rateLimiter.consume(count);
+    if (allowed < count) this._startRateLimitTimer();
+    return allowed;
+  }
+
+  private _startRateLimitTimer() {
+    const update = () => {
+      this._rateLimitWait = Math.ceil(this._rateLimiter.waitTime() / 1000);
+      if (!this._rateLimitWait) this._stopRateLimitTimer();
+    };
+    update();
+    if (this._rateLimitWait && !this._rateLimitTimer) this._rateLimitTimer = window.setInterval(update, 1000);
+  }
+
+  private _stopRateLimitTimer() {
+    if (this._rateLimitTimer) clearInterval(this._rateLimitTimer);
+    this._rateLimitTimer = 0;
+    this._rateLimitWait = 0;
+  }
+
+  private _autoSubmit(): void {
+    if (!this._autoSubmitApplies()) {
+      // Digits typed while auto_submit does not apply are never checked later.
+      this._processedInput = this._input;
+      return;
+    }
+    // Code lengths not known yet (loading, or failed until Retry): the digits are checked once they are.
+    if (this._codeLengthsStatus !== 'ready') return;
+    // For each user code length N, try the input (or with auto_submit_anywhere its last N digits, so the code
+    // is found anywhere in what was typed). Attempts are sent one at a time.
+    const lengths = this._codeLengths.disarm;
+    const steps = newInputCandidates(this._processedInput, this._input, lengths, this._config!.auto_submit_anywhere);
+    for (const codes of steps) {
+      // Saturated: the queue was reset and the input cleared.
+      if (!this._autoQueue.add(codes, this._config!.entity)) return;
+    }
+    this._input = this._input.slice(-Math.max(AUTO_SUBMIT_MAX_INPUT, ...lengths));
+    this._processedInput = this._input;
   }
 
   private async _handleActionClick(ev: Event, action: ArmActions): Promise<void> {
@@ -478,6 +709,16 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
           entity_id: this._config!.entity,
           action: action,
           armOptions: this.armOptions,
+          auto_submit:
+            this._config!.auto_submit &&
+            this._alarmoConfig?.code_format === FORMAT_NUMBER &&
+            this._codeLengthsStatus === 'ready'
+              ? {
+                  lengths: action == ArmActions.Disarm ? this._codeLengths.disarm : this._codeLengths.arm,
+                  anywhere: this._config!.auto_submit_anywhere,
+                  limiter: this._rateLimiter,
+                }
+              : undefined,
           cancel: () => {
             resolve(null);
           },
@@ -516,12 +757,12 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
     }
   }
 
-  private _showCodeError() {
+  private _showCodeError(message = localize('errors.invalid_pin', this.hass!.language)) {
     const inputField = this.shadowRoot?.querySelector('#code_input');
     if (inputField) {
       inputField.classList.remove('error');
       inputField.classList.add('error');
-      (inputField as any).hint = localize('errors.invalid_pin', this.hass!.language);
+      (inputField as any).hint = message;
     }
   }
 
@@ -531,12 +772,15 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
       inputField.classList.remove('error');
       (inputField as any).hint = '';
       this._input = '';
+      this._processedInput = '';
       this._cancelCodeClearTimer();
     }
   }
 
   private _clearCode() {
     this._input = '';
+    this._processedInput = '';
+    this._autoQueue.cancel();
     this._clearCodeError();
     this._cancelCodeClearTimer();
   }
@@ -783,6 +1027,15 @@ export class AlarmoCard extends SubscribeMixin(LitElement) {
         ha-dropdown {
           display: none;
         }
+      }
+      div.auto-submit-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 0px 16px 8px;
+        font-size: 14px;
+        color: var(--error-color);
       }
     `;
   }

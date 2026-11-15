@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "Warnung anzeigen, wenn der Alarm mit umgangenen Sensoren aktiviert wird.",
     "use_code_dialog": "Zeigen Sie die Tastatur zur Codeeingabe als Popup-Dialog an.",
     "hide_keypad": "Blenden Sie die Tasten der Tastatur zur Codeeingabe aus.",
+    "auto_submit": "Code automatisch absenden, sobald er vollständig ist (ein falscher Code wird stillschweigend ignoriert).",
+    "auto_submit_anywhere": "Den Code auch akzeptieren, wenn er an beliebiger Stelle in der Eingabe vorkommt.",
+    "auto_submit_rate_limit": "Automatisches Absenden, maximale Anzahl Ziffern pro Minute:",
     "available_actions": "Verfügbare Aktionen:",
     "action_dialog": {
       "title": "Anzeige der Aktion '{action}' anpassen",
@@ -35,6 +38,10 @@
     "invalid_pin": "Ungültig",
     "blocking_sensors": "Konnte nicht scharf geschaltet werden, da folgende Sensoren geöffnet sind",
     "triggered_sensors": "Alarm wurde durch folgende Sensoren ausgelöst",
-    "bypassed_sensors": "Es gibt umgangene Sensoren"
+    "bypassed_sensors": "Es gibt umgangene Sensoren",
+    "auto_submit_too_fast": "Zu schnell getippt, um jede Ziffer zu prüfen. Bitte den Code erneut eingeben.",
+    "auto_submit_failed": "Der Code konnte nicht an Alarmo gesendet werden. Bitte die Verbindung prüfen und den Code erneut eingeben.",
+    "auto_submit_unavailable": "Automatisches Absenden nicht verfügbar: Die Codelängen konnten nicht geladen werden.",
+    "auto_submit_rate_limited": "Zu viele Ziffern eingegeben. Bitte in {seconds} s erneut versuchen."
   }
 }

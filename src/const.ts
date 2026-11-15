@@ -69,6 +69,9 @@ export enum AlarmoEvents {
 
 export const EVENT = 'alarmo_updated';
 
+// Fired by Alarmo when its configuration (including users and codes) changes.
+export const CONFIG_UPDATED_EVENT = 'alarmo_config_updated';
+
 export const PENDING_STATES = ['arming', 'pending'];
 
 export const defaultCardConfig: CardConfig = {
@@ -83,11 +86,22 @@ export const defaultCardConfig: CardConfig = {
   show_ready_indicator: true,
   show_bypassed_sensors: true,
   use_code_dialog: false,
-  hide_keypad: false
+  hide_keypad: false,
+  auto_submit: false,
+  auto_submit_anywhere: false,
+  auto_submit_rate_limit: 30,
 };
 
 export const minButtonScale = 1;
 export const maxButtonScale = 2.5;
+
+// Number of digits that may be typed per minute while auto_submit is active.
+export const minAutoSubmitRateLimit = 10;
+export const maxAutoSubmitRateLimit = 120;
+
+// With auto_submit, only the most recent digits are kept (or more when a user code is longer). A fixed number, so
+// the input length does not reveal the code length.
+export const AUTO_SUBMIT_MAX_INPUT = 20;
 
 export const defaultArmOptions = {
   skip_delay: false,

@@ -1,4 +1,4 @@
-import { AlarmStates, minButtonScale, maxButtonScale } from '../const';
+import { AlarmStates, minButtonScale, maxButtonScale, minAutoSubmitRateLimit, maxAutoSubmitRateLimit } from '../const';
 import { CardConfig, StateConfig } from '../types';
 import { isDefined } from '../helpers';
 import { computeDomain } from '../lib/compute-domain';
@@ -20,6 +20,16 @@ export const validateConfig = (config?: Partial<CardConfig> & { button_scale?: a
       config.button_scale_actions > maxButtonScale)
   ) {
     throw new Error('Invalid configuration provided for button_scale_actions');
+  } else if (
+    isDefined(config.auto_submit_rate_limit) &&
+    (typeof config.auto_submit_rate_limit !== 'number' ||
+      !Number.isInteger(config.auto_submit_rate_limit) ||
+      config.auto_submit_rate_limit < minAutoSubmitRateLimit ||
+      config.auto_submit_rate_limit > maxAutoSubmitRateLimit)
+  ) {
+    throw new Error(
+      `Invalid configuration provided for auto_submit_rate_limit (${minAutoSubmitRateLimit}-${maxAutoSubmitRateLimit})`
+    );
   }
 };
 

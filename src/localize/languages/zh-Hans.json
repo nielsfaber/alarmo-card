@@ -13,6 +13,9 @@
     "show_bypassed_sensors": "当警报配备旁路传感器时显示警告消息。",
     "use_code_dialog": "以弹出对话框的形式显示用于输入代码的键盘。",
     "hide_keypad": "隐藏用于输入代码的键盘按钮。",
+    "auto_submit": "密码输入完整后自动提交（错误的密码会被静默忽略）。",
+    "auto_submit_anywhere": "密码出现在输入内容的任意位置时也予以接受。",
+    "auto_submit_rate_limit": "自动提交，每分钟最多可输入的数字个数：",
     "available_actions": "可用动作：",
     "action_dialog": {
       "title": "自定义动作'{action}'的显示",
@@ -35,6 +38,10 @@
     "invalid_pin": "无效的",
     "blocking_sensors": "由于以下传感器而无法警戒",
     "triggered_sensors": "警报是由以下传感器触发的",
-    "bypassed_sensors": "有绕过的传感器"
+    "bypassed_sensors": "有绕过的传感器",
+    "auto_submit_too_fast": "输入过快，无法检查每一位数字。请重新输入密码。",
+    "auto_submit_failed": "无法将密码发送到 Alarmo。请检查连接并重新输入密码。",
+    "auto_submit_unavailable": "自动提交不可用：无法加载密码长度。",
+    "auto_submit_rate_limited": "输入的数字过多。请在 {seconds} 秒后重试。"
   }
 }
